@@ -301,7 +301,6 @@ li {
   margin-inline: auto;
   margin-top: 2.8rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
   gap: 1.5rem;
 }
 
@@ -529,9 +528,19 @@ body.dark .ops-modal {
 /* 5. Responsive */
 /* ==================================== */
 
+@media (min-width: 1024px) {
+  /* This rule ensures 4 cards fit horizontally on desktop screens */
+  .grid-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
 @media (max-width: 900px) {
   .nav-links {
     display: none;
+  }
+  .grid-container {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -546,6 +555,12 @@ body.dark .ops-modal {
   .contact-form-section {
     padding: 0 15px;
     max-width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  .grid-container {
+    grid-template-columns: 1fr; /* Stack cards on very small screens */
   }
 }
 
