@@ -6,6 +6,7 @@
   /* Colors */
   --clr-primary: #00c4ff;
   --clr-accent: #ff3bdc;
+  --clr-logo-shadow: #00000040;
   --clr-accent-dark: #e000be;
   --clr-cta-business-ops: #ff6600;
   --clr-cta-business-ops-hover: #e94e1b;
@@ -38,6 +39,7 @@
 
 /* Dark Theme Variables */
 body.dark {
+  --clr-logo-shadow: #ffffff40;
   --clr-text: #fafbfe;
   --clr-text-subtle: #f3ecfe;
   --clr-text-light: #ccc;
@@ -151,9 +153,9 @@ li {
   font-family: "Segoe UI", Arial, sans-serif;
   font-weight: bold;
   font-size: 2rem;
-  color: var(--clr-accent);
+  color: var(--clr-text);
   letter-spacing: 2px;
-  text-shadow: 0 0 8px #ffb3fd, 0 0 32px #fff0;
+  text-shadow: 0 0 8px var(--clr-logo-shadow);
   user-select: none;
   position: absolute;
   left: 2rem;
@@ -212,6 +214,7 @@ li {
 
 /* CTA Buttons */
 .cta-button {
+  margin-top: 50px;
   display: inline-block;
   color: white;
   text-decoration: none;
