@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>IT Support Services | Ops Online Support</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/fabs-and-mobile-nav.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+  />
+</head>
+<body class="page-it-support">
+  <nav class="ops-nav">
+    <div class="ops-logo">OPS</div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link" data-key="nav-business-ops">Business Operations</a>
+      <a href="contact-center.html" class="nav-link" data-key="nav-contact-center">Contact Center</a>
+      <a href="it-support.html" class="nav-link active" data-key="nav-it-support">IT Support</a>
+      <a href="professional-services.html" class="nav-link" data-key="nav-professionals">Professionals</a>
+    </div>
+    <div id="toggles" class="toggles">
+      <button id="lang-toggle" class="toggle-btn" aria-label="Toggle language" aria-pressed="false">EN</button>
+      <button id="theme-toggle" class="toggle-btn" aria-label="Toggle dark/light theme" aria-pressed="false">Dark</button>
+    </div>
+  </nav>
+  <main id="page-content">
+    <header class="it-support-header">
+      <div class="page-title" data-key="page-title">IT Support</div>
+      <div class="page-subtitle" data-key="page-subtitle">Reliable technical assistance to keep your systems running.</div>
+      <h1 data-key="header-heading">Keep Your Systems Secure and Stable</h1>
+      <p data-key="header-subheading">
+        Dependable help desk, cybersecurity, and cloud services to keep your IT infrastructure running smoothly.
+      </p>
+      <a href="#form" class="cta-button primary it-support-cta" data-key="cta-learn-more">Learn More</a>
+    </header>
+
+    <section class="support-tiers-section">
+      <h2 data-key="tiers-heading">Our IT Support Tiers</h2>
+      <ul class="tiers-list">
+        <li data-key="tier-1">24/7 tech support & system monitoring</li>
+        <li data-key="tier-2">Cybersecurity audits, patching, threat detection</li>
+        <li data-key="tier-3">Cloud infrastructure management</li>
+        <li data-key="tier-4">NIST, CISA, OPS Core CyberSec compliance</li>
+      </ul>
+    </section>
+
+    <section class="client-story-section">
+      <h2 data-key="client-story-heading">Client Story</h2>
+      <blockquote data-key="client-quote">
+        “We went from 6 support tickets per day to 1 — and our team morale shot up. Best decision this year.”
+      </blockquote>
+      </section>
+
+    <section id="form" class="contact-form-section">
+      <h2 data-key="form-heading">Request Your Free IT Readiness Check</h2>
+      <form>
+        <input type="text" placeholder="" data-key="form-name" required />
+        <input type="email" placeholder="" data-key="form-email" required />
+        <input type="tel" placeholder="" data-key="form-phone" required />
+        <input type="text" placeholder="" data-key="form-company" required />
+        <button type="submit" class="cta-button" data-key="form-submit">Request Now</button>
+      </form>
+    </section>
+  </main>
+  <div id="modal-root"></div>
+  <div id="fabs-and-mobile-nav-container"></div>
+  <script src="js/langtheme.js" defer></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>
