@@ -1,0 +1,106 @@
+/* ====================================
+  Chatbot Modal Styles
+  ==================================== 
+*/
+.chatbot-backdrop {
+  z-index: 5000;
+}
+.ops-chatbot-modal {
+  padding: 0;
+  background: #251541;
+  border: 2px solid var(--clr-accent);
+  border-radius: 18px;
+  max-width: 320px;
+  height: 540px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 90%;
+}
+#chatbot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: .5rem;
+  background: linear-gradient(135deg, var(--clr-primary) 0%, var(--clr-accent) 100%);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: .75rem 1rem;
+  cursor: move; /* Draggable handle for chatbot */
+}
+#chat-log {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  background: #1b0e2d;
+  color: #eee;
+  font-size: .94rem;
+}
+.chat-msg {
+  margin: .5rem 0;
+  max-width: 90%;
+  padding: .5rem .7rem;
+}
+.user {
+  margin-left: auto;
+  background: var(--clr-primary);
+  color: #000;
+  border-radius: 14px 14px 0 14px;
+}
+.bot {
+  margin-right: auto;
+  background: #321b53;
+  color: #fff;
+  border-radius: 14px 14px 14px 0;
+}
+#chatbot-form-container {
+  background: #220f3a;
+  border-top: 1px solid var(--clr-accent);
+  padding: .55rem .7rem;
+}
+#chatbot-input-row {
+  display: flex;
+  gap: .6rem;
+}
+#chatbot-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: .95rem;
+  padding: .55rem .6rem;
+}
+#chatbot-send {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--clr-accent);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  padding: .5rem .9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: .3s;
+}
+#chatbot-send i {
+  transition: transform .3s;
+}
+#chatbot-send:hover i {
+  transform: rotate(-45deg);
+}
+#chatbot-send:disabled {
+  background: #555;
+  cursor: not-allowed;
+}
+.human-check {
+  color: #ddd;
+  font-size: .85rem;
+  display: flex;
+  align-items: center;
+  margin-top: .3rem;
+}
+.human-check input {
+  margin-right: .4rem;
+}
