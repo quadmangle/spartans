@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title data-key="title-contact-center">Contact Center | Ops Online Support</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+</head>
+<body class="page-contact-center">
+  <nav class="ops-nav">
+    <div class="ops-logo">OPS</div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link" data-key="nav-business-ops">Business Operations</a>
+      <a href="contact-center.html" class="nav-link active" data-key="nav-contact-center">Contact Center</a>
+      <a href="it-support.html" class="nav-link" data-key="nav-it-support">IT Support</a>
+      <a href="professional-services.html" class="nav-link" data-key="nav-professionals">Professionals</a>
+    </div>
+    <div id="toggles" class="toggles">
+      <button id="lang-toggle" class="toggle-btn" aria-label="Toggle language" aria-pressed="false">EN</button>
+      <button id="theme-toggle" class="toggle-btn" aria-label="Toggle dark/light theme" aria-pressed="false">Dark</button>
+    </div>
+  </nav>
+
+  <main id="page-content">
+    <header>
+      <h1 data-key="header-heading">Connect with Your Customers.</h1>
+      <p data-key="header-subheading">Enhance customer engagement with multilingual, multichannel support—24/7, data-driven, and empathetic.</p>
+      <a href="#form" class="cta-button it-and-contact" data-key="cta-learn-more">Learn More</a>
+    </header>
+
+    <section>
+      <h2 data-key="services-heading">Our Contact Center Services</h2>
+      <ul>
+        <li data-key="service-1">24/7 inbound/outbound call management</li>
+        <li data-key="service-2">Multilingual chat/email support</li>
+        <li data-key="service-3">CRM integration (e.g., HubSpot, Salesforce)</li>
+        <li data-key="service-4">Social media engagement & sentiment tracking</li>
+        <li data-key="service-5">Customer experience analytics & quality monitoring</li>
+      </ul>
+    </section>
+
+    <section class="client-story-section">
+      <h2 data-key="client-story-heading">Real Client Impact</h2>
+      <figure class="testimonial">
+        <blockquote data-key="client-quote">“Their team felt like an extension of our own. Customer satisfaction scores jumped 20% in the first quarter.”</blockquote>
+        <figcaption class="testimonial-author" data-key="client-author">– Director, E-commerce</figcaption>
+      </figure>
+    </section>
+
+    <section id="form" class="contact-form-section">
+      <h2 data-key="form-heading">Request Your Free Needs Assessment</h2>
+      <form>
+        <input type="text" placeholder="" data-key="form-name" required />
+        <input type="email" placeholder="" data-key="form-email" required />
+        <input type="tel" placeholder="" data-key="form-phone" required />
+        <input type="text" placeholder="" data-key="form-company" required />
+        <button type="submit" class="submit-button" data-key="form-submit">Request Now</button>
+      </form>
+    </section>
+  </main>
+  <div id="modal-root"></div>
+  <script src="js/langtheme.js" defer></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>
