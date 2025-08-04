@@ -298,7 +298,7 @@ li {
 /* Business Ops Specific Components */
 .grid-container {
   width: min(85rem, 100%);
-  margin-inline: auto;
+  margin: 0 auto;
   margin-top: 2.8rem;
   display: grid;
   gap: 1.5rem;
@@ -523,6 +523,12 @@ body.dark .ops-modal {
 /* ==================================== */
 /* 5. Responsive */
 /* ==================================== */
+
+@media (min-width: 1200px) {
+  .grid-container {
+    grid-template-columns: repeat(4, 1fr); /* NEW: Displays four cards per row */
+  }
+}
 
 @media (min-width: 1024px) {
   /* This rule ensures 4 cards fit horizontally on desktop screens */
