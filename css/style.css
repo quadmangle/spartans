@@ -299,7 +299,7 @@ li {
 
 /* Business Ops Specific Components */
 .grid-container {
-  width: min(85rem, 100%);
+  width: min(95rem, 100%);
   margin: 0 auto;
   margin-top: 2.8rem;
   display: grid;
@@ -565,6 +565,7 @@ body.dark .ops-modal {
 @media (max-width: 500px) {
   .grid-container {
     grid-template-columns: 1fr; /* Stack cards on very small screens */
+    padding: 0 1rem;
   }
   .modal-actions {
     flex-direction: column; /* Stack buttons vertically on small screens */
