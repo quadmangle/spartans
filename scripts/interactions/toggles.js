@@ -1,50 +1,66 @@
-import { translations } from '../app-data.js';
+import { translations, services } from '../app-data.js';
 
 export let currentLanguage = 'en';
 export let isDarkTheme = false;
 
+/**
+ * Applies the current language translations to all elements with a `data-key` attribute.
+ */
 export function applyTranslations() {
   const elements = document.querySelectorAll('[data-key]');
   elements.forEach(el => {
     const key = el.getAttribute('data-key');
     if (translations[currentLanguage][key]) {
-      if (el.tagName === 'TITLE') {
-        document.title = translations[currentLanguage][key];
-      } else {
-        el.textContent = translations[currentLanguage][key];
-      }
+      el.textContent = translations[currentLanguage][key];
+    } else if (el.placeholder) {
+      el.placeholder = translations[currentLanguage][key] || el.placeholder;
     }
   });
-  // Update card content (dynamic translation)
-  const cards = document.querySelectorAll('.card');
-  cards.forEach(card => {
-    const serviceKey = card.getAttribute('data-service-key');
-    const serviceData = translations.services[serviceKey];
-    if (serviceData) {
-      card.querySelector('.title').textContent = serviceData[currentLanguage].title;
-      card.querySelector('.content').textContent = serviceData[currentLanguage].desc;
-    }
-  });
+
+  // Specifically handle the title for the main page
+  const titleEl = document.querySelector('title');
+  if (titleEl) {
+    const key = titleEl.getAttribute('data-key');
+    titleEl.textContent = translations[currentLanguage][key] || 'OPS Online Support';
+  }
 }
 
-function handleLanguageToggle(btn) {
+/**
+ * Handles the language toggle functionality.
+ */
+function handleLanguageToggle() {
   currentLanguage = currentLanguage === 'en' ? 'es' : 'en';
-  btn.textContent = currentLanguage === 'en' ? 'ES' : 'EN';
   document.documentElement.lang = currentLanguage;
+  document.querySelectorAll('#lang-toggle, #lang-btn').forEach(btn => {
+    btn.textContent = currentLanguage === 'en' ? 'ES' : 'EN';
+  });
   applyTranslations();
 }
 
-function handleThemeToggle(btn) {
+/**
+ * Handles the theme toggle functionality.
+ */
+function handleThemeToggle() {
   isDarkTheme = !isDarkTheme;
   document.body.classList.toggle('dark', isDarkTheme);
-  btn.textContent = isDarkTheme ? 'Light' : 'Dark';
+  document.querySelectorAll('#theme-toggle, #theme-btn').forEach(btn => {
+    btn.textContent = isDarkTheme ? 'Light' : 'Dark';
+  });
+  localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Check for saved theme preference
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    handleThemeToggle(); // This will toggle it to dark mode
+  }
+
+  // Set up event listeners for both header and mobile nav buttons
   document.querySelectorAll('#lang-toggle, #lang-btn').forEach(btn => {
-    btn.addEventListener('click', () => handleLanguageToggle(btn));
+    btn.addEventListener('click', handleLanguageToggle);
   });
   document.querySelectorAll('#theme-toggle, #theme-btn').forEach(btn => {
-    btn.addEventListener('click', () => handleThemeToggle(btn));
+    btn.addEventListener('click', handleThemeToggle);
   });
 });
