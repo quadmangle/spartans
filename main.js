@@ -1,19 +1,30 @@
-import { translations, services } from './scripts/app-data.js';
+/**
+ * @fileoverview The main application entry point. This file orchestrates all
+ * the other modular scripts and sets up the website on page load.
+ */
+import { services } from './scripts/app-data.js';
 import { applyTranslations } from './scripts/interactions/toggles.js';
 import { openModal } from './scripts/interactions/modals.js';
-import { openMobileNav, setupMobileNav } from './scripts/interactions/mobile-nav.js';
+import { setupMobileNav } from './scripts/interactions/mobile-nav.js';
 import { setupChatbot } from './scripts/components/chatbot.js';
 import { setupContactForm } from './scripts/components/contact-form.js';
 import { setupJoinForm } from './scripts/components/join-form.js';
 
-// --- Core Business Logic ---
+// Global variable for current language, initialized in toggles.js
+declare var currentLanguage: string;
+
+/**
+ * Dynamically generates the service cards based on the data in app-data.js.
+ */
 function createServiceCards() {
   const container = document.getElementById('cards-section');
   if (!container) return;
   container.innerHTML = '';
+  
+  // Create cards from the services object.
   Object.keys(services).forEach(key => {
     const serviceData = services[key];
-    const cardData = serviceData[currentLanguage];
+    const cardData = serviceData[currentLanguage || 'en']; // Use current language or fallback to 'en'
     const card = document.createElement('div');
     card.className = 'card';
     card.setAttribute('data-service-key', key);
@@ -26,12 +37,16 @@ function createServiceCards() {
   });
 }
 
-// --- Document Ready Handler ---
-document.addEventListener('DOMContentLoaded', () => {
-  // Initialize all modular components
+/**
+ * Initializes all the components of the website.
+ */
+function initApp() {
+  // Setup core functionalities first.
   applyTranslations();
   createServiceCards();
   setupMobileNav();
+
+  // Setup modals and forms.
   setupChatbot();
   setupContactForm();
   setupJoinForm();
@@ -43,13 +58,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const card = event.target.closest('.card');
       if (card) {
         const serviceKey = card.getAttribute('data-service-key');
-        openModal('dynamic-service-modal', serviceKey);
+        // A placeholder for showing a dynamic modal with service details.
+        // For a real app, this would dynamically generate content for a single modal.
+        console.log(`Open modal for service: ${serviceKey}`);
+        // openModal('dynamic-service-modal');
       }
     });
   }
+}
 
-  // Hook up FAB buttons to open specific modals
-  document.getElementById('fab-join-btn').addEventListener('click', () => openModal('join-us-modal'));
-  document.getElementById('fab-contact-btn').addEventListener('click', () => openModal('contact-us-modal'));
-  document.getElementById('fab-chatbot-btn').addEventListener('click', () => openModal('chatbot-modal'));
-});
+document.addEventListener('DOMContentLoaded', initApp);
