@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Professional Services | Ops Online Support</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/fabs-and-mobile-nav.css" />
+</head>
+<body class="page-professional-services">
+  <nav class="ops-nav">
+    <div class="ops-logo">OPS</div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link" data-key="nav-business-ops">Business Operations</a>
+      <a href="contact-center.html" class="nav-link" data-key="nav-contact-center">Contact Center</a>
+      <a href="it-support.html" class="nav-link" data-key="nav-it-support">IT Support</a>
+      <a href="professional-services.html" class="nav-link active" data-key="nav-professionals">Professionals</a>
+    </div>
+    <div id="toggles" class="toggles">
+      <button id="lang-toggle" class="toggle-btn" aria-label="Toggle language" aria-pressed="false">EN</button>
+      <button id="theme-toggle" class="toggle-btn" aria-label="Toggle dark/light theme" aria-pressed="false">Dark</button>
+    </div>
+  </nav>
+
+  <main id="page-content">
+    <header>
+      <h1 data-key="header-heading">Unlock Expertise. Deliver Results.</h1>
+      <p data-key="header-subheading">
+        Our consultants bring decades of experience to your biggest business challenges.
+      </p>
+      <a href="#form" class="cta-button primary" data-key="cta-strategy-call">Book Free Strategy Call</a>
+    </header>
+
+    <section class="specialization-section">
+      <h2 data-key="specialties-heading">We Specialize In:</h2>
+      <ul class="specialties-list">
+        <li data-key="specialty-1">Digital transformation & change management</li>
+        <li data-key="specialty-2">Business continuity & risk planning</li>
+        <li data-key="specialty-3">Revenue operations & analytics</li>
+      </ul>
+    </section>
+
+    <section class="impact-section">
+      <h2 data-key="impact-heading">Real Impact</h2>
+      <figure class="testimonial">
+        <blockquote data-key="client-quote">
+          “Their team didn’t just advise — they executed. We hit 120% of our revenue goal within two quarters.”
+        </blockquote>
+        <figcaption class="testimonial-author" data-key="client-author">– CEO, B2B SaaS</figcaption>
+      </figure>
+      <img src="images/partner-logos.png" class="responsive-image" alt="" data-key="client-logos-alt" />
+    </section>
+
+    <section class="offer-card">
+      <h2 data-key="offer-heading">Limited-Time Offer</h2>
+      <p data-key="offer-text">
+        Book by July 31 and get a free 90-minute ops strategy session (normally $650).
+      </p>
+      <p><span class="highlight-text" data-key="offer-count">Only 6 sessions left this month.</span></p>
+    </section>
+
+    <section id="form" class="contact-form-section">
+      <h2 data-key="form-heading">Get Started Now</h2>
+      <form>
+        <input type="text" placeholder="" data-key="form-name" required />
+        <input type="email" placeholder="" data-key="form-email" required />
+        <input type="tel" placeholder="" data-key="form-phone" required />
+        <input type="text" placeholder="" data-key="form-company" required />
+        <button type="submit" class="cta-button" data-key="form-submit">
+          Book Session
+        </button>
+      </form>
+    </section>
+  </main>
+  <div id="modal-root"></div>
+  <div id="fabs-and-mobile-nav-container"></div>
+  <script src="js/langtheme.js" defer></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>
