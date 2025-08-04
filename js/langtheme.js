@@ -4,7 +4,7 @@ const translations = {
   services: {
     ops: {
       icon: '<i class="fa-thin fa-briefcase"></i>',
-      learn: "business-operations.html",
+      learn: "index.html", // Updated to point to the correct page
       img: "https://placehold.co/96x96?text=OPS",
       en: {
         title: "BUSINESS OPERATIONS",
@@ -115,7 +115,7 @@ const translations = {
     },
     pro: {
       icon: '<i class="fa-thin fa-user-tie"></i>',
-      learn: "professionals.html",
+      learn: "professional-services.html",
       img: "https://placehold.co/96x96?text=PRO",
       en: {
         title: "PROFESSIONALS",
@@ -196,6 +196,11 @@ const translations = {
     'offer-text': "Book by July 31 and get a free 90-minute ops strategy session (normally $650).",
     'offer-count': "Only 6 sessions left this month.",
     'cta-strategy-call': "Book Free Strategy Call",
+    // NEW MODAL BUTTONS
+    'modal-learn-more': "Learn More",
+    'modal-ask-chattia': "Ask Chattia",
+    'modal-join-us': "Join Us",
+    'modal-contact-us': "Contact Us",
   },
   es: {
     'title-business-ops': "Servicios de Gestion | Ops Online Support",
@@ -239,6 +244,11 @@ const translations = {
     'offer-text': "Reserve antes del 31 de julio y obtenga una sesión de estrategia de operaciones gratuita de 90 minutos (normalmente $650).",
     'offer-count': "Solo quedan 6 sesiones este mes.",
     'cta-strategy-call': "Reservar Llamada de Estrategia Gratis",
+    // NEW MODAL BUTTONS
+    'modal-learn-more': "Aprende Más",
+    'modal-ask-chattia': "Pregunta a Chattia",
+    'modal-join-us': "Únete a Nosotros",
+    'modal-contact-us': "Contáctanos",
   },
 };
 
