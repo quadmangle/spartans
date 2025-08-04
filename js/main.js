@@ -71,6 +71,9 @@ function createModal(serviceKey, lang) {
   modalBackdrop.appendChild(modalContent);
   modalRoot.appendChild(modalBackdrop);
 
+  // Make the modal draggable
+  makeDraggable(modalContent);
+
   // Update button text with translations
   updateModalContent(modalContent, lang);
 
@@ -105,6 +108,50 @@ function createModal(serviceKey, lang) {
 
   function closeModal() {
     modalRoot.innerHTML = '';
+  }
+}
+
+function makeDraggable(modal) {
+  const header = modal.querySelector('.modal-header');
+  if (!header) return;
+
+  let isDragging = false;
+  let offsetX, offsetY;
+
+  header.addEventListener('mousedown', (e) => {
+    isDragging = true;
+
+    // We calculate the offset from the top-left of the modal.
+    // This prevents the modal from "jumping" to the cursor position.
+    offsetX = e.clientX - modal.offsetLeft;
+    offsetY = e.clientY - modal.offsetTop;
+
+    // The transform is removed to allow for smooth dragging based on top/left.
+    modal.style.transform = 'none';
+
+    // We add the listeners to the document so that dragging continues
+    // even if the cursor moves outside the modal header.
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
+
+  function onMouseMove(e) {
+    if (!isDragging) return;
+
+    // Prevent text selection during drag
+    e.preventDefault();
+
+    const newX = e.clientX - offsetX;
+    const newY = e.clientY - offsetY;
+
+    modal.style.left = `${newX}px`;
+    modal.style.top = `${newY}px`;
+  }
+
+  function onMouseUp() {
+    isDragging = false;
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
   }
 }
 
