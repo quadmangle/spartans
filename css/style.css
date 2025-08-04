@@ -298,6 +298,10 @@ li {
   background: #4527a0;
 }
 
+.business-ops-form {
+  margin-top: 50px;
+}
+
 /* Business Ops Specific Components */
 .grid-container {
   width: min(95rem, 100%);
