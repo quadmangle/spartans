@@ -297,7 +297,7 @@ li {
 
 /* Business Ops Specific Components */
 .grid-container {
-  width: min(75rem, 100%);
+  width: min(85rem, 100%);
   margin-inline: auto;
   margin-top: 2.8rem;
   display: grid;
@@ -403,24 +403,20 @@ body.dark .card .icon > i {
   bottom: 0;
   background: rgba(44, 26, 73, 0.31);
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
+  align-items: center; /* ALIGN VERTICALLY CENTER */
+  justify-content: center; /* ALIGN HORIZONTALLY CENTER */
 }
 
 .ops-modal {
   min-width: 310px;
-  max-width: 490px;
+  max-width: 800px; /* INCREASED MODAL WIDTH */
   width: 96vw;
-  margin-top: 5vh;
   background: #fff;
   color: #1a1930;
   border-radius: 2rem;
   box-shadow: 0 6px 60px #5e24bb25, 0 0 0 2px #fff1;
   padding: 2.1rem 2.2rem 1.3rem 2.2rem;
-  position: absolute;
-  left: 50%;
-  top: 12vh;
-  transform: translate(-50%, 0);
+  position: relative; /* RELATIVE POSITIONING FOR CENTERING */
   transition: box-shadow 0.17s;
   cursor: default;
   z-index: 2222;
@@ -561,6 +557,13 @@ body.dark .ops-modal {
 @media (max-width: 500px) {
   .grid-container {
     grid-template-columns: 1fr; /* Stack cards on very small screens */
+  }
+  .modal-actions {
+    flex-direction: column; /* Stack buttons vertically on small screens */
+    align-items: stretch;
+  }
+  .modal-btn {
+    width: 100%; /* Full width buttons on mobile */
   }
 }
 
