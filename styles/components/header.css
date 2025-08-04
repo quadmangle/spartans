@@ -1,0 +1,51 @@
+/* ====================================
+  Header Navigation & Toggles
+  ==================================== */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: var(--clr-background);
+  border-bottom: 1px solid var(--clr-border);
+  padding: 1rem 2rem;
+  transition: background-color var(--tr-duration), border-color var(--tr-duration);
+}
+
+.ops-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.ops-logo {
+  font-weight: 800;
+  font-size: 1.8rem;
+  color: var(--clr-accent);
+}
+
+.toggles {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.toggle-btn {
+  padding: 0.5rem 1rem;
+  background: var(--clr-card-bg);
+  color: var(--clr-text);
+  border-radius: var(--br-radius);
+  font-weight: 600;
+  transition: background-color var(--tr-duration);
+  border: 1px solid var(--clr-border);
+}
+
+.toggle-btn:hover {
+  background: var(--clr-highlight);
+}
+
+@media (max-width: 768px) {
+  .toggles {
+    display: none; /* Hide toggles on small screens, they are in the mobile nav */
+  }
+}
