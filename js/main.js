@@ -46,7 +46,7 @@ function createModal(serviceKey, lang) {
   const modalContent = document.createElement('div');
   modalContent.className = 'ops-modal';
 
-  // Build the modal HTML
+  // Build the modal HTML with new buttons in the footer
   modalContent.innerHTML = `
     <button class="close-modal" aria-label="Close modal">×</button>
     <div class="modal-header">
@@ -60,7 +60,10 @@ function createModal(serviceKey, lang) {
       </ul>
     </div>
     <div class="modal-actions">
-      <a href="${serviceData.learn}" class="modal-btn cta">Learn More</a>
+      <a href="${serviceData.learn}" class="modal-btn" data-key="modal-learn-more"></a>
+      <a href="#" id="ask-chattia-btn" class="modal-btn" data-key="modal-ask-chattia"></a>
+      <a href="#" id="join-us-btn" class="modal-btn" data-key="modal-join-us"></a>
+      <a href="contact-center.html#form" class="modal-btn" data-key="modal-contact-us"></a>
     </div>
   `;
 
@@ -68,15 +71,51 @@ function createModal(serviceKey, lang) {
   modalBackdrop.appendChild(modalContent);
   modalRoot.appendChild(modalBackdrop);
 
-  // Add event listener to close button
-  modalContent.querySelector('.close-modal').addEventListener('click', () => {
-    modalRoot.innerHTML = '';
+  // Update button text with translations
+  updateModalContent(modalContent, lang);
+
+  // Add event listeners for new buttons
+  // Note: These are placeholders. You will need to replace the `console.log` calls
+  // with actual calls to your Cloudflare Workers or other services.
+  const askChattiaBtn = document.getElementById('ask-chattia-btn');
+  askChattiaBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    console.log('Redirecting to Chatbot via Cloudflare Worker...');
+    alert('Launching Chatbot...');
+    closeModal();
   });
+
+  const joinUsBtn = document.getElementById('join-us-btn');
+  joinUsBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    console.log('Redirecting to Join Us form via Cloudflare Worker...');
+    alert('Launching Join Us form...');
+    closeModal();
+  });
+  
+  // Add event listener to close button
+  modalContent.querySelector('.close-modal').addEventListener('click', closeModal);
 
   // Close modal when clicking outside of it
   modalBackdrop.addEventListener('click', (event) => {
     if (event.target === modalBackdrop) {
-      modalRoot.innerHTML = '';
+      closeModal();
+    }
+  });
+
+  function closeModal() {
+    modalRoot.innerHTML = '';
+  }
+}
+
+// Helper function to update content inside the modal after creation
+function updateModalContent(modalElement, lang) {
+  const elements = modalElement.querySelectorAll('[data-key]');
+  elements.forEach(el => {
+    const key = el.getAttribute('data-key');
+    const translation = translations[lang][key];
+    if (translation) {
+      el.textContent = translation;
     }
   });
 }
