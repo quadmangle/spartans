@@ -404,24 +404,27 @@ body.dark .card .icon > i {
   right: 0;
   bottom: 0;
   background: rgba(44, 26, 73, 0.31);
-  display: flex;
-  align-items: center; /* ALIGN VERTICALLY CENTER */
-  justify-content: center; /* ALIGN HORIZONTALLY CENTER */
 }
 
 .ops-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   min-width: 310px;
-  max-width: 800px; /* INCREASED MODAL WIDTH */
-  width: 96vw;
+  max-width: 800px;
+  width: 80vw;
+  max-height: 80vh;
   background: #fff;
   color: #1a1930;
   border-radius: 2rem;
   box-shadow: 0 6px 60px #5e24bb25, 0 0 0 2px #fff1;
   padding: 2.1rem 2.2rem 1.3rem 2.2rem;
-  position: relative; /* RELATIVE POSITIONING FOR CENTERING */
   transition: box-shadow 0.17s;
   cursor: default;
   z-index: 2222;
+  display: flex;
+  flex-direction: column;
 }
 body.dark .ops-modal {
   background: #251541;
@@ -433,6 +436,7 @@ body.dark .ops-modal {
   gap: 1.3em;
   align-items: center;
   margin-bottom: 1em;
+  cursor: move;
 }
 
 .modal-header img {
@@ -452,6 +456,8 @@ body.dark .ops-modal {
 .modal-content-body {
   margin-bottom: 1.1em;
   font-size: 1.05em;
+  overflow-y: auto;
+  flex-shrink: 1;
 }
 
 .modal-features {
