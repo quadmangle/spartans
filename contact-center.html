@@ -16,11 +16,18 @@
       <a href="it-support.html" class="nav-link" data-key="nav-it-support">IT Support</a>
       <a href="professional-services.html" class="nav-link" data-key="nav-professionals">Professionals</a>
     </div>
-    <div id="toggles" class="toggles">
-      <button id="lang-toggle" class="toggle-btn" aria-label="Toggle language" aria-pressed="false">EN</button>
-      <button id="theme-toggle" class="toggle-btn" aria-label="Toggle dark/light theme" aria-pressed="false">Dark</button>
-    </div>
+    <button id="mobile-menu-button" class="mobile-menu-button" aria-label="Open menu" aria-controls="mobileNav" aria-expanded="false">
+      <i class="fas fa-bars"></i>
+    </button>
   </nav>
+
+  <div class="fab-container" aria-label="Quick actions">
+    <button id="fab-menu" class="fab" aria-label="Toggle navigation" aria-controls="mobileNav" aria-expanded="false">
+      <i class="fas fa-bars"></i>
+    </button>
+    <button id="fab-lang" class="fab lang-toggle" aria-label="Toggle language" aria-pressed="false">EN</button>
+    <button id="fab-theme" class="fab theme-toggle" aria-label="Toggle dark/light theme" aria-pressed="false">Dark</button>
+  </div>
 
   <main id="page-content">
     <header>
@@ -61,6 +68,7 @@
   </main>
   <div id="modal-root"></div>
   <script src="js/langtheme.js" defer></script>
+  <script src="js/nav.js" defer></script>
   <script src="js/main.js" defer></script>
 </body>
 </html>
