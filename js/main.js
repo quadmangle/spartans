@@ -4,6 +4,10 @@
 // The `translations` object contains all service card and modal data.
 // We assume `translations` and `currentLanguage` are globally available after langtheme.js loads.
 
+const CHATBOT_SNIPPET_URL = 'chatbot.html';
+const CHATBOT_RATE_LIMIT_MS = 5000;
+let lastChatbotLaunch = 0;
+
 function createServiceCards(services, lang) {
   const container = document.getElementById('cards-section');
   if (!container) return; // Only run this on the index page
@@ -78,13 +82,10 @@ function createModal(serviceKey, lang) {
   updateModalContent(modalContent, lang);
 
   // Add event listeners for new buttons
-  // Note: These are placeholders. You will need to replace the `console.log` calls
-  // with actual calls to your Cloudflare Workers or other services.
   const askChattiaBtn = document.getElementById('ask-chattia-btn');
   askChattiaBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    console.log('Redirecting to Chatbot via Cloudflare Worker...');
-    alert('Launching Chatbot...');
+    openChatbotModal('service-modal');
     closeModal();
   });
 
@@ -167,6 +168,65 @@ function updateModalContent(modalElement, lang) {
   });
 }
 
+function auditLog(event, details = {}) {
+  const payload = { event, details, timestamp: new Date().toISOString() };
+  console.log('audit', payload);
+  if (location.protocol === 'https:') {
+    fetch('https://example.com/audit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      mode: 'cors',
+      credentials: 'omit',
+      body: JSON.stringify(payload)
+    }).catch(() => {});
+  }
+}
+
+function openChatbotModal(source = 'unknown') {
+  if (Date.now() - lastChatbotLaunch < CHATBOT_RATE_LIMIT_MS) {
+    console.warn('Chatbot modal rate limited');
+    return;
+  }
+  lastChatbotLaunch = Date.now();
+
+  if (location.protocol !== 'https:') {
+    console.warn('Chatbot requires HTTPS');
+    return;
+  }
+
+  auditLog('chatbot_open', { source });
+
+  fetch(CHATBOT_SNIPPET_URL, {
+    method: 'GET',
+    mode: 'cors',
+    credentials: 'omit',
+    cache: 'no-cache'
+  })
+    .then(res => res.text())
+    .then(html => {
+      const backdrop = document.createElement('div');
+      backdrop.id = 'chatbot-modal';
+      backdrop.className = 'modal-backdrop';
+
+      const content = document.createElement('div');
+      content.className = 'chatbot-modal-content';
+      content.innerHTML = `<button class="chatbot-close" aria-label="Close chatbot">×</button>${html}`;
+
+      backdrop.appendChild(content);
+      document.body.appendChild(backdrop);
+
+      const closeModal = () => {
+        auditLog('chatbot_close', { source });
+        backdrop.remove();
+      };
+      content.querySelector('.chatbot-close').addEventListener('click', closeModal);
+      backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) closeModal();
+      });
+    })
+    .catch(err => console.error('Chatbot failed to load', err));
+}
+
 // Function to handle form submission (prevents default behavior)
 function handleFormSubmit(event) {
   event.preventDefault();
@@ -190,6 +250,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const serviceKey = card.getAttribute('data-service-key');
         createModal(serviceKey, currentLanguage);
       }
+    });
+  }
+
+  const chatbotFab = document.getElementById('chatbot-fab');
+  if (chatbotFab) {
+    chatbotFab.addEventListener('click', () => openChatbotModal('fab'));
+  }
+
+  const chatbotMenuLink = document.getElementById('chatbot-menu-link');
+  if (chatbotMenuLink) {
+    chatbotMenuLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      openChatbotModal('mobile-menu');
     });
   }
 
