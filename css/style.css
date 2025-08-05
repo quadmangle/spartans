@@ -517,7 +517,7 @@ body.dark .card .icon > i {
   padding: 2.1rem 2.2rem 1.3rem 2.2rem;
   transition: box-shadow 0.17s;
   cursor: default;
-  z-index: 2000;
+  z-index: 3000;
   display: flex;
   flex-direction: column;
 }

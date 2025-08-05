@@ -125,8 +125,6 @@ function createModal(serviceKey, lang) {
 
 function openChattiaModal() {
   const modalRoot = document.getElementById('modal-root');
-  const modalBackdrop = document.createElement('div');
-  modalBackdrop.className = 'modal-backdrop';
 
   const modalContent = document.createElement('div');
   modalContent.className = 'ops-modal';
@@ -138,28 +136,28 @@ function openChattiaModal() {
     </div>
   `;
 
-  modalBackdrop.appendChild(modalContent);
-  modalRoot.appendChild(modalBackdrop);
+  modalRoot.appendChild(modalContent);
 
   makeDraggable(modalContent);
   updateModalContent(modalContent, currentLanguage);
 
   modalContent.querySelector('.close-modal').addEventListener('click', closeModal);
-  modalBackdrop.addEventListener('click', (event) => {
-    if (event.target === modalBackdrop) {
+  document.addEventListener('click', handleOutsideClick);
+
+  function handleOutsideClick(event) {
+    if (!modalContent.contains(event.target)) {
       closeModal();
     }
-  });
+  }
 
   function closeModal() {
     modalRoot.innerHTML = '';
+    document.removeEventListener('click', handleOutsideClick);
   }
 }
 
 function openJoinUsModal() {
   const modalRoot = document.getElementById('modal-root');
-  const modalBackdrop = document.createElement('div');
-  modalBackdrop.className = 'modal-backdrop';
 
   const modalContent = document.createElement('div');
   modalContent.className = 'ops-modal';
@@ -171,21 +169,23 @@ function openJoinUsModal() {
     </div>
   `;
 
-  modalBackdrop.appendChild(modalContent);
-  modalRoot.appendChild(modalBackdrop);
+  modalRoot.appendChild(modalContent);
 
   makeDraggable(modalContent);
   updateModalContent(modalContent, currentLanguage);
 
   modalContent.querySelector('.close-modal').addEventListener('click', closeModal);
-  modalBackdrop.addEventListener('click', (event) => {
-    if (event.target === modalBackdrop) {
+  document.addEventListener('click', handleOutsideClick);
+
+  function handleOutsideClick(event) {
+    if (!modalContent.contains(event.target)) {
       closeModal();
     }
-  });
+  }
 
   function closeModal() {
     modalRoot.innerHTML = '';
+    document.removeEventListener('click', handleOutsideClick);
   }
 }
 
