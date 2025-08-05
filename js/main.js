@@ -43,10 +43,7 @@ function createModal(serviceKey, lang) {
 
   if (!modalData) return;
 
-  // Create modal backdrop and content
-  const modalBackdrop = document.createElement('div');
-  modalBackdrop.className = 'modal-backdrop';
-
+  // Create modal content
   const modalContent = document.createElement('div');
   modalContent.className = 'ops-modal';
 
@@ -65,15 +62,12 @@ function createModal(serviceKey, lang) {
     </div>
     <div class="modal-actions">
       <a href="${serviceData.learn}" class="modal-btn" data-key="modal-learn-more"></a>
-      <a href="#" id="ask-chattia-btn" class="modal-btn" data-key="modal-ask-chattia"></a>
-      <a href="#" id="join-us-btn" class="modal-btn" data-key="modal-join-us"></a>
+      <a href="#" id="ask-chattia-btn" class="modal-btn" data-key="modal-ask-chattia" aria-controls="chattia-modal"></a>
+      <a href="#" id="join-us-btn" class="modal-btn" data-key="modal-join-us" aria-controls="join-us-modal"></a>
       <a href="contact-center.html#form" class="modal-btn" data-key="modal-contact-us"></a>
-    </div>
-  `;
 
-  // Append modal to the DOM
-  modalBackdrop.appendChild(modalContent);
-  modalRoot.appendChild(modalBackdrop);
+  // Append modal directly to the modal root
+  modalRoot.appendChild(modalContent);
 
   // Make the modal draggable
   makeDraggable(modalContent);
@@ -87,20 +81,89 @@ function createModal(serviceKey, lang) {
     e.preventDefault();
     openChatbotModal('service-modal');
     closeModal();
+    openChattiaModal();
   });
 
   const joinUsBtn = document.getElementById('join-us-btn');
   joinUsBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    console.log('Redirecting to Join Us form via Cloudflare Worker...');
-    alert('Launching Join Us form...');
+    console.log('Opening Join Us modal');
     closeModal();
+    openJoinUsModal();
   });
   
   // Add event listener to close button
   modalContent.querySelector('.close-modal').addEventListener('click', closeModal);
 
   // Close modal when clicking outside of it
+  function handleOutsideClick(event) {
+    if (!modalContent.contains(event.target)) {
+      closeModal();
+    }
+  }
+  document.addEventListener('click', handleOutsideClick);
+
+  function closeModal() {
+    modalRoot.innerHTML = '';
+    document.removeEventListener('click', handleOutsideClick);
+  }
+}
+
+function openChattiaModal() {
+  const modalRoot = document.getElementById('modal-root');
+  const modalBackdrop = document.createElement('div');
+  modalBackdrop.className = 'modal-backdrop';
+
+  const modalContent = document.createElement('div');
+  modalContent.className = 'ops-modal';
+  modalContent.id = 'chattia-modal';
+  modalContent.innerHTML = `
+    <button class="close-modal" aria-label="Close modal">×</button>
+    <div class="modal-content-body">
+      <p data-key="modal-chattia-loading">Launching Chatbot...</p>
+    </div>
+  `;
+
+  modalBackdrop.appendChild(modalContent);
+  modalRoot.appendChild(modalBackdrop);
+
+  makeDraggable(modalContent);
+  updateModalContent(modalContent, currentLanguage);
+
+  modalContent.querySelector('.close-modal').addEventListener('click', closeModal);
+  modalBackdrop.addEventListener('click', (event) => {
+    if (event.target === modalBackdrop) {
+      closeModal();
+    }
+  });
+
+  function closeModal() {
+    modalRoot.innerHTML = '';
+  }
+}
+
+function openJoinUsModal() {
+  const modalRoot = document.getElementById('modal-root');
+  const modalBackdrop = document.createElement('div');
+  modalBackdrop.className = 'modal-backdrop';
+
+  const modalContent = document.createElement('div');
+  modalContent.className = 'ops-modal';
+  modalContent.id = 'join-us-modal';
+  modalContent.innerHTML = `
+    <button class="close-modal" aria-label="Close modal">×</button>
+    <div class="modal-content-body">
+      <p data-key="modal-joinus-loading">Opening Join Us form...</p>
+    </div>
+  `;
+
+  modalBackdrop.appendChild(modalContent);
+  modalRoot.appendChild(modalBackdrop);
+
+  makeDraggable(modalContent);
+  updateModalContent(modalContent, currentLanguage);
+
+  modalContent.querySelector('.close-modal').addEventListener('click', closeModal);
   modalBackdrop.addEventListener('click', (event) => {
     if (event.target === modalBackdrop) {
       closeModal();
@@ -155,6 +218,9 @@ function makeDraggable(modal) {
     document.removeEventListener('mouseup', onMouseUp);
   }
 }
+
+// Export the draggable helper for other modules
+window.makeDraggable = makeDraggable;
 
 // Helper function to update content inside the modal after creation
 function updateModalContent(modalElement, lang) {
@@ -236,6 +302,107 @@ function handleFormSubmit(event) {
   event.target.reset(); // Clear the form
 }
 
+// Open a contact form modal
+function openContactModal() {
+  const modalRoot = document.getElementById('modal-root');
+  const modal = document.createElement('div');
+  modal.className = 'ops-modal';
+
+  modal.innerHTML = `
+    <button class="close-modal" aria-label="Close modal">×</button>
+    <div class="modal-header"><h3 data-key="modal-contact-us">Contact Us</h3></div>
+    <div class="modal-content-body">
+      <form>
+        <input type="text" placeholder="" data-key="form-name" required />
+        <input type="email" placeholder="" data-key="form-email" required />
+        <input type="tel" placeholder="" data-key="form-phone" required />
+        <input type="text" placeholder="" data-key="form-company" required />
+        <button type="submit" class="submit-button" data-key="form-submit">Request Now</button>
+      </form>
+    </div>
+  `;
+
+  modalRoot.appendChild(modal);
+  updateModalContent(modal, currentLanguage);
+  makeDraggable(modal);
+
+  modal.querySelector('form').addEventListener('submit', handleFormSubmit);
+  modal.querySelector('.close-modal').addEventListener('click', () => {
+    modal.remove();
+  });
+}
+
+// Open a join-us form modal
+function openJoinModal() {
+  const modalRoot = document.getElementById('modal-root');
+  const modal = document.createElement('div');
+  modal.className = 'ops-modal';
+
+  modal.innerHTML = `
+    <button class="close-modal" aria-label="Close modal">×</button>
+    <div class="modal-header"><h3 data-key="modal-join-us">Join Us</h3></div>
+    <div class="modal-content-body">
+      <form>
+        <input type="text" placeholder="" data-key="form-name" required />
+        <input type="email" placeholder="" data-key="form-email" required />
+        <input type="tel" placeholder="" data-key="form-phone" required />
+        <input type="text" placeholder="" data-key="form-company" required />
+        <button type="submit" class="submit-button" data-key="form-submit">Request Now</button>
+      </form>
+    </div>
+  `;
+
+  modalRoot.appendChild(modal);
+  updateModalContent(modal, currentLanguage);
+  makeDraggable(modal);
+
+  modal.querySelector('form').addEventListener('submit', handleFormSubmit);
+  modal.querySelector('.close-modal').addEventListener('click', () => {
+    modal.remove();
+  });
+}
+
+// Open a simple chatbot modal
+function openChatbotModal() {
+  const modalRoot = document.getElementById('modal-root');
+  const modal = document.createElement('div');
+  modal.className = 'ops-modal';
+
+  modal.innerHTML = `
+    <button class="close-modal" aria-label="Close modal">×</button>
+    <div class="modal-header"><h3 data-key="modal-ask-chattia">Ask Chattia</h3></div>
+    <div class="modal-content-body chatbot-body">
+      <div class="chat-log" aria-live="polite"></div>
+      <form class="chat-form">
+        <input type="text" aria-label="Message" placeholder="Type your message" required />
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  `;
+
+  modalRoot.appendChild(modal);
+  updateModalContent(modal, currentLanguage);
+  makeDraggable(modal);
+
+  modal.querySelector('.close-modal').addEventListener('click', () => {
+    modal.remove();
+  });
+
+  const chatForm = modal.querySelector('form');
+  chatForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const input = chatForm.querySelector('input');
+    const message = input.value.trim();
+    if (!message) return;
+    const log = modal.querySelector('.chat-log');
+    const userMsg = document.createElement('div');
+    userMsg.className = 'chat-message user';
+    userMsg.textContent = message;
+    log.appendChild(userMsg);
+    input.value = '';
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   // --- Main Page Logic ---
   // Generate service cards on the main page dynamically
@@ -270,5 +437,45 @@ document.addEventListener('DOMContentLoaded', () => {
   const forms = document.querySelectorAll('form');
   forms.forEach(form => {
     form.addEventListener('submit', handleFormSubmit);
+  });
+
+  // --- Modal trigger buttons ---
+  const contactTriggers = [
+    document.getElementById('contact-fab'),
+    document.getElementById('mobile-contact-btn')
+  ];
+  contactTriggers.forEach(btn => {
+    if (btn) {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openContactModal();
+      });
+    }
+  });
+
+  const joinTriggers = [
+    document.getElementById('join-fab'),
+    document.getElementById('mobile-join-btn')
+  ];
+  joinTriggers.forEach(btn => {
+    if (btn) {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openJoinModal();
+      });
+    }
+  });
+
+  const chatbotTriggers = [
+    document.getElementById('chatbot-fab'),
+    document.getElementById('mobile-chatbot-btn')
+  ];
+  chatbotTriggers.forEach(btn => {
+    if (btn) {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openChatbotModal();
+      });
+    }
   });
 });
