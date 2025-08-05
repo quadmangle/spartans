@@ -29,6 +29,7 @@ function createServiceCards(services, lang) {
       <div class="title">${cardData.title}</div>
       <div class="icon">${serviceData.icon}</div>
       <div class="content">${cardData.desc}</div>
+    `;
 
     // Add the card to the container
     container.appendChild(card);
@@ -63,6 +64,7 @@ function createModal(serviceKey, lang) {
       <a href="#" id="join-us-btn" class="modal-btn" data-key="modal-join-us"></a>
       <a href="#" id="contact-us-btn" class="modal-btn" data-key="modal-contact-us"></a>
     </div>
+  `;
 
   // Append modal directly to the modal root
   modalRoot.appendChild(modalContent);
@@ -130,16 +132,11 @@ function openChattiaModal() {
     <div class="modal-content-body">
       <p data-key="modal-chattia-loading">Launching Chatbot...</p>
     </div>
+  `;
 
   modalRoot.appendChild(modalContent);
   makeDraggable(modalContent);
   updateModalContent(modalContent, currentLanguage);
-  const handleKeydown = (event) => {
-    if (event.key === 'Escape') {
-      closeModal();
-    }
-  };
-  document.addEventListener('keydown', handleKeydown);
   const handleKeydown = (event) => {
     if (event.key === 'Escape') {
       closeModal();
@@ -171,8 +168,9 @@ function openJoinModal() {
     <div class="modal-content-body">
       <p data-key="modal-joinus-loading">Opening Join Us form...</p>
     </div>
+  `;
 
-    modalRoot.appendChild(modalContent);
+  modalRoot.appendChild(modalContent);
   makeDraggable(modalContent);
   updateModalContent(modalContent, currentLanguage);
   const handleKeydown = (event) => {
@@ -334,18 +332,6 @@ function openChatbotModal(source = 'unknown') {
     closeBtn.dataset.listenerAdded = 'true';
   }
 
-  const handleKeydown = (e) => {
-    if (e.key === 'Escape') {
-      modal.close();
-    }
-  };
-  const handleOutsideClick = (e) => {
-    if (e.target === modal) {
-      modal.close();
-    }
-  };
-  modal.addEventListener('keydown', handleKeydown);
-  modal.addEventListener('click', handleOutsideClick);
   const handleKeydown = (e) => {
     if (e.key === 'Escape') {
       modal.close();
