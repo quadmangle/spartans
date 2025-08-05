@@ -198,6 +198,7 @@ const translations = {
     'cta-strategy-call': "Book Free Strategy Call",
     // Modal button
     'modal-learn-more': "Learn More",
+    'footer-copyright': '© 2025 OPS Online Support.',
   },
   es: {
     'title-business-ops': "Servicios de Gestion | Ops Online Support",
@@ -243,6 +244,7 @@ const translations = {
     'cta-strategy-call': "Reservar Llamada de Estrategia Gratis",
     // Modal button
     'modal-learn-more': "Aprende Más",
+    'footer-copyright': '© 2025 OPS Online Support.',
   },
 };
 
