@@ -4,6 +4,10 @@
 // The `translations` object contains all service card and modal data.
 // We assume `translations` and `currentLanguage` are globally available after langtheme.js loads.
 
+const CHATBOT_SNIPPET_URL = 'chatbot.html';
+const CHATBOT_RATE_LIMIT_MS = 5000;
+let lastChatbotLaunch = 0;
+
 function createServiceCards(services, lang) {
   const container = document.getElementById('cards-section');
   if (!container) return; // Only run this on the index page
@@ -76,7 +80,7 @@ function createModal(serviceKey, lang) {
   const askChattiaBtn = document.getElementById('ask-chattia-btn');
   askChattiaBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    console.log('Opening Chatbot modal');
+    openChatbotModal('service-modal');
     closeModal();
     openChattiaModal();
   });
@@ -244,16 +248,101 @@ function updateModalContent(modalElement, lang) {
   });
 }
 
-function sanitizeInput(str) {
-  return str.replace(/[&<>"']/g, (char) => {
-    const map = {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;'
-    };
-    return map[char];
+function auditLog(event, details = {}) {
+  const payload = { event, details, timestamp: new Date().toISOString() };
+  console.log('audit', payload);
+  if (location.protocol === 'https:') {
+    fetch('https://example.com/audit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      mode: 'cors',
+      credentials: 'omit',
+      body: JSON.stringify(payload)
+    }).catch(() => {});
+  }
+}
+
+function openChatbotModal(source = 'unknown') {
+  if (Date.now() - lastChatbotLaunch < CHATBOT_RATE_LIMIT_MS) {
+    console.warn('Chatbot modal rate limited');
+    return;
+  }
+  lastChatbotLaunch = Date.now();
+
+  if (location.protocol !== 'https:') {
+    console.warn('Chatbot requires HTTPS');
+    return;
+  }
+
+  auditLog('chatbot_open', { source });
+
+  fetch(CHATBOT_SNIPPET_URL, {
+    method: 'GET',
+    mode: 'cors',
+    credentials: 'omit',
+    cache: 'no-cache'
+  })
+    .then(res => res.text())
+    .then(html => {
+      const backdrop = document.createElement('div');
+      backdrop.id = 'chatbot-modal';
+      backdrop.className = 'modal-backdrop';
+
+      const content = document.createElement('div');
+      content.className = 'chatbot-modal-content';
+      content.innerHTML = `<button class="chatbot-close" aria-label="Close chatbot">×</button>${html}`;
+
+      backdrop.appendChild(content);
+      document.body.appendChild(backdrop);
+
+      const closeModal = () => {
+        auditLog('chatbot_close', { source });
+        backdrop.remove();
+      };
+      content.querySelector('.chatbot-close').addEventListener('click', closeModal);
+      backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) closeModal();
+      });
+    })
+    .catch(err => console.error('Chatbot failed to load', err));
+}
+
+// Function to handle form submission (prevents default behavior)
+function handleFormSubmit(event) {
+  event.preventDefault();
+  // In a real application, you would send this data to a server
+  console.log('Form submitted:', new FormData(event.target));
+  alert('Thank you for your submission!');
+  event.target.reset(); // Clear the form
+}
+
+// Open a contact form modal
+function openContactModal() {
+  const modalRoot = document.getElementById('modal-root');
+  const modal = document.createElement('div');
+  modal.className = 'ops-modal';
+
+  modal.innerHTML = `
+    <button class="close-modal" aria-label="Close modal">×</button>
+    <div class="modal-header"><h3 data-key="modal-contact-us">Contact Us</h3></div>
+    <div class="modal-content-body">
+      <form>
+        <input type="text" placeholder="" data-key="form-name" required />
+        <input type="email" placeholder="" data-key="form-email" required />
+        <input type="tel" placeholder="" data-key="form-phone" required />
+        <input type="text" placeholder="" data-key="form-company" required />
+        <button type="submit" class="submit-button" data-key="form-submit">Request Now</button>
+      </form>
+    </div>
+  `;
+
+  modalRoot.appendChild(modal);
+  updateModalContent(modal, currentLanguage);
+  makeDraggable(modal);
+
+  modal.querySelector('form').addEventListener('submit', handleFormSubmit);
+  modal.querySelector('.close-modal').addEventListener('click', () => {
+    modal.remove();
   });
 }
 
@@ -322,6 +411,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const serviceKey = card.getAttribute('data-service-key');
         createModal(serviceKey, currentLanguage);
       }
+    });
+  }
+
+  const chatbotFab = document.getElementById('chatbot-fab');
+  if (chatbotFab) {
+    chatbotFab.addEventListener('click', () => openChatbotModal('fab'));
+  }
+
+  const chatbotMenuLink = document.getElementById('chatbot-menu-link');
+  if (chatbotMenuLink) {
+    chatbotMenuLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      openChatbotModal('mobile-menu');
     });
   }
 
