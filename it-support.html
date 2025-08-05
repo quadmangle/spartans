@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://placehold.co; style-src 'self' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; script-src 'self'; connect-src 'self'; frame-ancestors 'none';" />
   <title data-key="title-it-support">IT Support | Ops Online Support</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/style.css" />
@@ -17,11 +18,18 @@
       <a href="professional-services.html" class="nav-link" data-key="nav-professionals">Professionals</a>
       <a href="#" id="chatbot-menu-link" class="nav-link mobile-only">Ask Chattia</a>
     </div>
-    <div id="toggles" class="toggles">
-      <button id="lang-toggle" class="toggle-btn" aria-label="Toggle language" aria-pressed="false">EN</button>
-      <button id="theme-toggle" class="toggle-btn" aria-label="Toggle dark/light theme" aria-pressed="false">Dark</button>
-    </div>
+    <button id="mobile-menu-button" class="mobile-menu-button" aria-label="Open menu" aria-controls="mobileNav" aria-expanded="false">
+      <i class="fas fa-bars"></i>
+    </button>
   </nav>
+
+  <div class="fab-container" aria-label="Quick actions">
+    <button id="fab-menu" class="fab" aria-label="Toggle navigation" aria-controls="mobileNav" aria-expanded="false">
+      <i class="fas fa-bars"></i>
+    </button>
+    <button id="fab-lang" class="fab lang-toggle" aria-label="Toggle language" aria-pressed="false">EN</button>
+    <button id="fab-theme" class="fab theme-toggle" aria-label="Toggle dark/light theme" aria-pressed="false">Dark</button>
+  </div>
 
   <main id="page-content">
     <header>
@@ -64,6 +72,7 @@
     <i class="fas fa-comment-dots"></i>
   </button>
   <script src="js/langtheme.js" defer></script>
+  <script src="js/nav.js" defer></script>
   <script src="js/main.js" defer></script>
 </body>
 </html>
