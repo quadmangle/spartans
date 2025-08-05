@@ -1,0 +1,117 @@
+<!-- This is a fragment, intended to be loaded dynamically -->
+<div class="modal-container" role="dialog" aria-modal="true">
+  <div class="modal-header">
+    <h1>Join Us</h1>
+    <button class="modal-close"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="modal-content">
+    <form id="joinForm" autocomplete="off" novalidate>
+      <div class="form-pairs">
+        <div>
+          <label for="name">Name</label>
+          <input id="name" name="name" required placeholder="Enter your name" />
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input id="email" type="email" name="email" required placeholder="Enter your email" />
+        </div>
+        <div>
+          <label for="phone">Phone</label>
+          <input id="phone" type="tel" name="phone" required placeholder="Enter your phone" />
+        </div>
+        <div></div>
+      </div>
+
+      <!-- Dynamic Sections -->
+      <div class="form-section" data-section="Skills">
+        <div class="section-header">
+          <h2>Skills</h2>
+          <div>
+            <button type="button" class="circle-btn add" title="Add field">+</button>
+            <button type="button" class="circle-btn remove" title="Remove last field">−</button>
+          </div>
+        </div>
+        <div class="inputs"></div>
+        <button type="button" class="accept-btn">Accept</button>
+        <button type="button" class="edit-btn" style="display:none;">Edit</button>
+      </div>
+
+      <div class="form-section" data-section="Education">
+        <div class="section-header">
+          <h2>Education</h2>
+          <div>
+            <button type="button" class="circle-btn add" title="Add field">+</button>
+            <button type="button" class="circle-btn remove" title="Remove last field">−</button>
+          </div>
+        </div>
+        <div class="inputs"></div>
+        <button type="button" class="accept-btn">Accept</button>
+        <button type="button" class="edit-btn" style="display:none;">Edit</button>
+      </div>
+
+      <div class="form-section" data-section="Certification">
+        <div class="section-header">
+          <h2>Certification</h2>
+          <div>
+            <button type="button" class="circle-btn add" title="Add field">+</button>
+            <button type="button" class="circle-btn remove" title="Remove last field">−</button>
+          </div>
+        </div>
+        <div class="inputs"></div>
+        <button type="button" class="accept-btn">Accept</button>
+        <button type="button" class="edit-btn" style="display:none;">Edit</button>
+      </div>
+
+      <div class="form-section" data-section="Hobbies">
+        <div class="section-header">
+          <h2>Hobbies</h2>
+          <div>
+            <button type="button" class="circle-btn add" title="Add field">+</button>
+            <button type="button" class="circle-btn remove" title="Remove last field">−</button>
+          </div>
+        </div>
+        <div class="inputs"></div>
+        <button type="button" class="accept-btn">Accept</button>
+        <button type="button" class="edit-btn" style="display:none;">Edit</button>
+      </div>
+
+      <div class="form-section">
+        <h2>What are you interested about?</h2>
+        <select id="jn-interest" name="jn-interest" required>
+          <option value="" disabled selected>Select an option</option>
+          <option>Business Operations</option>
+          <option>Contact Center</option>
+          <option>IT Support</option>
+          <option>Professionals</option>
+        </select>
+      </div>
+
+      <div class="form-section">
+        <h2>Continued Education</h2>
+        <div class="inputs"></div>
+        <button type="button" class="circle-btn add" title="Add field">+</button>
+      </div>
+
+      <div class="form-section">
+        <h2>Experience</h2>
+        <div class="inputs"></div>
+        <button type="button" class="circle-btn add" title="Add field">+</button>
+      </div>
+
+      <div>
+        <label for="about">Tell us about yourself</label>
+        <textarea id="about" name="about" rows="4" placeholder="Tell us about yourself..."></textarea>
+      </div>
+
+      <!-- Honeypot Field for security -->
+      <div class="honeypot">
+        <label for="honeypot-join">Leave this field blank</label>
+        <input type="text" id="honeypot-join" name="honeypot-join" />
+      </div>
+
+      <div class="modal-footer">
+        <button type="submit" class="submit-btn">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
