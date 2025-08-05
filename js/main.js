@@ -29,7 +29,6 @@ function createServiceCards(services, lang) {
       <div class="title">${cardData.title}</div>
       <div class="icon">${serviceData.icon}</div>
       <div class="content">${cardData.desc}</div>
-    `;
 
     // Add the card to the container
     container.appendChild(card);
@@ -40,9 +39,7 @@ function createModal(serviceKey, lang) {
   const modalRoot = document.getElementById('modal-root');
   const serviceData = translations.services[serviceKey];
   const modalData = serviceData[lang].modal;
-
   if (!modalData) return;
-
   // Create modal content
   const modalContent = document.createElement('div');
   modalContent.className = 'ops-modal';
@@ -95,7 +92,6 @@ function createModal(serviceKey, lang) {
   const contactBtn = document.getElementById('contact-us-btn');
   contactBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    openContactModal();
     closeModal();
   });
 
@@ -129,7 +125,6 @@ function openChattiaModal() {
   const modalRoot = document.getElementById('modal-root');
   const modalBackdrop = document.createElement('div');
   modalBackdrop.className = 'modal-backdrop';
-
   const modalContent = document.createElement('div');
   modalContent.className = 'ops-modal';
   modalContent.id = 'chattia-modal';
@@ -138,14 +133,10 @@ function openChattiaModal() {
     <div class="modal-content-body">
       <p data-key="modal-chattia-loading">Launching Chatbot...</p>
     </div>
-  `;
-
   modalBackdrop.appendChild(modalContent);
   modalRoot.appendChild(modalBackdrop);
-
   makeDraggable(modalContent);
   updateModalContent(modalContent, currentLanguage);
-
   const handleKeydown = (event) => {
     if (event.key === 'Escape') {
       closeModal();
@@ -166,11 +157,15 @@ function openChattiaModal() {
   }
 }
 
-function openJoinUsModal() {
+function openJoinModal() {
   const modalRoot = document.getElementById('modal-root');
+
+  // Ensure any existing modal is closed before opening a new one
+  if (modalRoot) {
+    modalRoot.innerHTML = '';
+  }
   const modalBackdrop = document.createElement('div');
   modalBackdrop.className = 'modal-backdrop';
-
   const modalContent = document.createElement('div');
   modalContent.className = 'ops-modal';
   modalContent.id = 'join-us-modal';
@@ -179,28 +174,22 @@ function openJoinUsModal() {
     <div class="modal-content-body">
       <p data-key="modal-joinus-loading">Opening Join Us form...</p>
     </div>
-  `;
-
   modalBackdrop.appendChild(modalContent);
   modalRoot.appendChild(modalBackdrop);
-
   makeDraggable(modalContent);
   updateModalContent(modalContent, currentLanguage);
-
   const handleKeydown = (event) => {
     if (event.key === 'Escape') {
       closeModal();
     }
   };
   document.addEventListener('keydown', handleKeydown);
-
   modalContent.querySelector('.close-modal').addEventListener('click', closeModal);
   modalBackdrop.addEventListener('click', (event) => {
     if (event.target === modalBackdrop) {
       closeModal();
     }
   });
-
   function closeModal() {
     modalRoot.innerHTML = '';
     document.removeEventListener('keydown', handleKeydown);
@@ -210,10 +199,8 @@ function openJoinUsModal() {
 function makeDraggable(modal) {
   const header = modal.querySelector('.modal-header');
   if (!header) return;
-
   let isDragging = false;
   let offsetX, offsetY;
-
   header.addEventListener('mousedown', (e) => {
     isDragging = true;
 
@@ -230,7 +217,6 @@ function makeDraggable(modal) {
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
-
   function onMouseMove(e) {
     if (!isDragging) return;
 
@@ -239,7 +225,6 @@ function makeDraggable(modal) {
 
     const newX = e.clientX - offsetX;
     const newY = e.clientY - offsetY;
-
     modal.style.left = `${newX}px`;
     modal.style.top = `${newY}px`;
   }
@@ -293,7 +278,6 @@ function openChatbotModal(source = 'unknown') {
   }
 
   auditLog('chatbot_open', { source });
-
   fetch(CHATBOT_SNIPPET_URL, {
     method: 'GET',
     mode: 'cors',
@@ -305,14 +289,11 @@ function openChatbotModal(source = 'unknown') {
       const backdrop = document.createElement('div');
       backdrop.id = 'chatbot-modal';
       backdrop.className = 'modal-backdrop';
-
       const content = document.createElement('div');
       content.className = 'chatbot-modal-content';
       content.innerHTML = `<button class="chatbot-close" aria-label="Close chatbot">×</button>${html}`;
-
       backdrop.appendChild(content);
       document.body.appendChild(backdrop);
-
       const closeModal = () => {
         auditLog('chatbot_close', { source });
         document.removeEventListener('keydown', handleKeydown);
@@ -343,10 +324,17 @@ async function openContactModal() {
     container.innerHTML = html.trim();
     modal = container.firstElementChild;
     document.body.appendChild(modal);
+  }
 
-    const form = modal.querySelector('form');
+  const form = modal.querySelector('form');
+  if (!form.dataset.listenerAdded) {
     form.addEventListener('submit', handleFormSubmit);
-    modal.querySelector('.close-modal').addEventListener('click', () => modal.close());
+    form.dataset.listenerAdded = 'true';
+  }
+  const closeBtn = modal.querySelector('.close-modal');
+  if (closeBtn && !closeBtn.dataset.listenerAdded) {
+    closeBtn.addEventListener('click', () => modal.close());
+    closeBtn.dataset.listenerAdded = 'true';
   }
 
   const handleKeydown = (e) => {
@@ -374,7 +362,7 @@ async function openContactModal() {
   }, { once: true });
 }
 
-// Function to handle form submission (prevents default behavior)
+// Function to handle form submission
 async function handleFormSubmit(event) {
   event.preventDefault();
 
