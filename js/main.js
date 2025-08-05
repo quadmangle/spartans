@@ -91,9 +91,8 @@ function createModal(serviceKey, lang) {
   const joinUsBtn = document.getElementById('join-us-btn');
   joinUsBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    console.log('Redirecting to Join Us form via Cloudflare Worker...');
-    alert('Launching Join Us form...');
     closeModal();
+    openJoinModal();
   });
   
   // Add event listener to close button
@@ -176,6 +175,40 @@ function handleFormSubmit(event) {
   event.target.reset(); // Clear the form
 }
 
+// Fetch and display the Join Us modal
+function openJoinModal() {
+  fetch('joinus.html')
+    .then(res => res.text())
+    .then(html => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const joinModal = doc.getElementById('join-modal');
+      if (!joinModal) return;
+
+      const modalRoot = document.getElementById('modal-root');
+      if (!modalRoot) return;
+
+      modalRoot.innerHTML = '';
+      modalRoot.appendChild(joinModal);
+
+      const form = joinModal.querySelector('form');
+      if (form) {
+        initDynamicSections(form);
+        form.addEventListener('submit', handleFormSubmit);
+      }
+
+      const close = () => {
+        modalRoot.innerHTML = '';
+      };
+
+      joinModal.querySelector('.close-modal').addEventListener('click', close);
+      joinModal.addEventListener('click', (e) => {
+        if (e.target === joinModal) close();
+      });
+    })
+    .catch(err => console.error('Unable to load join form', err));
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   // --- Main Page Logic ---
   // Generate service cards on the main page dynamically
@@ -198,4 +231,20 @@ document.addEventListener('DOMContentLoaded', () => {
   forms.forEach(form => {
     form.addEventListener('submit', handleFormSubmit);
   });
+
+  const fabJoin = document.getElementById('fab-join');
+  if (fabJoin) {
+    fabJoin.addEventListener('click', (e) => {
+      e.preventDefault();
+      openJoinModal();
+    });
+  }
+
+  const mobileJoin = document.getElementById('join-nav-mobile');
+  if (mobileJoin) {
+    mobileJoin.addEventListener('click', (e) => {
+      e.preventDefault();
+      openJoinModal();
+    });
+  }
 });
