@@ -58,9 +58,10 @@ function createModal(serviceKey, lang) {
     </div>
     <div class="modal-actions">
       <a href="${serviceData.learn}" class="modal-btn" data-key="modal-learn-more"></a>
-      <a href="#" id="ask-chattia-btn" class="modal-btn" data-key="modal-ask-chattia" aria-controls="chattia-modal"></a>
-      <a href="#" id="join-us-btn" class="modal-btn" data-key="modal-join-us" aria-controls="join-us-modal"></a>
-      <a href="contact-center.html#form" class="modal-btn" data-key="modal-contact-us"></a>
+      <a href="#" id="ask-chattia-btn" class="modal-btn" data-key="modal-ask-chattia"></a>
+      <a href="#" id="join-us-btn" class="modal-btn" data-key="modal-join-us"></a>
+      <a href="#" id="contact-us-btn" class="modal-btn" data-key="modal-contact-us"></a>
+    </div>
 
   // Append modal directly to the modal root
   modalRoot.appendChild(modalContent);
@@ -85,6 +86,13 @@ function createModal(serviceKey, lang) {
     e.preventDefault();
     closeModal();
     openJoinModal();
+  });
+
+  const contactBtn = document.getElementById('contact-us-btn');
+  contactBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    openContactModal();
+    closeModal();
   });
   
   // Add event listener to close button
@@ -229,13 +237,68 @@ function updateModalContent(modalElement, lang) {
   });
 }
 
+function sanitizeInput(str) {
+  return str.replace(/[&<>"']/g, (char) => {
+    const map = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    };
+    return map[char];
+  });
+}
+
+async function openContactModal() {
+  let modal = document.getElementById('contact-modal');
+
+  if (!modal) {
+    const response = await fetch('contactus.html', { mode: 'same-origin' });
+    const html = await response.text();
+    const container = document.createElement('div');
+    container.innerHTML = html.trim();
+    modal = container.firstElementChild;
+    document.body.appendChild(modal);
+
+    const form = modal.querySelector('form');
+    form.addEventListener('submit', handleFormSubmit);
+    modal.querySelector('.close-modal').addEventListener('click', () => modal.close());
+  }
+
+  if (typeof modal.showModal === 'function') {
+    modal.showModal();
+  } else {
+    modal.setAttribute('open', 'true');
+  }
+}
+
 // Function to handle form submission (prevents default behavior)
-function handleFormSubmit(event) {
+async function handleFormSubmit(event) {
   event.preventDefault();
-  // In a real application, you would send this data to a server
-  console.log('Form submitted:', new FormData(event.target));
-  alert('Thank you for your submission!');
-  event.target.reset(); // Clear the form
+
+  const formData = new FormData(event.target);
+  const sanitized = {};
+  formData.forEach((value, key) => {
+    sanitized[key] = sanitizeInput(value);
+  });
+
+  try {
+    await fetch('https://example.com/api/contact', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      mode: 'cors',
+      body: JSON.stringify(sanitized)
+    });
+    alert('Thank you for your submission!');
+    event.target.reset();
+  } catch (err) {
+    console.error('Form submission failed:', err);
+    alert('Unable to submit form at this time.');
+  }
 }
 
 // Fetch and display the Join Us modal
