@@ -261,7 +261,7 @@ let currentTheme = localStorage.getItem('theme') || 'light';
 
 function updateContent() {
   const elements = document.querySelectorAll('[data-key]');
-  const langToggle = document.getElementById('lang-toggle');
+  const langButtons = document.querySelectorAll('.lang-toggle');
   const langData = translations[currentLanguage];
 
   elements.forEach(el => {
@@ -289,8 +289,11 @@ function updateContent() {
     }
   });
 
-  // Update language toggle button text
-  langToggle.textContent = currentLanguage.toUpperCase();
+  // Update language toggle buttons
+  langButtons.forEach(btn => {
+    btn.textContent = currentLanguage.toUpperCase();
+    btn.setAttribute('aria-pressed', currentLanguage === 'es');
+  });
 }
 
 function toggleLanguage() {
@@ -302,8 +305,11 @@ function toggleLanguage() {
 function updateTheme() {
   document.body.classList.remove('light', 'dark');
   document.body.classList.add(currentTheme);
-  const themeToggle = document.getElementById('theme-toggle');
-  themeToggle.textContent = (currentTheme === 'light') ? 'Dark' : 'Light';
+  const themeButtons = document.querySelectorAll('.theme-toggle');
+  themeButtons.forEach(btn => {
+    btn.textContent = (currentTheme === 'light') ? 'Dark' : 'Light';
+    btn.setAttribute('aria-pressed', currentTheme === 'dark');
+  });
 }
 
 function toggleTheme() {
@@ -312,13 +318,8 @@ function toggleTheme() {
   updateTheme();
 }
 
-// Event Listeners for Toggles
+// Initialize stored settings
 document.addEventListener('DOMContentLoaded', () => {
-  // Apply initial language and theme from localStorage
   updateContent();
   updateTheme();
-  
-  // Toggle Buttons
-  document.getElementById('lang-toggle').addEventListener('click', toggleLanguage);
-  document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
 });
