@@ -58,11 +58,9 @@ function createModal(serviceKey, lang) {
     </div>
     <div class="modal-actions">
       <a href="${serviceData.learn}" class="modal-btn" data-key="modal-learn-more"></a>
-      <a href="#" id="ask-chattia-btn" class="modal-btn" data-key="modal-ask-chattia"></a>
-      <a href="#" id="join-us-btn" class="modal-btn" data-key="modal-join-us"></a>
-      <a href="#" id="contact-us-btn" class="modal-btn" data-key="modal-contact-us"></a>
-    </div>
-  `;
+      <a href="#" id="ask-chattia-btn" class="modal-btn" data-key="modal-ask-chattia" aria-controls="chattia-modal"></a>
+      <a href="#" id="join-us-btn" class="modal-btn" data-key="modal-join-us" aria-controls="join-us-modal"></a>
+      <a href="contact-center.html#form" class="modal-btn" data-key="modal-contact-us"></a>
 
   // Append modal directly to the modal root
   modalRoot.appendChild(modalContent);
@@ -74,27 +72,20 @@ function createModal(serviceKey, lang) {
   updateModalContent(modalContent, lang);
 
   // Add event listeners for new buttons
-  // Note: These are placeholders. You will need to replace the `console.log` calls
-  // with actual calls to your Cloudflare Workers or other services.
   const askChattiaBtn = document.getElementById('ask-chattia-btn');
   askChattiaBtn.addEventListener('click', (e) => {
     e.preventDefault();
+    console.log('Opening Chatbot modal');
     closeModal();
-    openChatbotModal();
+    openChattiaModal();
   });
 
   const joinUsBtn = document.getElementById('join-us-btn');
   joinUsBtn.addEventListener('click', (e) => {
     e.preventDefault();
+    console.log('Opening Join Us modal');
     closeModal();
-    openJoinModal();
-  });
-
-  const contactUsBtn = document.getElementById('contact-us-btn');
-  contactUsBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    closeModal();
-    openContactModal();
+    openJoinUsModal();
   });
   
   // Add event listener to close button
@@ -111,6 +102,72 @@ function createModal(serviceKey, lang) {
   function closeModal() {
     modalRoot.innerHTML = '';
     document.removeEventListener('click', handleOutsideClick);
+  }
+}
+
+function openChattiaModal() {
+  const modalRoot = document.getElementById('modal-root');
+  const modalBackdrop = document.createElement('div');
+  modalBackdrop.className = 'modal-backdrop';
+
+  const modalContent = document.createElement('div');
+  modalContent.className = 'ops-modal';
+  modalContent.id = 'chattia-modal';
+  modalContent.innerHTML = `
+    <button class="close-modal" aria-label="Close modal">×</button>
+    <div class="modal-content-body">
+      <p data-key="modal-chattia-loading">Launching Chatbot...</p>
+    </div>
+  `;
+
+  modalBackdrop.appendChild(modalContent);
+  modalRoot.appendChild(modalBackdrop);
+
+  makeDraggable(modalContent);
+  updateModalContent(modalContent, currentLanguage);
+
+  modalContent.querySelector('.close-modal').addEventListener('click', closeModal);
+  modalBackdrop.addEventListener('click', (event) => {
+    if (event.target === modalBackdrop) {
+      closeModal();
+    }
+  });
+
+  function closeModal() {
+    modalRoot.innerHTML = '';
+  }
+}
+
+function openJoinUsModal() {
+  const modalRoot = document.getElementById('modal-root');
+  const modalBackdrop = document.createElement('div');
+  modalBackdrop.className = 'modal-backdrop';
+
+  const modalContent = document.createElement('div');
+  modalContent.className = 'ops-modal';
+  modalContent.id = 'join-us-modal';
+  modalContent.innerHTML = `
+    <button class="close-modal" aria-label="Close modal">×</button>
+    <div class="modal-content-body">
+      <p data-key="modal-joinus-loading">Opening Join Us form...</p>
+    </div>
+  `;
+
+  modalBackdrop.appendChild(modalContent);
+  modalRoot.appendChild(modalBackdrop);
+
+  makeDraggable(modalContent);
+  updateModalContent(modalContent, currentLanguage);
+
+  modalContent.querySelector('.close-modal').addEventListener('click', closeModal);
+  modalBackdrop.addEventListener('click', (event) => {
+    if (event.target === modalBackdrop) {
+      closeModal();
+    }
+  });
+
+  function closeModal() {
+    modalRoot.innerHTML = '';
   }
 }
 
