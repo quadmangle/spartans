@@ -1,37 +1,8 @@
 // This file contains the main logic for page-specific dynamic content and modals.
 
-// Grab the translation data from langtheme.js (which is loaded first)
+// Grab the translation data from langtheme.js (which is loaded first).
 // The `translations` object contains all service card and modal data.
 // We assume `translations` and `currentLanguage` are globally available after langtheme.js loads.
-
-
-function createServiceCards(services, lang) {
-  const container = document.getElementById('cards-section');
-  if (!container) return; // Only run this on the index page
-
-  // Clear any existing content
-  container.innerHTML = '';
-
-  Object.keys(services).forEach(key => {
-    const serviceData = services[key];
-    const cardData = serviceData[lang];
-
-    // Create a new card element
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.setAttribute('data-service-key', key);
-
-    // Build the inner HTML for the card
-    card.innerHTML = `
-      <div class="title">${cardData.title}</div>
-      <div class="icon">${serviceData.icon}</div>
-      <div class="content">${cardData.desc}</div>
-    `;
-
-    // Add the card to the container
-    container.appendChild(card);
-  });
-}
 
 function createModal(serviceKey, lang) {
   const modalRoot = document.getElementById('modal-root');
@@ -193,11 +164,7 @@ async function handleFormSubmit(event) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // --- Main Page Logic ---
-  // Generate service cards on the main page dynamically
-  createServiceCards(translations.services, currentLanguage);
-
-  // Event listener for dynamically created cards
+  // --- Card Modal Logic ---
   const cardsContainer = document.getElementById('cards-section');
   if (cardsContainer) {
     cardsContainer.addEventListener('click', (event) => {
