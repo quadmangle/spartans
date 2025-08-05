@@ -99,15 +99,16 @@ function createModal(serviceKey, lang) {
     closeModal();
   });
 
-  const contactBtn = document.getElementById('contact-us-btn');
-  contactBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    openContactModal();
-    closeModal();
-  });
-  
   // Add event listener to close button
   modalContent.querySelector('.close-modal').addEventListener('click', closeModal);
+
+  // Close modal on Escape key
+  const handleKeydown = (event) => {
+    if (event.key === 'Escape') {
+      closeModal();
+    }
+  };
+  document.addEventListener('keydown', handleKeydown);
 
   // Close modal when clicking outside of it
   function handleOutsideClick(event) {
@@ -120,6 +121,7 @@ function createModal(serviceKey, lang) {
   function closeModal() {
     modalRoot.innerHTML = '';
     document.removeEventListener('click', handleOutsideClick);
+    document.removeEventListener('keydown', handleKeydown);
   }
 }
 
@@ -144,6 +146,13 @@ function openChattiaModal() {
   makeDraggable(modalContent);
   updateModalContent(modalContent, currentLanguage);
 
+  const handleKeydown = (event) => {
+    if (event.key === 'Escape') {
+      closeModal();
+    }
+  };
+  document.addEventListener('keydown', handleKeydown);
+
   modalContent.querySelector('.close-modal').addEventListener('click', closeModal);
   modalBackdrop.addEventListener('click', (event) => {
     if (event.target === modalBackdrop) {
@@ -153,6 +162,7 @@ function openChattiaModal() {
 
   function closeModal() {
     modalRoot.innerHTML = '';
+    document.removeEventListener('keydown', handleKeydown);
   }
 }
 
@@ -177,6 +187,13 @@ function openJoinUsModal() {
   makeDraggable(modalContent);
   updateModalContent(modalContent, currentLanguage);
 
+  const handleKeydown = (event) => {
+    if (event.key === 'Escape') {
+      closeModal();
+    }
+  };
+  document.addEventListener('keydown', handleKeydown);
+
   modalContent.querySelector('.close-modal').addEventListener('click', closeModal);
   modalBackdrop.addEventListener('click', (event) => {
     if (event.target === modalBackdrop) {
@@ -186,6 +203,7 @@ function openJoinUsModal() {
 
   function closeModal() {
     modalRoot.innerHTML = '';
+    document.removeEventListener('keydown', handleKeydown);
   }
 }
 
@@ -297,53 +315,22 @@ function openChatbotModal(source = 'unknown') {
 
       const closeModal = () => {
         auditLog('chatbot_close', { source });
+        document.removeEventListener('keydown', handleKeydown);
         backdrop.remove();
       };
+      const handleKeydown = (e) => {
+        if (e.key === 'Escape') {
+          closeModal();
+        }
+      };
+      document.addEventListener('keydown', handleKeydown);
+
       content.querySelector('.chatbot-close').addEventListener('click', closeModal);
       backdrop.addEventListener('click', (e) => {
         if (e.target === backdrop) closeModal();
       });
     })
     .catch(err => console.error('Chatbot failed to load', err));
-}
-
-// Function to handle form submission (prevents default behavior)
-function handleFormSubmit(event) {
-  event.preventDefault();
-  // In a real application, you would send this data to a server
-  console.log('Form submitted:', new FormData(event.target));
-  alert('Thank you for your submission!');
-  event.target.reset(); // Clear the form
-}
-
-// Open a contact form modal
-function openContactModal() {
-  const modalRoot = document.getElementById('modal-root');
-  const modal = document.createElement('div');
-  modal.className = 'ops-modal';
-
-  modal.innerHTML = `
-    <button class="close-modal" aria-label="Close modal">×</button>
-    <div class="modal-header"><h3 data-key="modal-contact-us">Contact Us</h3></div>
-    <div class="modal-content-body">
-      <form>
-        <input type="text" placeholder="" data-key="form-name" required />
-        <input type="email" placeholder="" data-key="form-email" required />
-        <input type="tel" placeholder="" data-key="form-phone" required />
-        <input type="text" placeholder="" data-key="form-company" required />
-        <button type="submit" class="submit-button" data-key="form-submit">Request Now</button>
-      </form>
-    </div>
-  `;
-
-  modalRoot.appendChild(modal);
-  updateModalContent(modal, currentLanguage);
-  makeDraggable(modal);
-
-  modal.querySelector('form').addEventListener('submit', handleFormSubmit);
-  modal.querySelector('.close-modal').addEventListener('click', () => {
-    modal.remove();
-  });
 }
 
 async function openContactModal() {
@@ -362,11 +349,29 @@ async function openContactModal() {
     modal.querySelector('.close-modal').addEventListener('click', () => modal.close());
   }
 
+  const handleKeydown = (e) => {
+    if (e.key === 'Escape') {
+      modal.close();
+    }
+  };
+  const handleOutsideClick = (e) => {
+    if (e.target === modal) {
+      modal.close();
+    }
+  };
+  modal.addEventListener('keydown', handleKeydown);
+  modal.addEventListener('click', handleOutsideClick);
+
   if (typeof modal.showModal === 'function') {
     modal.showModal();
   } else {
     modal.setAttribute('open', 'true');
   }
+
+  modal.addEventListener('close', () => {
+    modal.removeEventListener('keydown', handleKeydown);
+    modal.removeEventListener('click', handleOutsideClick);
+  }, { once: true });
 }
 
 // Function to handle form submission (prevents default behavior)
@@ -391,6 +396,15 @@ async function handleFormSubmit(event) {
     });
     alert('Thank you for your submission!');
     event.target.reset();
+    const dialog = event.target.closest('dialog');
+    if (dialog) {
+      dialog.close();
+    } else {
+      const modal = event.target.closest('.ops-modal');
+      if (modal) {
+        modal.remove();
+      }
+    }
   } catch (err) {
     console.error('Form submission failed:', err);
     alert('Unable to submit form at this time.');
