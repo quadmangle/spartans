@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Join Us | Ops Online Support</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+</head>
+<body class="page-join-us">
+  <div id="join-modal" class="modal-backdrop">
+    <div class="ops-modal">
+      <button class="close-modal" aria-label="Close modal">×</button>
+      <div class="modal-header">
+        <h3 class="modal-title">Join Us</h3>
+      </div>
+      <div class="modal-content-body">
+        <form id="join-us-form" class="dynamic-form">
+          <input type="text" name="name" placeholder="Name" required pattern="[A-Za-z\s]+" />
+          <input type="email" name="email" placeholder="Email" required />
+          <div class="dynamic-fields">
+            <div class="field-group">
+              <input type="text" name="skills[]" placeholder="Skill" required />
+              <button type="button" class="remove-field" aria-label="Remove">&minus;</button>
+            </div>
+          </div>
+          <button type="button" class="add-field" aria-label="Add Skill">Add Skill</button>
+          <button type="submit" class="submit-button">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/dynamic-sections.js"></script>
+  <script src="js/langtheme.js" defer></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>

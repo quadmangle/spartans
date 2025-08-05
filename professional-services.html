@@ -18,9 +18,11 @@
       <a href="professional-services.html" class="nav-link active" data-key="nav-professionals">Professionals</a>
       <a href="#" id="chatbot-menu-link" class="nav-link mobile-only">Ask Chattia</a>
     </div>
-    <button id="mobile-menu-button" class="mobile-menu-button" aria-label="Open menu" aria-controls="mobileNav" aria-expanded="false">
-      <i class="fas fa-bars"></i>
-    </button>
+    <a href="#" id="join-nav-mobile" class="nav-link mobile-only">Join Us</a>
+    <div id="toggles" class="toggles">
+      <button id="lang-toggle" class="toggle-btn" aria-label="Toggle language" aria-pressed="false">EN</button>
+      <button id="theme-toggle" class="toggle-btn" aria-label="Toggle dark/light theme" aria-pressed="false">Dark</button>
+    </div>
   </nav>
 
   <div class="fab-container" aria-label="Quick actions">
@@ -73,6 +75,9 @@
       </form>
     </section>
   </main>
+  <button class="fab-contact" aria-label="Contact us" onclick="openContactModal()">
+    <i class="fas fa-envelope"></i>
+  </button>
   <div id="modal-root"></div>
   <button id="chatbot-fab" class="fab-chatbot" aria-label="Ask Chattia">
     <i class="fas fa-comment-dots"></i>
