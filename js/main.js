@@ -122,8 +122,6 @@ function createModal(serviceKey, lang) {
 
 function openChattiaModal() {
   const modalRoot = document.getElementById('modal-root');
-  const modalBackdrop = document.createElement('div');
-  modalBackdrop.className = 'modal-backdrop';
   const modalContent = document.createElement('div');
   modalContent.className = 'ops-modal';
   modalContent.id = 'chattia-modal';
@@ -132,8 +130,8 @@ function openChattiaModal() {
     <div class="modal-content-body">
       <p data-key="modal-chattia-loading">Launching Chatbot...</p>
     </div>
-  modalBackdrop.appendChild(modalContent);
-  modalRoot.appendChild(modalBackdrop);
+
+  modalRoot.appendChild(modalContent);
   makeDraggable(modalContent);
   updateModalContent(modalContent, currentLanguage);
   const handleKeydown = (event) => {
@@ -142,7 +140,6 @@ function openChattiaModal() {
     }
   };
   document.addEventListener('keydown', handleKeydown);
-
   const handleKeydown = (event) => {
     if (event.key === 'Escape') {
       closeModal();
@@ -150,27 +147,22 @@ function openChattiaModal() {
   };
   document.addEventListener('keydown', handleKeydown);
   modalContent.querySelector('.close-modal').addEventListener('click', closeModal);
-  modalBackdrop.addEventListener('click', (event) => {
-    if (event.target === modalBackdrop) {
+  document.addEventListener('click', handleOutsideClick);
+
+  function handleOutsideClick(event) {
+    if (!modalContent.contains(event.target)) {
       closeModal();
     }
-  });
+  }
 
   function closeModal() {
     modalRoot.innerHTML = '';
-    document.removeEventListener('keydown', handleKeydown);
+    document.removeEventListener('click', handleOutsideClick);
   }
 }
 
 function openJoinModal() {
   const modalRoot = document.getElementById('modal-root');
-
-  // Ensure any existing modal is closed before opening a new one
-  if (modalRoot) {
-    modalRoot.innerHTML = '';
-  }
-  const modalBackdrop = document.createElement('div');
-  modalBackdrop.className = 'modal-backdrop';
   const modalContent = document.createElement('div');
   modalContent.className = 'ops-modal';
   modalContent.id = 'join-us-modal';
@@ -179,8 +171,8 @@ function openJoinModal() {
     <div class="modal-content-body">
       <p data-key="modal-joinus-loading">Opening Join Us form...</p>
     </div>
-  modalBackdrop.appendChild(modalContent);
-  modalRoot.appendChild(modalBackdrop);
+
+    modalRoot.appendChild(modalContent);
   makeDraggable(modalContent);
   updateModalContent(modalContent, currentLanguage);
   const handleKeydown = (event) => {
@@ -190,14 +182,17 @@ function openJoinModal() {
   };
   document.addEventListener('keydown', handleKeydown);
   modalContent.querySelector('.close-modal').addEventListener('click', closeModal);
-  modalBackdrop.addEventListener('click', (event) => {
-    if (event.target === modalBackdrop) {
+  document.addEventListener('click', handleOutsideClick);
+
+  function handleOutsideClick(event) {
+    if (!modalContent.contains(event.target)) {
       closeModal();
     }
-  });
+  }
+
   function closeModal() {
     modalRoot.innerHTML = '';
-    document.removeEventListener('keydown', handleKeydown);
+    document.removeEventListener('click', handleOutsideClick);
   }
 }
 
