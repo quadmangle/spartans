@@ -113,7 +113,6 @@ function createModal(serviceKey, lang) {
     }
   }
   document.addEventListener('click', handleOutsideClick);
-
   function closeModal() {
     modalRoot.innerHTML = '';
     document.removeEventListener('click', handleOutsideClick);
@@ -144,6 +143,12 @@ function openChattiaModal() {
   };
   document.addEventListener('keydown', handleKeydown);
 
+  const handleKeydown = (event) => {
+    if (event.key === 'Escape') {
+      closeModal();
+    }
+  };
+  document.addEventListener('keydown', handleKeydown);
   modalContent.querySelector('.close-modal').addEventListener('click', closeModal);
   modalBackdrop.addEventListener('click', (event) => {
     if (event.target === modalBackdrop) {
@@ -222,7 +227,6 @@ function makeDraggable(modal) {
 
     // Prevent text selection during drag
     e.preventDefault();
-
     const newX = e.clientX - offsetX;
     const newY = e.clientY - offsetY;
     modal.style.left = `${newX}px`;
@@ -305,7 +309,6 @@ function openChatbotModal(source = 'unknown') {
         }
       };
       document.addEventListener('keydown', handleKeydown);
-
       content.querySelector('.chatbot-close').addEventListener('click', closeModal);
       backdrop.addEventListener('click', (e) => {
         if (e.target === backdrop) closeModal();
@@ -314,9 +317,8 @@ function openChatbotModal(source = 'unknown') {
     .catch(err => console.error('Chatbot failed to load', err));
 }
 
-async function openContactModal() {
+  async function openContactModal() {
   let modal = document.getElementById('contact-modal');
-
   if (!modal) {
     const response = await fetch('contactus.html', { mode: 'same-origin' });
     const html = await response.text();
@@ -337,6 +339,18 @@ async function openContactModal() {
     closeBtn.dataset.listenerAdded = 'true';
   }
 
+  const handleKeydown = (e) => {
+    if (e.key === 'Escape') {
+      modal.close();
+    }
+  };
+  const handleOutsideClick = (e) => {
+    if (e.target === modal) {
+      modal.close();
+    }
+  };
+  modal.addEventListener('keydown', handleKeydown);
+  modal.addEventListener('click', handleOutsideClick);
   const handleKeydown = (e) => {
     if (e.key === 'Escape') {
       modal.close();
