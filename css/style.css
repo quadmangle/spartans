@@ -593,3 +593,58 @@ body.dark .ops-modal {
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+
+/* Contact Modal and Floating Action Button */
+#contact-modal {
+  width: min(90%, 500px);
+  border: none;
+  border-radius: 8px;
+  padding: var(--space-lg) var(--space-md);
+}
+
+#contact-modal form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+#contact-modal menu {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  padding: 0;
+}
+
+.fab-contact {
+  position: fixed;
+  bottom: var(--space-lg);
+  right: var(--space-lg);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: var(--clr-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.fab-contact:focus {
+  outline: 2px solid var(--clr-accent);
+}
+
+@media (max-width: 600px) {
+  .fab-contact {
+    bottom: var(--space-md);
+    right: var(--space-md);
+    width: 48px;
+    height: 48px;
+  }
+  #contact-modal {
+    width: 95%;
+  }
+}
