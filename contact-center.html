@@ -58,6 +58,10 @@
         <input type="email" placeholder="" data-key="form-email" required />
         <input type="tel" placeholder="" data-key="form-phone" required />
         <input type="text" placeholder="" data-key="form-company" required />
+        <div class="honeypot" aria-hidden="true">
+          <label for="hp-field">Leave this field blank</label>
+          <input type="text" id="hp-field" name="hp" tabindex="-1" autocomplete="off" />
+        </div>
         <button type="submit" class="submit-button" data-key="form-submit">Request Now</button>
       </form>
     </section>

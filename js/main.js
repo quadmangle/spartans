@@ -127,14 +127,24 @@ function sanitizeInput(str) {
 }
 
 // Function to handle form submission
-async function handleFormSubmit(event) {
-  event.preventDefault();
+  async function handleFormSubmit(event) {
+    event.preventDefault();
 
-  const formData = new FormData(event.target);
-  const sanitized = {};
-  formData.forEach((value, key) => {
-    sanitized[key] = sanitizeInput(value);
-  });
+    // Honeypot check: block bots that fill hidden fields
+    const honeypot = event.target.querySelector('input[name="hp"]');
+    if (honeypot && honeypot.value !== '') {
+      console.warn('Honeypot filled. Blocking form submission.');
+      event.target.reset();
+      return;
+    }
+
+    const formData = new FormData(event.target);
+    const sanitized = {};
+    formData.forEach((value, key) => {
+      if (key !== 'hp') {
+        sanitized[key] = sanitizeInput(value);
+      }
+    });
 
   try {
     await fetch('https://example.com/api/contact', {
