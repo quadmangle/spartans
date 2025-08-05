@@ -29,7 +29,6 @@ function createServiceCards(services, lang) {
       <div class="title">${cardData.title}</div>
       <div class="icon">${serviceData.icon}</div>
       <div class="content">${cardData.desc}</div>
-    `;
 
     // Add the card to the container
     container.appendChild(card);
@@ -40,9 +39,7 @@ function createModal(serviceKey, lang) {
   const modalRoot = document.getElementById('modal-root');
   const serviceData = translations.services[serviceKey];
   const modalData = serviceData[lang].modal;
-
   if (!modalData) return;
-
   // Create modal content
   const modalContent = document.createElement('div');
   modalContent.className = 'ops-modal';
@@ -96,11 +93,18 @@ function createModal(serviceKey, lang) {
   contactBtn.addEventListener('click', (e) => {
     e.preventDefault();
     closeModal();
-    openContactModal();
   });
-  
+
   // Add event listener to close button
   modalContent.querySelector('.close-modal').addEventListener('click', closeModal);
+
+  // Close modal on Escape key
+  const handleKeydown = (event) => {
+    if (event.key === 'Escape') {
+      closeModal();
+    }
+  };
+  document.addEventListener('keydown', handleKeydown);
 
   // Close modal when clicking outside of it
   function handleOutsideClick(event) {
@@ -113,6 +117,7 @@ function createModal(serviceKey, lang) {
   function closeModal() {
     modalRoot.innerHTML = '';
     document.removeEventListener('click', handleOutsideClick);
+    document.removeEventListener('keydown', handleKeydown);
   }
 }
 
@@ -120,7 +125,6 @@ function openChattiaModal() {
   const modalRoot = document.getElementById('modal-root');
   const modalBackdrop = document.createElement('div');
   modalBackdrop.className = 'modal-backdrop';
-
   const modalContent = document.createElement('div');
   modalContent.className = 'ops-modal';
   modalContent.id = 'chattia-modal';
@@ -129,13 +133,16 @@ function openChattiaModal() {
     <div class="modal-content-body">
       <p data-key="modal-chattia-loading">Launching Chatbot...</p>
     </div>
-  `;
-
   modalBackdrop.appendChild(modalContent);
   modalRoot.appendChild(modalBackdrop);
-
   makeDraggable(modalContent);
   updateModalContent(modalContent, currentLanguage);
+  const handleKeydown = (event) => {
+    if (event.key === 'Escape') {
+      closeModal();
+    }
+  };
+  document.addEventListener('keydown', handleKeydown);
 
   modalContent.querySelector('.close-modal').addEventListener('click', closeModal);
   modalBackdrop.addEventListener('click', (event) => {
@@ -146,6 +153,7 @@ function openChattiaModal() {
 
   function closeModal() {
     modalRoot.innerHTML = '';
+    document.removeEventListener('keydown', handleKeydown);
   }
 }
 
@@ -156,10 +164,8 @@ function openJoinModal() {
   if (modalRoot) {
     modalRoot.innerHTML = '';
   }
-
   const modalBackdrop = document.createElement('div');
   modalBackdrop.className = 'modal-backdrop';
-
   const modalContent = document.createElement('div');
   modalContent.className = 'ops-modal';
   modalContent.id = 'join-us-modal';
@@ -168,33 +174,33 @@ function openJoinModal() {
     <div class="modal-content-body">
       <p data-key="modal-joinus-loading">Opening Join Us form...</p>
     </div>
-  `;
-
   modalBackdrop.appendChild(modalContent);
   modalRoot.appendChild(modalBackdrop);
-
   makeDraggable(modalContent);
   updateModalContent(modalContent, currentLanguage);
-
-  const closeModal = () => {
-    modalRoot.innerHTML = '';
+  const handleKeydown = (event) => {
+    if (event.key === 'Escape') {
+      closeModal();
+    }
   };
-
+  document.addEventListener('keydown', handleKeydown);
   modalContent.querySelector('.close-modal').addEventListener('click', closeModal);
   modalBackdrop.addEventListener('click', (event) => {
     if (event.target === modalBackdrop) {
       closeModal();
     }
   });
+  function closeModal() {
+    modalRoot.innerHTML = '';
+    document.removeEventListener('keydown', handleKeydown);
+  }
 }
 
 function makeDraggable(modal) {
   const header = modal.querySelector('.modal-header');
   if (!header) return;
-
   let isDragging = false;
   let offsetX, offsetY;
-
   header.addEventListener('mousedown', (e) => {
     isDragging = true;
 
@@ -211,7 +217,6 @@ function makeDraggable(modal) {
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
-
   function onMouseMove(e) {
     if (!isDragging) return;
 
@@ -220,7 +225,6 @@ function makeDraggable(modal) {
 
     const newX = e.clientX - offsetX;
     const newY = e.clientY - offsetY;
-
     modal.style.left = `${newX}px`;
     modal.style.top = `${newY}px`;
   }
@@ -274,7 +278,6 @@ function openChatbotModal(source = 'unknown') {
   }
 
   auditLog('chatbot_open', { source });
-
   fetch(CHATBOT_SNIPPET_URL, {
     method: 'GET',
     mode: 'cors',
@@ -286,18 +289,23 @@ function openChatbotModal(source = 'unknown') {
       const backdrop = document.createElement('div');
       backdrop.id = 'chatbot-modal';
       backdrop.className = 'modal-backdrop';
-
       const content = document.createElement('div');
       content.className = 'chatbot-modal-content';
       content.innerHTML = `<button class="chatbot-close" aria-label="Close chatbot">×</button>${html}`;
-
       backdrop.appendChild(content);
       document.body.appendChild(backdrop);
-
       const closeModal = () => {
         auditLog('chatbot_close', { source });
+        document.removeEventListener('keydown', handleKeydown);
         backdrop.remove();
       };
+      const handleKeydown = (e) => {
+        if (e.key === 'Escape') {
+          closeModal();
+        }
+      };
+      document.addEventListener('keydown', handleKeydown);
+
       content.querySelector('.chatbot-close').addEventListener('click', closeModal);
       backdrop.addEventListener('click', (e) => {
         if (e.target === backdrop) closeModal();
@@ -329,23 +337,29 @@ async function openContactModal() {
     closeBtn.dataset.listenerAdded = 'true';
   }
 
+  const handleKeydown = (e) => {
+    if (e.key === 'Escape') {
+      modal.close();
+    }
+  };
+  const handleOutsideClick = (e) => {
+    if (e.target === modal) {
+      modal.close();
+    }
+  };
+  modal.addEventListener('keydown', handleKeydown);
+  modal.addEventListener('click', handleOutsideClick);
+
   if (typeof modal.showModal === 'function') {
     modal.showModal();
   } else {
     modal.setAttribute('open', 'true');
   }
 
-  return modal;
-}
-// Basic HTML sanitizer
-function sanitizeInput(value) {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
-    .trim();
+  modal.addEventListener('close', () => {
+    modal.removeEventListener('keydown', handleKeydown);
+    modal.removeEventListener('click', handleOutsideClick);
+  }, { once: true });
 }
 
 // Function to handle form submission
@@ -370,8 +384,15 @@ async function handleFormSubmit(event) {
     });
     alert('Thank you for your submission!');
     event.target.reset();
-    const modal = event.target.closest('dialog');
-    if (modal) modal.close();
+    const dialog = event.target.closest('dialog');
+    if (dialog) {
+      dialog.close();
+    } else {
+      const modal = event.target.closest('.ops-modal');
+      if (modal) {
+        modal.remove();
+      }
+    }
   } catch (err) {
     console.error('Form submission failed:', err);
     alert('Unable to submit form at this time.');
