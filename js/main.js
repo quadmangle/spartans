@@ -39,10 +39,7 @@ function createModal(serviceKey, lang) {
 
   if (!modalData) return;
 
-  // Create modal backdrop and content
-  const modalBackdrop = document.createElement('div');
-  modalBackdrop.className = 'modal-backdrop';
-
+  // Create modal content
   const modalContent = document.createElement('div');
   modalContent.className = 'ops-modal';
 
@@ -65,11 +62,9 @@ function createModal(serviceKey, lang) {
       <a href="#" id="join-us-btn" class="modal-btn" data-key="modal-join-us"></a>
       <a href="#" id="contact-us-btn" class="modal-btn" data-key="modal-contact-us"></a>
     </div>
-  `;
 
-  // Append modal to the DOM
-  modalBackdrop.appendChild(modalContent);
-  modalRoot.appendChild(modalBackdrop);
+  // Append modal directly to the modal root
+  modalRoot.appendChild(modalContent);
 
   // Make the modal draggable
   makeDraggable(modalContent);
@@ -78,22 +73,19 @@ function createModal(serviceKey, lang) {
   updateModalContent(modalContent, lang);
 
   // Add event listeners for new buttons
-  // Note: These are placeholders. You will need to replace the `console.log` calls
-  // with actual calls to your Cloudflare Workers or other services.
   const askChattiaBtn = document.getElementById('ask-chattia-btn');
   askChattiaBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    console.log('Redirecting to Chatbot via Cloudflare Worker...');
-    alert('Launching Chatbot...');
+    console.log('Opening Chatbot modal');
     closeModal();
+    openChattiaModal();
   });
 
   const joinUsBtn = document.getElementById('join-us-btn');
   joinUsBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    console.log('Redirecting to Join Us form via Cloudflare Worker...');
-    alert('Launching Join Us form...');
     closeModal();
+    openJoinModal();
   });
 
   const contactBtn = document.getElementById('contact-us-btn');
@@ -107,6 +99,74 @@ function createModal(serviceKey, lang) {
   modalContent.querySelector('.close-modal').addEventListener('click', closeModal);
 
   // Close modal when clicking outside of it
+  function handleOutsideClick(event) {
+    if (!modalContent.contains(event.target)) {
+      closeModal();
+    }
+  }
+  document.addEventListener('click', handleOutsideClick);
+
+  function closeModal() {
+    modalRoot.innerHTML = '';
+    document.removeEventListener('click', handleOutsideClick);
+  }
+}
+
+function openChattiaModal() {
+  const modalRoot = document.getElementById('modal-root');
+  const modalBackdrop = document.createElement('div');
+  modalBackdrop.className = 'modal-backdrop';
+
+  const modalContent = document.createElement('div');
+  modalContent.className = 'ops-modal';
+  modalContent.id = 'chattia-modal';
+  modalContent.innerHTML = `
+    <button class="close-modal" aria-label="Close modal">×</button>
+    <div class="modal-content-body">
+      <p data-key="modal-chattia-loading">Launching Chatbot...</p>
+    </div>
+  `;
+
+  modalBackdrop.appendChild(modalContent);
+  modalRoot.appendChild(modalBackdrop);
+
+  makeDraggable(modalContent);
+  updateModalContent(modalContent, currentLanguage);
+
+  modalContent.querySelector('.close-modal').addEventListener('click', closeModal);
+  modalBackdrop.addEventListener('click', (event) => {
+    if (event.target === modalBackdrop) {
+      closeModal();
+    }
+  });
+
+  function closeModal() {
+    modalRoot.innerHTML = '';
+  }
+}
+
+function openJoinUsModal() {
+  const modalRoot = document.getElementById('modal-root');
+  const modalBackdrop = document.createElement('div');
+  modalBackdrop.className = 'modal-backdrop';
+
+  const modalContent = document.createElement('div');
+  modalContent.className = 'ops-modal';
+  modalContent.id = 'join-us-modal';
+  modalContent.innerHTML = `
+    <button class="close-modal" aria-label="Close modal">×</button>
+    <div class="modal-content-body">
+      <p data-key="modal-joinus-loading">Opening Join Us form...</p>
+    </div>
+  `;
+
+  modalBackdrop.appendChild(modalContent);
+  modalRoot.appendChild(modalBackdrop);
+
+  makeDraggable(modalContent);
+  updateModalContent(modalContent, currentLanguage);
+
+  modalContent.querySelector('.close-modal').addEventListener('click', closeModal);
   modalBackdrop.addEventListener('click', (event) => {
     if (event.target === modalBackdrop) {
       closeModal();
@@ -161,6 +221,9 @@ function makeDraggable(modal) {
     document.removeEventListener('mouseup', onMouseUp);
   }
 }
+
+// Export the draggable helper for other modules
+window.makeDraggable = makeDraggable;
 
 // Helper function to update content inside the modal after creation
 function updateModalContent(modalElement, lang) {
@@ -238,6 +301,40 @@ async function handleFormSubmit(event) {
   }
 }
 
+// Fetch and display the Join Us modal
+function openJoinModal() {
+  fetch('joinus.html')
+    .then(res => res.text())
+    .then(html => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const joinModal = doc.getElementById('join-modal');
+      if (!joinModal) return;
+
+      const modalRoot = document.getElementById('modal-root');
+      if (!modalRoot) return;
+
+      modalRoot.innerHTML = '';
+      modalRoot.appendChild(joinModal);
+
+      const form = joinModal.querySelector('form');
+      if (form) {
+        initDynamicSections(form);
+        form.addEventListener('submit', handleFormSubmit);
+      }
+
+      const close = () => {
+        modalRoot.innerHTML = '';
+      };
+
+      joinModal.querySelector('.close-modal').addEventListener('click', close);
+      joinModal.addEventListener('click', (e) => {
+        if (e.target === joinModal) close();
+      });
+    })
+    .catch(err => console.error('Unable to load join form', err));
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   // --- Main Page Logic ---
   // Generate service cards on the main page dynamically
@@ -260,4 +357,20 @@ document.addEventListener('DOMContentLoaded', () => {
   forms.forEach(form => {
     form.addEventListener('submit', handleFormSubmit);
   });
+
+  const fabJoin = document.getElementById('fab-join');
+  if (fabJoin) {
+    fabJoin.addEventListener('click', (e) => {
+      e.preventDefault();
+      openJoinModal();
+    });
+  }
+
+  const mobileJoin = document.getElementById('join-nav-mobile');
+  if (mobileJoin) {
+    mobileJoin.addEventListener('click', (e) => {
+      e.preventDefault();
+      openJoinModal();
+    });
+  }
 });
