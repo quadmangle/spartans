@@ -540,14 +540,14 @@ body.dark .ops-modal {
 
 @media (min-width: 1200px) {
   .grid-container {
-    grid-template-columns: repeat(3, 1fr); /* Displays three cards per row */
+    grid-template-columns: repeat(4, 1fr); /* Displays three cards per row */
   }
 }
 
 @media (min-width: 1024px) {
   /* This rule ensures three cards fit horizontally on desktop screens */
   .grid-container {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
