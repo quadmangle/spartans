@@ -402,16 +402,6 @@ body.dark .card .icon > i {
 }
 
 /* Modal */
-.modal-backdrop {
-  position: fixed;
-  z-index: 1999;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(44, 26, 73, 0.31);
-}
-
 .ops-modal {
   position: absolute;
   top: 50%;

@@ -39,10 +39,7 @@ function createModal(serviceKey, lang) {
 
   if (!modalData) return;
 
-  // Create modal backdrop and content
-  const modalBackdrop = document.createElement('div');
-  modalBackdrop.className = 'modal-backdrop';
-
+  // Create modal content
   const modalContent = document.createElement('div');
   modalContent.className = 'ops-modal';
 
@@ -67,9 +64,8 @@ function createModal(serviceKey, lang) {
     </div>
   `;
 
-  // Append modal to the DOM
-  modalBackdrop.appendChild(modalContent);
-  modalRoot.appendChild(modalBackdrop);
+  // Append modal directly to the modal root
+  modalRoot.appendChild(modalContent);
 
   // Make the modal draggable
   makeDraggable(modalContent);
@@ -100,14 +96,16 @@ function createModal(serviceKey, lang) {
   modalContent.querySelector('.close-modal').addEventListener('click', closeModal);
 
   // Close modal when clicking outside of it
-  modalBackdrop.addEventListener('click', (event) => {
-    if (event.target === modalBackdrop) {
+  function handleOutsideClick(event) {
+    if (!modalContent.contains(event.target)) {
       closeModal();
     }
-  });
+  }
+  document.addEventListener('click', handleOutsideClick);
 
   function closeModal() {
     modalRoot.innerHTML = '';
+    document.removeEventListener('click', handleOutsideClick);
   }
 }
 
@@ -154,6 +152,9 @@ function makeDraggable(modal) {
     document.removeEventListener('mouseup', onMouseUp);
   }
 }
+
+// Export the draggable helper for other modules
+window.makeDraggable = makeDraggable;
 
 // Helper function to update content inside the modal after creation
 function updateModalContent(modalElement, lang) {
