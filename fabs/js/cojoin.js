@@ -6,17 +6,19 @@
  * and the dynamic form fields for the Join form.
  */
 
-document.addEventListener('DOMContentLoaded', () => {
+function initCojoinForms() {
 
   const contactForm = document.getElementById('contactForm');
   const joinForm = document.getElementById('joinForm');
 
-  if (contactForm) {
+  if (contactForm && !contactForm.dataset.cojoinInitialized) {
     contactForm.addEventListener('submit', handleContactSubmit);
+    contactForm.dataset.cojoinInitialized = 'true';
   }
 
-  if (joinForm) {
+  if (joinForm && !joinForm.dataset.cojoinInitialized) {
     joinForm.addEventListener('submit', handleJoinSubmit);
+    joinForm.dataset.cojoinInitialized = 'true';
     initJoinForm();
   }
 
@@ -281,4 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
       section.classList.remove('completed');
     }
   }
-});
+}
+
+window.initCojoinForms = initCojoinForms;
+document.addEventListener('DOMContentLoaded', initCojoinForms);
