@@ -156,8 +156,14 @@ function openChattiaModal() {
   }
 }
 
-function openJoinUsModal() {
+function openJoinModal() {
   const modalRoot = document.getElementById('modal-root');
+
+  // Ensure any existing modal is closed before opening a new one
+  if (modalRoot) {
+    modalRoot.innerHTML = '';
+  }
+
   const modalBackdrop = document.createElement('div');
   modalBackdrop.className = 'modal-backdrop';
 
@@ -177,16 +183,16 @@ function openJoinUsModal() {
   makeDraggable(modalContent);
   updateModalContent(modalContent, currentLanguage);
 
+  const closeModal = () => {
+    modalRoot.innerHTML = '';
+  };
+
   modalContent.querySelector('.close-modal').addEventListener('click', closeModal);
   modalBackdrop.addEventListener('click', (event) => {
     if (event.target === modalBackdrop) {
       closeModal();
     }
   });
-
-  function closeModal() {
-    modalRoot.innerHTML = '';
-  }
 }
 
 function makeDraggable(modal) {
