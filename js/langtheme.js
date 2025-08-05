@@ -312,4 +312,12 @@ function toggleTheme() {
 document.addEventListener('DOMContentLoaded', () => {
   updateContent();
   updateTheme();
+
+  document.querySelectorAll('.lang-toggle').forEach(btn => {
+    btn.addEventListener('click', toggleLanguage);
+  });
+
+  document.querySelectorAll('.theme-toggle').forEach(btn => {
+    btn.addEventListener('click', toggleTheme);
+  });
 });
