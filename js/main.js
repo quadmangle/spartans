@@ -83,9 +83,8 @@ function createModal(serviceKey, lang) {
   const joinUsBtn = document.getElementById('join-us-btn');
   joinUsBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    console.log('Opening Join Us modal');
     closeModal();
-    openJoinUsModal();
+    openJoinModal();
   });
   
   // Add event listener to close button
@@ -239,105 +238,38 @@ function handleFormSubmit(event) {
   event.target.reset(); // Clear the form
 }
 
-// Open a contact form modal
-function openContactModal() {
-  const modalRoot = document.getElementById('modal-root');
-  const modal = document.createElement('div');
-  modal.className = 'ops-modal';
-
-  modal.innerHTML = `
-    <button class="close-modal" aria-label="Close modal">×</button>
-    <div class="modal-header"><h3 data-key="modal-contact-us">Contact Us</h3></div>
-    <div class="modal-content-body">
-      <form>
-        <input type="text" placeholder="" data-key="form-name" required />
-        <input type="email" placeholder="" data-key="form-email" required />
-        <input type="tel" placeholder="" data-key="form-phone" required />
-        <input type="text" placeholder="" data-key="form-company" required />
-        <button type="submit" class="submit-button" data-key="form-submit">Request Now</button>
-      </form>
-    </div>
-  `;
-
-  modalRoot.appendChild(modal);
-  updateModalContent(modal, currentLanguage);
-  makeDraggable(modal);
-
-  modal.querySelector('form').addEventListener('submit', handleFormSubmit);
-  modal.querySelector('.close-modal').addEventListener('click', () => {
-    modal.remove();
-  });
-}
-
-// Open a join-us form modal
+// Fetch and display the Join Us modal
 function openJoinModal() {
-  const modalRoot = document.getElementById('modal-root');
-  const modal = document.createElement('div');
-  modal.className = 'ops-modal';
+  fetch('joinus.html')
+    .then(res => res.text())
+    .then(html => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const joinModal = doc.getElementById('join-modal');
+      if (!joinModal) return;
 
-  modal.innerHTML = `
-    <button class="close-modal" aria-label="Close modal">×</button>
-    <div class="modal-header"><h3 data-key="modal-join-us">Join Us</h3></div>
-    <div class="modal-content-body">
-      <form>
-        <input type="text" placeholder="" data-key="form-name" required />
-        <input type="email" placeholder="" data-key="form-email" required />
-        <input type="tel" placeholder="" data-key="form-phone" required />
-        <input type="text" placeholder="" data-key="form-company" required />
-        <button type="submit" class="submit-button" data-key="form-submit">Request Now</button>
-      </form>
-    </div>
-  `;
+      const modalRoot = document.getElementById('modal-root');
+      if (!modalRoot) return;
 
-  modalRoot.appendChild(modal);
-  updateModalContent(modal, currentLanguage);
-  makeDraggable(modal);
+      modalRoot.innerHTML = '';
+      modalRoot.appendChild(joinModal);
 
-  modal.querySelector('form').addEventListener('submit', handleFormSubmit);
-  modal.querySelector('.close-modal').addEventListener('click', () => {
-    modal.remove();
-  });
-}
+      const form = joinModal.querySelector('form');
+      if (form) {
+        initDynamicSections(form);
+        form.addEventListener('submit', handleFormSubmit);
+      }
 
-// Open a simple chatbot modal
-function openChatbotModal() {
-  const modalRoot = document.getElementById('modal-root');
-  const modal = document.createElement('div');
-  modal.className = 'ops-modal';
+      const close = () => {
+        modalRoot.innerHTML = '';
+      };
 
-  modal.innerHTML = `
-    <button class="close-modal" aria-label="Close modal">×</button>
-    <div class="modal-header"><h3 data-key="modal-ask-chattia">Ask Chattia</h3></div>
-    <div class="modal-content-body chatbot-body">
-      <div class="chat-log" aria-live="polite"></div>
-      <form class="chat-form">
-        <input type="text" aria-label="Message" placeholder="Type your message" required />
-        <button type="submit">Send</button>
-      </form>
-    </div>
-  `;
-
-  modalRoot.appendChild(modal);
-  updateModalContent(modal, currentLanguage);
-  makeDraggable(modal);
-
-  modal.querySelector('.close-modal').addEventListener('click', () => {
-    modal.remove();
-  });
-
-  const chatForm = modal.querySelector('form');
-  chatForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const input = chatForm.querySelector('input');
-    const message = input.value.trim();
-    if (!message) return;
-    const log = modal.querySelector('.chat-log');
-    const userMsg = document.createElement('div');
-    userMsg.className = 'chat-message user';
-    userMsg.textContent = message;
-    log.appendChild(userMsg);
-    input.value = '';
-  });
+      joinModal.querySelector('.close-modal').addEventListener('click', close);
+      joinModal.addEventListener('click', (e) => {
+        if (e.target === joinModal) close();
+      });
+    })
+    .catch(err => console.error('Unable to load join form', err));
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -363,43 +295,19 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', handleFormSubmit);
   });
 
-  // --- Modal trigger buttons ---
-  const contactTriggers = [
-    document.getElementById('contact-fab'),
-    document.getElementById('mobile-contact-btn')
-  ];
-  contactTriggers.forEach(btn => {
-    if (btn) {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        openContactModal();
-      });
-    }
-  });
+  const fabJoin = document.getElementById('fab-join');
+  if (fabJoin) {
+    fabJoin.addEventListener('click', (e) => {
+      e.preventDefault();
+      openJoinModal();
+    });
+  }
 
-  const joinTriggers = [
-    document.getElementById('join-fab'),
-    document.getElementById('mobile-join-btn')
-  ];
-  joinTriggers.forEach(btn => {
-    if (btn) {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        openJoinModal();
-      });
-    }
-  });
-
-  const chatbotTriggers = [
-    document.getElementById('chatbot-fab'),
-    document.getElementById('mobile-chatbot-btn')
-  ];
-  chatbotTriggers.forEach(btn => {
-    if (btn) {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        openChatbotModal();
-      });
-    }
-  });
+  const mobileJoin = document.getElementById('join-nav-mobile');
+  if (mobileJoin) {
+    mobileJoin.addEventListener('click', (e) => {
+      e.preventDefault();
+      openJoinModal();
+    });
+  }
 });

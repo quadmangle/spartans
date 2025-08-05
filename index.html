@@ -17,9 +17,11 @@
       <a href="it-support.html" class="nav-link" data-key="nav-it-support">IT Support</a>
       <a href="professional-services.html" class="nav-link" data-key="nav-professionals">Professionals</a>
     </div>
-    <button id="mobile-menu-button" class="mobile-menu-button" aria-label="Open menu" aria-controls="mobileNav" aria-expanded="false">
-      <i class="fas fa-bars"></i>
-    </button>
+    <a href="#" id="join-nav-mobile" class="nav-link mobile-only">Join Us</a>
+    <div id="toggles" class="toggles">
+      <button id="lang-toggle" class="toggle-btn" aria-label="Toggle language" aria-pressed="false">EN</button>
+      <button id="theme-toggle" class="toggle-btn" aria-label="Toggle dark/light theme" aria-pressed="false">Dark</button>
+    </div>
   </nav>
 
   <div class="fab-container" aria-label="Quick actions">
@@ -40,7 +42,7 @@
     <section id="cards-section" class="grid-container">
       </section>
 
-    <section id="form" class="contact-form-section business-ops-form">
+  <section id="form" class="contact-form-section business-ops-form">
       <h2 data-key="form-heading">Request a Free Consultation</h2>
       <form>
         <input type="text" placeholder="" data-key="form-name" required />
@@ -51,8 +53,9 @@
       </form>
     </section>
   </main>
-
+  <a href="#" id="fab-join" class="fab-join" aria-label="Join Us"><i class="fas fa-user-plus"></i></a>
   <div id="modal-root"></div>
+  <script src="js/dynamic-sections.js" defer></script>
   <script src="js/langtheme.js" defer></script>
   <script src="js/nav.js" defer></script>
   <script src="js/main.js" defer></script>
