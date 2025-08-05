@@ -98,6 +98,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (modal) {
           modal.id = `${modalId}-modal`;
           document.body.appendChild(modal);
+          if (window.initCojoinForms) {
+            window.initCojoinForms();
+          }
           modal.style.display = 'flex';
           activeModal = modal;
 
