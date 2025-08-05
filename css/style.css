@@ -402,18 +402,8 @@ body.dark .card .icon > i {
 }
 
 /* Modal */
-.modal-backdrop {
-  position: fixed;
-  z-index: 1999;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(44, 26, 73, 0.31);
-}
-
 .ops-modal {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -424,17 +414,19 @@ body.dark .card .icon > i {
   background: #fff;
   color: #1a1930;
   border-radius: 2rem;
-  box-shadow: 0 6px 60px #5e24bb25, 0 0 0 2px #fff1;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   padding: 2.1rem 2.2rem 1.3rem 2.2rem;
   transition: box-shadow 0.17s;
   cursor: default;
-  z-index: 2222;
+  z-index: 2000;
   display: flex;
   flex-direction: column;
 }
 body.dark .ops-modal {
   background: #251541;
   color: #fafbfe;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .modal-header {
