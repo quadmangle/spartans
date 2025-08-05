@@ -94,6 +94,13 @@ function createModal(serviceKey, lang) {
     openContactModal();
     closeModal();
   });
+
+  const contactBtn = document.getElementById('contact-us-btn');
+  contactBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    openContactModal();
+    closeModal();
+  });
   
   // Add event listener to close button
   modalContent.querySelector('.close-modal').addEventListener('click', closeModal);
@@ -299,40 +306,6 @@ async function handleFormSubmit(event) {
     console.error('Form submission failed:', err);
     alert('Unable to submit form at this time.');
   }
-}
-
-// Fetch and display the Join Us modal
-function openJoinModal() {
-  fetch('joinus.html')
-    .then(res => res.text())
-    .then(html => {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, 'text/html');
-      const joinModal = doc.getElementById('join-modal');
-      if (!joinModal) return;
-
-      const modalRoot = document.getElementById('modal-root');
-      if (!modalRoot) return;
-
-      modalRoot.innerHTML = '';
-      modalRoot.appendChild(joinModal);
-
-      const form = joinModal.querySelector('form');
-      if (form) {
-        initDynamicSections(form);
-        form.addEventListener('submit', handleFormSubmit);
-      }
-
-      const close = () => {
-        modalRoot.innerHTML = '';
-      };
-
-      joinModal.querySelector('.close-modal').addEventListener('click', close);
-      joinModal.addEventListener('click', (e) => {
-        if (e.target === joinModal) close();
-      });
-    })
-    .catch(err => console.error('Unable to load join form', err));
 }
 
 document.addEventListener('DOMContentLoaded', () => {
