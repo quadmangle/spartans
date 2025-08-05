@@ -95,15 +95,8 @@ function createModal(serviceKey, lang) {
   const contactBtn = document.getElementById('contact-us-btn');
   contactBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    openContactModal();
     closeModal();
-  });
-
-  const contactBtn = document.getElementById('contact-us-btn');
-  contactBtn.addEventListener('click', (e) => {
-    e.preventDefault();
     openContactModal();
-    closeModal();
   });
   
   // Add event listener to close button
