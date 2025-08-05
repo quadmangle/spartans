@@ -26,6 +26,7 @@ function createServiceCards(services, lang) {
       <div class="title">${cardData.title}</div>
       <div class="icon">${serviceData.icon}</div>
       <div class="content">${cardData.desc}</div>
+    `;
 
     // Add the card to the container
     container.appendChild(card);
@@ -57,6 +58,7 @@ function createModal(serviceKey, lang) {
     <div class="modal-actions">
       <a href="${serviceData.learn}" class="modal-btn" data-key="modal-learn-more"></a>
     </div>
+  `;
 
   // Append modal directly to the modal root
   modalRoot.appendChild(modalContent);
@@ -91,7 +93,6 @@ function createModal(serviceKey, lang) {
     document.removeEventListener('keydown', handleKeydown);
   }
 }
-
 
 function makeDraggable(modal) {
   const header = modal.querySelector('.modal-header');
