@@ -78,12 +78,14 @@ document.addEventListener('DOMContentLoaded', () => {
    * @param {string} modalId The ID of the modal to show ('contact', 'join', or 'chatbot').
    */
   async function showModal(modalId) {
+    const targetId = modalId === 'chatbot' ? 'chatbot-container' : `${modalId}-modal`;
+
     // Hide any currently active modal before showing a new one
-    if (activeModal && activeModal.id !== `${modalId}-modal`) {
+    if (activeModal && activeModal.id !== targetId) {
       hideModal(activeModal);
     }
 
-    let modal = document.getElementById(`${modalId}-modal`);
+    let modal = document.getElementById(targetId);
     if (modal) {
       modal.style.display = 'flex';
       activeModal = modal;
@@ -96,7 +98,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         modal = tempDiv.querySelector('.modal-container') || tempDiv.querySelector('#chatbot-container');
         if (modal) {
-          modal.id = `${modalId}-modal`;
+          if (modalId !== 'chatbot') {
+            modal.id = targetId;
+          }
           document.body.appendChild(modal);
           if (window.initCojoinForms) {
             window.initCojoinForms();
@@ -110,12 +114,16 @@ document.addEventListener('DOMContentLoaded', () => {
           if (closeBtn) {
             closeBtn.addEventListener('click', () => hideModal(modal));
           }
+
+          if (modalId === 'chatbot' && window.initChatbot) {
+            window.initChatbot();
+          }
         }
       } catch (error) {
         console.error(`Failed to load modal for ${modalId}:`, error);
       }
     }
-    
+
     // Initialize draggable on window load, then update on resize
     // This function is expected to be defined in fabs/js/cojoin.js
     if (window.initDraggableModal) {

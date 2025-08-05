@@ -5,7 +5,7 @@
  * It handles language toggles, theme changes, and chat interactions.
  */
 
-document.addEventListener('DOMContentLoaded', () => {
+function initChatbot() {
   const qs = s => document.querySelector(s),
         qsa = s => [...document.querySelectorAll(s)];
 
@@ -90,4 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
       send.disabled = false;
     };
   }
-});
+}
+
+window.initChatbot = initChatbot;
