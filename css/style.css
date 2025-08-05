@@ -208,6 +208,103 @@ li {
   background: var(--clr-accent);
 }
 
+/* Mobile Navigation */
+#mobileNav {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100%;
+  background: var(--clr-background);
+  box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+  padding: var(--space-lg) var(--space-md);
+  flex-direction: column;
+  gap: var(--space-md);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 1000;
+}
+
+#mobileNav[aria-hidden="false"] {
+  transform: translateX(0);
+  display: flex;
+}
+
+#mobileNav a {
+  color: var(--clr-text);
+  text-decoration: none;
+  font-size: 1.2rem;
+  margin-bottom: var(--space-md);
+}
+
+#mobileNav .mobile-toggles {
+  margin-top: auto;
+  display: flex;
+  gap: var(--space-sm);
+}
+
+/* FAB Buttons */
+.fab-container {
+  position: fixed;
+  bottom: var(--space-lg);
+  right: var(--space-lg);
+  display: none;
+  flex-direction: column;
+  gap: var(--space-sm);
+  z-index: 1000;
+}
+
+.fab {
+  background: var(--clr-primary);
+  border: none;
+  color: #fff;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.fab:focus {
+  outline: 2px solid var(--clr-accent);
+}
+
+.mobile-menu-button {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--clr-text);
+  font-size: 1.5rem;
+  position: absolute;
+  top: 1.2rem;
+  right: 2rem;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  #mobileNav {
+    display: flex;
+  }
+
+  .fab-container {
+    display: none;
+  }
+
+  .mobile-menu-button {
+    display: block;
+  }
+}
+
+@media (min-width: 769px) {
+  .fab-container {
+    display: flex;
+  }
+}
+
 /* ==================================== */
 /* 4. Components */
 /* ==================================== */
@@ -304,11 +401,12 @@ li {
 
 /* Business Ops Specific Components */
 .grid-container {
-  width: min(95rem, 100%);
+  max-width: 1200px;
   margin: 0 auto;
   margin-top: 2.8rem;
   display: grid;
-  gap: 1.5rem;
+  gap: 50px; /* ≈200 px total spacing (3 gaps × 50px + 50px outer margins) */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
 .card {
@@ -402,18 +500,8 @@ body.dark .card .icon > i {
 }
 
 /* Modal */
-.modal-backdrop {
-  position: fixed;
-  z-index: 1999;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(44, 26, 73, 0.31);
-}
-
 .ops-modal {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -424,17 +512,19 @@ body.dark .card .icon > i {
   background: #fff;
   color: #1a1930;
   border-radius: 2rem;
-  box-shadow: 0 6px 60px #5e24bb25, 0 0 0 2px #fff1;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   padding: 2.1rem 2.2rem 1.3rem 2.2rem;
   transition: box-shadow 0.17s;
   cursor: default;
-  z-index: 2222;
+  z-index: 2000;
   display: flex;
   flex-direction: column;
 }
 body.dark .ops-modal {
   background: #251541;
   color: #fafbfe;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .modal-header {
@@ -534,20 +624,75 @@ body.dark .ops-modal {
   z-index: 3;
 }
 
+.fab-join {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--clr-accent);
+  color: #fff;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  z-index: 1500;
+  text-decoration: none;
+}
+
+.fab-join:hover {
+  background: var(--clr-accent-dark);
+}
+
+.mobile-only {
+  display: none;
+}
+
+.field-group {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.field-group input {
+  flex: 1;
+}
+
+.add-field,
+.remove-field {
+  background: var(--clr-primary);
+  border: none;
+  color: #fff;
+  padding: 0.4em 0.8em;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.remove-field {
+  background: #e74c3c;
+}
+
+.add-field {
+  background: var(--clr-accent);
+  margin-top: 0.5rem;
+}
+
 /* ==================================== */
 /* 5. Responsive */
 /* ==================================== */
 
-@media (min-width: 1200px) {
+/* Optional: keep only if further desktop-specific tweaks needed */
+@media (min-width: 1024px) {
   .grid-container {
-    grid-template-columns: repeat(4, 1fr); /* Displays three cards per row */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   }
 }
 
-@media (min-width: 1024px) {
-  /* This rule ensures three cards fit horizontally on desktop screens */
-  .grid-container {
-    grid-template-columns: repeat(4, 1fr);
+@media (min-width: 901px) {
+  .fab-join {
+    display: flex;
   }
 }
 
@@ -557,6 +702,12 @@ body.dark .ops-modal {
   }
   .grid-container {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .mobile-only {
+    display: block;
+    position: absolute;
+    right: 8rem;
+    top: 1.2rem;
   }
 }
 

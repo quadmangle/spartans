@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://placehold.co; style-src 'self' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; script-src 'self'; connect-src 'self'; frame-ancestors 'none';" />
   <title data-key="title-business-ops">Business Operations | Ops Online Support</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/style.css" />
@@ -16,11 +17,20 @@
       <a href="it-support.html" class="nav-link" data-key="nav-it-support">IT Support</a>
       <a href="professional-services.html" class="nav-link" data-key="nav-professionals">Professionals</a>
     </div>
+    <a href="#" id="join-nav-mobile" class="nav-link mobile-only">Join Us</a>
     <div id="toggles" class="toggles">
       <button id="lang-toggle" class="toggle-btn" aria-label="Toggle language" aria-pressed="false">EN</button>
       <button id="theme-toggle" class="toggle-btn" aria-label="Toggle dark/light theme" aria-pressed="false">Dark</button>
     </div>
   </nav>
+
+  <div class="fab-container" aria-label="Quick actions">
+    <button id="fab-menu" class="fab" aria-label="Toggle navigation" aria-controls="mobileNav" aria-expanded="false">
+      <i class="fas fa-bars"></i>
+    </button>
+    <button id="fab-lang" class="fab lang-toggle" aria-label="Toggle language" aria-pressed="false">EN</button>
+    <button id="fab-theme" class="fab theme-toggle" aria-label="Toggle dark/light theme" aria-pressed="false">Dark</button>
+  </div>
 
   <main id="page-content">
     <header>
@@ -32,7 +42,7 @@
     <section id="cards-section" class="grid-container">
       </section>
 
-    <section id="form" class="contact-form-section business-ops-form">
+  <section id="form" class="contact-form-section business-ops-form">
       <h2 data-key="form-heading">Request a Free Consultation</h2>
       <form>
         <input type="text" placeholder="" data-key="form-name" required />
@@ -48,7 +58,9 @@
     <i class="fas fa-envelope"></i>
   </button>
   <div id="modal-root"></div>
+  <script src="js/dynamic-sections.js" defer></script>
   <script src="js/langtheme.js" defer></script>
+  <script src="js/nav.js" defer></script>
   <script src="js/main.js" defer></script>
 </body>
 </html>
