@@ -306,45 +306,6 @@ function openChatbotModal(source = 'unknown') {
     .catch(err => console.error('Chatbot failed to load', err));
 }
 
-// Function to handle form submission (prevents default behavior)
-function handleFormSubmit(event) {
-  event.preventDefault();
-  // In a real application, you would send this data to a server
-  console.log('Form submitted:', new FormData(event.target));
-  alert('Thank you for your submission!');
-  event.target.reset(); // Clear the form
-}
-
-// Open a contact form modal
-function openContactModal() {
-  const modalRoot = document.getElementById('modal-root');
-  const modal = document.createElement('div');
-  modal.className = 'ops-modal';
-
-  modal.innerHTML = `
-    <button class="close-modal" aria-label="Close modal">×</button>
-    <div class="modal-header"><h3 data-key="modal-contact-us">Contact Us</h3></div>
-    <div class="modal-content-body">
-      <form>
-        <input type="text" placeholder="" data-key="form-name" required />
-        <input type="email" placeholder="" data-key="form-email" required />
-        <input type="tel" placeholder="" data-key="form-phone" required />
-        <input type="text" placeholder="" data-key="form-company" required />
-        <button type="submit" class="submit-button" data-key="form-submit">Request Now</button>
-      </form>
-    </div>
-  `;
-
-  modalRoot.appendChild(modal);
-  updateModalContent(modal, currentLanguage);
-  makeDraggable(modal);
-
-  modal.querySelector('form').addEventListener('submit', handleFormSubmit);
-  modal.querySelector('.close-modal').addEventListener('click', () => {
-    modal.remove();
-  });
-}
-
 async function openContactModal() {
   let modal = document.getElementById('contact-modal');
 
@@ -355,10 +316,17 @@ async function openContactModal() {
     container.innerHTML = html.trim();
     modal = container.firstElementChild;
     document.body.appendChild(modal);
+  }
 
-    const form = modal.querySelector('form');
+  const form = modal.querySelector('form');
+  if (!form.dataset.listenerAdded) {
     form.addEventListener('submit', handleFormSubmit);
-    modal.querySelector('.close-modal').addEventListener('click', () => modal.close());
+    form.dataset.listenerAdded = 'true';
+  }
+  const closeBtn = modal.querySelector('.close-modal');
+  if (closeBtn && !closeBtn.dataset.listenerAdded) {
+    closeBtn.addEventListener('click', () => modal.close());
+    closeBtn.dataset.listenerAdded = 'true';
   }
 
   if (typeof modal.showModal === 'function') {
@@ -366,9 +334,21 @@ async function openContactModal() {
   } else {
     modal.setAttribute('open', 'true');
   }
+
+  return modal;
+}
+// Basic HTML sanitizer
+function sanitizeInput(value) {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+    .trim();
 }
 
-// Function to handle form submission (prevents default behavior)
+// Function to handle form submission
 async function handleFormSubmit(event) {
   event.preventDefault();
 
@@ -390,6 +370,8 @@ async function handleFormSubmit(event) {
     });
     alert('Thank you for your submission!');
     event.target.reset();
+    const modal = event.target.closest('dialog');
+    if (modal) modal.close();
   } catch (err) {
     console.error('Form submission failed:', err);
     alert('Unable to submit form at this time.');
