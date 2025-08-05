@@ -1,0 +1,64 @@
+<!-- This is a fragment, intended to be loaded dynamically -->
+<div class="modal-container" role="dialog" aria-modal="true">
+  <div class="modal-header">
+    <h1>Contact Us</h1>
+    <button class="modal-close"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="modal-content">
+    <form id="contactForm" autocomplete="off">
+      <div class="form-row">
+        <div class="form-cell">
+          <label for="name">Name</label>
+          <input id="name" name="name" required placeholder="Enter your name" />
+        </div>
+        <div class="form-cell">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" required placeholder="Enter your email" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-cell">
+          <label for="contactNumber">Contact Number</label>
+          <input id="contactNumber" name="contactNumber" type="tel" required placeholder="Enter your contact number" />
+        </div>
+        <div class="form-cell">
+          <label for="preferredDate">Preferred Date</label>
+          <input id="preferredDate" name="preferredDate" type="date" required />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-cell">
+          <label for="preferredTime">Preferred Time</label>
+          <input id="preferredTime" name="preferredTime" type="time" required />
+        </div>
+        <div class="form-cell">
+          <label for="interest">What are you interested about?</label>
+          <select id="interest" name="interest" required>
+            <option value="" disabled selected>Select an option</option>
+            <option>Business Operations</option>
+            <option>Contact Center</option>
+            <option>IT Support</option>
+            <option>Professionals</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-top:1rem;">
+        <label for="comments">Comments</label>
+        <textarea id="comments" name="comments" rows="4" placeholder="What service are you interested in?"></textarea>
+      </div>
+
+      <!-- Honeypot Field for security -->
+      <div class="honeypot">
+        <label for="honeypot-contact">Leave this field blank</label>
+        <input type="text" id="honeypot-contact" name="honeypot-contact" />
+      </div>
+
+      <div class="modal-footer">
+        <button type="submit" class="submit-btn">Send</button>
+      </div>
+    </form>
+  </div>
+</div>
