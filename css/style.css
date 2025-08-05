@@ -208,102 +208,6 @@ li {
   background: var(--clr-accent);
 }
 
-/* Mobile Navigation */
-#mobileNav {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 250px;
-  height: 100%;
-  background: var(--clr-background);
-  box-shadow: 2px 0 5px rgba(0,0,0,0.3);
-  padding: var(--space-lg) var(--space-md);
-  flex-direction: column;
-  gap: var(--space-md);
-  transform: translateX(-100%);
-  transition: transform 0.3s ease;
-  z-index: 1000;
-}
-
-#mobileNav[aria-hidden="false"] {
-  transform: translateX(0);
-  display: flex;
-}
-
-#mobileNav a {
-  color: var(--clr-text);
-  text-decoration: none;
-  font-size: 1.2rem;
-  margin-bottom: var(--space-md);
-}
-
-#mobileNav .mobile-toggles {
-  margin-top: auto;
-  display: flex;
-  gap: var(--space-sm);
-}
-
-/* FAB Buttons */
-.fab-container {
-  position: fixed;
-  bottom: var(--space-lg);
-  right: var(--space-lg);
-  display: none;
-  flex-direction: column;
-  gap: var(--space-sm);
-  z-index: 1000;
-}
-
-.fab {
-  background: var(--clr-primary);
-  border: none;
-  color: #fff;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-}
-
-.fab:focus {
-  outline: 2px solid var(--clr-accent);
-}
-
-.mobile-menu-button {
-  display: none;
-  background: none;
-  border: none;
-  color: var(--clr-text);
-  font-size: 1.5rem;
-  position: absolute;
-  top: 1.2rem;
-  right: 2rem;
-  cursor: pointer;
-}
-
-@media (max-width: 768px) {
-  #mobileNav {
-    display: flex;
-  }
-
-  .fab-container {
-    display: none;
-  }
-
-  .mobile-menu-button {
-    display: block;
-  }
-}
-
-@media (min-width: 769px) {
-  .fab-container {
-    display: flex;
-  }
-}
 
 /* ==================================== */
 /* 4. Components */
@@ -624,68 +528,6 @@ body.dark .ops-modal {
   z-index: 3;
 }
 
-/* Chatbot FAB and Modal */
-.fab-chatbot {
-  position: fixed;
-  bottom: var(--space-lg);
-  right: var(--space-lg);
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  border: none;
-  background: var(--clr-primary);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-  z-index: 2000;
-  transition: background 0.2s;
-}
-
-.fab-chatbot:hover,
-.fab-chatbot:focus {
-  background: var(--clr-accent);
-  outline: none;
-}
-
-#chatbot-modal .chatbot-modal-content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 90%;
-  max-width: 600px;
-  height: 80%;
-  background: var(--clr-background);
-  color: var(--clr-text);
-  border-radius: 1rem;
-  box-shadow: 0 4px 40px rgba(0,0,0,0.4);
-  display: flex;
-  flex-direction: column;
-}
-
-#chatbot-modal .chatbot-frame-wrapper,
-#chatbot-modal .chatbot-frame {
-  width: 100%;
-  height: 100%;
-}
-
-.chatbot-close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  color: var(--clr-text);
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-.mobile-only {
-  display: none;
-}
 
 /* ==================================== */
 /* 5. Responsive */
@@ -698,24 +540,9 @@ body.dark .ops-modal {
   }
 }
 
-@media (min-width: 901px) {
-  .fab-join {
-    display: flex;
-  }
-}
-
 @media (max-width: 900px) {
-  .nav-links {
-    display: none;
-  }
   .grid-container {
     grid-template-columns: repeat(2, 1fr);
-  }
-  .mobile-only {
-    display: block;
-    position: absolute;
-    right: 8rem;
-    top: 1.2rem;
   }
 }
 
@@ -730,12 +557,6 @@ body.dark .ops-modal {
   .contact-form-section {
     padding: 0 15px;
     max-width: 100%;
-  }
-  .mobile-only {
-    display: block;
-  }
-  .fab-chatbot {
-    display: none;
   }
 }
 
@@ -759,57 +580,3 @@ body.dark .ops-modal {
   100% { background-position: 0% 50%; }
 }
 
-/* Contact Modal and Floating Action Button */
-#contact-modal {
-  width: min(90%, 500px);
-  border: none;
-  border-radius: 8px;
-  padding: var(--space-lg) var(--space-md);
-}
-
-#contact-modal form {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
-}
-
-#contact-modal menu {
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--space-sm);
-  padding: 0;
-}
-
-.fab-contact {
-  position: fixed;
-  bottom: var(--space-lg);
-  right: var(--space-lg);
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  border: none;
-  background: var(--clr-primary);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  z-index: 1000;
-}
-
-.fab-contact:focus {
-  outline: 2px solid var(--clr-accent);
-}
-
-@media (max-width: 600px) {
-  .fab-contact {
-    bottom: var(--space-md);
-    right: var(--space-md);
-    width: 48px;
-    height: 48px;
-  }
-  #contact-modal {
-    width: 95%;
-  }
-}
