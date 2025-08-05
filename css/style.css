@@ -208,6 +208,20 @@ li {
   background: var(--clr-accent);
 }
 
+/* Footer */
+.ops-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  padding: var(--space-sm) 0;
+  background: var(--clr-background);
+  color: var(--clr-text);
+  font-size: 0.9rem;
+  border-top: 1px solid var(--clr-form-border);
+}
+
 
 /* ==================================== */
 /* 4. Components */
