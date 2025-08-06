@@ -565,6 +565,21 @@ body.dark .ops-modal {
 }
 
 @media (max-width: 768px) {
+  /* Hide navigation links on small screens until toggled and allow
+     horizontal scrolling so users can swipe through the options */
+  .nav-links {
+    display: none;
+    flex-direction: row;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* When navigation is open, display links in a horizontal strip */
+  .nav-links.open {
+    display: flex;
+  }
+
   h1 {
     font-size: 2.2rem;
   }
