@@ -174,6 +174,24 @@ function sanitizeInput(str) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  const navToggle = document.querySelector('.nav-menu-toggle');
+  const navLinks = document.getElementById('primary-nav');
+  if (navToggle && navLinks) {
+    navToggle.addEventListener('click', () => {
+      const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+      navToggle.setAttribute('aria-expanded', String(!expanded));
+      navLinks.classList.toggle('open');
+    });
+
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+          navLinks.classList.remove('open');
+          navToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+  }
   // --- Card Modal Logic ---
   const cardsContainer = document.getElementById('cards-section');
   if (cardsContainer) {
