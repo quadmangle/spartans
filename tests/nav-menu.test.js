@@ -79,7 +79,7 @@ test('nav-menu-toggle hidden on desktop widths', () => {
 test('nav-menu-toggle CSS visibility rules', () => {
   const css = fs.readFileSync(path.join(__dirname, '../css/style.css'), 'utf8');
   // hidden by default
-  assert.match(css, /\.nav-menu-toggle\s*{\s*display:\s*none;\s*}/);
+  assert.match(css, /\.nav-menu-toggle\s*{[^}]*display:\s*none;[^}]*}/);
   // visible within the max-width: 768px media query
   assert.match(css, /@media\s*\(max-width:\s*768px\)[^]*?\.nav-menu-toggle\s*{[^}]*display:\s*(block|flex);?/);
 });
