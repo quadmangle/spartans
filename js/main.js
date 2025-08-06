@@ -176,6 +176,13 @@ function sanitizeInput(str) {
 document.addEventListener('DOMContentLoaded', () => {
   const navToggle = document.querySelector('.nav-menu-toggle');
   const navLinks = document.getElementById('primary-nav');
+  if (navToggle) {
+    const updateToggleVisibility = () => {
+      navToggle.style.display = window.innerWidth <= 768 ? 'block' : 'none';
+    };
+    updateToggleVisibility();
+    window.addEventListener('resize', updateToggleVisibility);
+  }
   if (navToggle && navLinks) {
     navToggle.addEventListener('click', () => {
       const expanded = navToggle.getAttribute('aria-expanded') === 'true';
@@ -210,13 +217,4 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', handleFormSubmit);
   });
 
-  // --- Mobile Navigation Toggle ---
-  const navToggle = document.querySelector('.nav-menu-toggle');
-  const primaryNav = document.getElementById('primary-nav');
-  if (navToggle && primaryNav) {
-    navToggle.addEventListener('click', () => {
-      const isOpen = primaryNav.classList.toggle('open');
-      navToggle.setAttribute('aria-expanded', String(isOpen));
-    });
-  }
 });
