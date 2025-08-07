@@ -206,11 +206,23 @@ function initCojoinForms() {
 
       if (addBtn) {
         addBtn.addEventListener('click', () => {
-          const input = document.createElement('input');
-          input.type = 'text';
-          input.placeholder = `Enter ${section.querySelector('h2').textContent.toLowerCase()}`;
-          inputsContainer.appendChild(input);
-          input.focus();
+          let field;
+          if (section.dataset.section === 'Experience') {
+            const count = inputsContainer.querySelectorAll('textarea').length + 1;
+            field = document.createElement('textarea');
+            field.rows = 3;
+            field.placeholder = `tell us about your Experience ${count}`;
+          } else if (section.dataset.section === 'Continued Education') {
+            field = document.createElement('textarea');
+            field.rows = 3;
+            field.placeholder = 'Online Courses, Seminars, Webinars with Completion Certification';
+          } else {
+            field = document.createElement('input');
+            field.type = 'text';
+            field.placeholder = `Enter ${section.querySelector('h2').textContent.toLowerCase()}`;
+          }
+          inputsContainer.appendChild(field);
+          field.focus();
         });
       }
 
@@ -226,7 +238,7 @@ function initCojoinForms() {
 
       if (acceptBtn) {
         acceptBtn.addEventListener('click', () => {
-          const inputs = inputsContainer.querySelectorAll('input[type=text]');
+          const inputs = inputsContainer.querySelectorAll('input[type=text], textarea');
           if (inputs.length === 0) {
             alert('Add at least one entry.');
             return;
@@ -267,7 +279,7 @@ function initCojoinForms() {
    * @param {boolean} accepted True to lock the section, false to unlock.
    */
   function toggleSectionState(section, accepted) {
-    const inputs = section.querySelectorAll('input[type=text]');
+    const inputs = section.querySelectorAll('input[type=text], textarea');
     const acceptBtn = section.querySelector('.accept-btn');
     const editBtn = section.querySelector('.edit-btn');
     const addBtn = section.querySelector('.circle-btn.add');

@@ -122,9 +122,11 @@ function updateModalContent(modalElement, lang) {
 // Basic sanitization helper
 function sanitizeInput(str) {
   // In a real application, we would use a library like DOMPurify here.
-  // This is a placeholder to simulate the sanitization process.
-  const sanitized = str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  return sanitized;
+  // This placeholder removes HTML tags and escapes remaining brackets.
+  return str
+    .replace(/<[^>]*>/g, '')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
 // Function to handle form submission
