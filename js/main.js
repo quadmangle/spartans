@@ -203,7 +203,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const cardsContainer = document.getElementById('cards-section');
   if (cardsContainer) {
     cardsContainer.addEventListener('click', (event) => {
-      const card = event.target.closest('.card');
+      const learnMore = event.target.closest('.learn-more');
+      if (!learnMore) return;
+
+      // prevent the card click handler from firing when navigating
+      event.stopPropagation();
+
+      const card = learnMore.closest('.card');
       if (card) {
         const serviceKey = card.getAttribute('data-service-key');
         createModal(serviceKey, currentLanguage);
