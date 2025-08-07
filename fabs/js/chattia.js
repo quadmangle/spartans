@@ -88,6 +88,9 @@ function initChatbot() {
         log.lastChild.textContent = 'Error: Can’t reach AI.';
       }
       send.disabled = false;
+      if (window.hideActiveFabModal) {
+        window.hideActiveFabModal();
+      }
     };
   }
 }

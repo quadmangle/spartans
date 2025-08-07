@@ -256,14 +256,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (serviceData && serviceData.learn) {
       btn.setAttribute('href', serviceData.learn);
     }
-    btn.addEventListener('click', (event) => {
-      // Allow default behavior for modified clicks (new tab, etc.)
-      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
-        return;
-      }
-      event.preventDefault();
-      createModal(serviceKey, currentLanguage);
-    });
   });
 
   // --- Form Submission Logic ---
