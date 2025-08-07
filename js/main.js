@@ -4,6 +4,9 @@
 // The `translations` object contains all service card and modal data.
 // We assume `translations` and `currentLanguage` are globally available after langtheme.js loads.
 
+// CSRF token retrieved from the server. Updated after each request.
+let csrfToken = '';
+
 function createModal(serviceKey, lang) {
   const modalRoot = document.getElementById('modal-root');
   const serviceData = translations.services[serviceKey];
@@ -156,22 +159,26 @@ function sanitizeInput(str) {
       }
     });
 
-    // Add CSRF token to the sanitized data.
-    // In a real application, this token would be fetched from the server.
-    sanitized.csrf_token = 'placeholder_csrf_token';
-
     try {
-      const response = await fetch('https://example.com/api/contact', {
+      const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
+        credentials: 'include',
         mode: 'cors',
         body: JSON.stringify({ ...sanitized, 'h-captcha-response': hcaptchaResponse })
       });
 
       if (response.ok) {
+        const newToken = response.headers.get('X-CSRF-Token');
+        if (newToken) {
+          csrfToken = newToken;
+          document.querySelectorAll('input[name="csrfToken"]').forEach(input => {
+            input.value = csrfToken;
+          });
+        }
         alert('Thank you for your submission!');
         event.target.reset();
         const dialog = event.target.closest('dialog');
@@ -194,7 +201,7 @@ function sanitizeInput(str) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const navToggle = document.querySelector('.nav-menu-toggle');
   const navLinks = document.querySelector('.nav-links');
   if (navToggle) {
@@ -279,8 +286,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // --- Form Submission Logic ---
+  // --- CSRF Token Fetch ---
   const forms = document.querySelectorAll('form');
+  try {
+    const res = await fetch('/api/csrf-token', { credentials: 'include' });
+    const data = await res.json();
+    csrfToken = data.token;
+    forms.forEach(form => {
+      const hidden = document.createElement('input');
+      hidden.type = 'hidden';
+      hidden.name = 'csrfToken';
+      hidden.value = csrfToken;
+      form.appendChild(hidden);
+    });
+  } catch (err) {
+    console.error('Failed to retrieve CSRF token', err);
+  }
+
+  // --- Form Submission Logic ---
   forms.forEach(form => {
     form.addEventListener('submit', handleFormSubmit);
   });
