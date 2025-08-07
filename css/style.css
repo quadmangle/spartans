@@ -154,6 +154,7 @@ li {
   font-weight: bold;
   font-size: 2rem;
   color: var(--clr-text);
+  text-decoration: none;
   letter-spacing: 2px;
   text-shadow: 0 0 8px var(--clr-logo-shadow);
   user-select: none;
