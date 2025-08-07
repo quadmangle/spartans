@@ -199,6 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+
   // --- Card Learn More Buttons ---
   const learnButtons = document.querySelectorAll('#cards-section .card .learn-more');
   learnButtons.forEach(btn => {
