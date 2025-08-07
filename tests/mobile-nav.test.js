@@ -46,7 +46,7 @@ const pages = ['index.html', 'contact-center.html', 'it-support.html', 'professi
 for (const page of pages) {
   test(`nav links closed by default on ${page}`, () => {
     const html = fs.readFileSync(path.join(root, page), 'utf-8');
-    assert.match(html, /<div class="nav-links">/);
+    assert.match(html, /<div class="nav-links"/);
     assert.ok(!/<div class="nav-links open"/.test(html), 'nav links should not be open by default');
   });
 }

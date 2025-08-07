@@ -192,7 +192,8 @@ li {
   right: 2rem;
 }
 
-.toggle-btn {
+.toggle-btn,
+.nav-menu-toggle {
   background: var(--clr-primary);
   border: none;
   color: #fff;
@@ -202,27 +203,21 @@ li {
   font-size: 1em;
   cursor: pointer;
   transition: background 0.18s;
+  width: 40px;
+  text-align: center;
 }
 
-.toggle-btn:hover {
+.toggle-btn:hover,
+.nav-menu-toggle:hover,
+.nav-menu-toggle:focus {
   background: var(--clr-accent);
 }
 
 .nav-menu-toggle {
   display: none;
-  background: var(--clr-primary);
-  border: none;
-  color: #fff;
-  border-radius: 5px;
-  padding: 0.36em 0.86em;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.18s;
 }
 
-.nav-menu-toggle:hover,
 .nav-menu-toggle:focus {
-  background: var(--clr-accent);
   outline: none;
 }
 
