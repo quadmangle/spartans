@@ -94,6 +94,19 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /**
+   * Basic HTML sanitization. Uses DOMPurify when available and falls back to
+   * stripping script tags otherwise.
+   * @param {string} dirty The HTML string to sanitize.
+   * @returns {string} A sanitized HTML string.
+   */
+  function sanitizeHTML(dirty) {
+    if (window.DOMPurify && typeof window.DOMPurify.sanitize === 'function') {
+      return window.DOMPurify.sanitize(dirty);
+    }
+    return dirty.replace(/<script[^>]*>.*?<\/script>/gi, '');
+  }
+
+  /**
    * Displays the specified modal, dynamically loading it if not already present.
    * @param {string} modalId The ID of the modal to show ('contact', 'join', or 'chatbot').
    */
@@ -115,18 +128,36 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       // Dynamic loading logic: fetch HTML from 'fabs/' directory
       try {
-        const htmlContent = await fetch(`fabs/${modalId}.html`).then(res => res.text());
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = htmlContent;
+        const url = `fabs/${modalId}.html`;
+        const response = await fetch(url, { credentials: 'same-origin' });
+        const responseURL = response.url || '';
+        if (responseURL && !responseURL.startsWith(window.location.origin)) {
+          throw new Error('Cross-origin fetch blocked');
+        }
+        const type = (response.headers && response.headers.get
+          ? response.headers.get('Content-Type')
+          : '') || '';
+        if (type && !type.toLowerCase().startsWith('text/html')) {
+          throw new Error(`Unexpected content type: ${type}`);
+        }
+        const htmlContent = await response.text();
+        const sanitized = sanitizeHTML(htmlContent);
+        const template = document.createElement('template');
+        template.innerHTML = sanitized;
 
-        modal = tempDiv.querySelector('.modal-container') || tempDiv.querySelector('#chatbot-container');
+        const root = template.content || template;
+        modal = root.querySelector('.modal-container') || root.querySelector('#chatbot-container');
         if (modal) {
           if (modalId !== 'chatbot') {
             modal.id = targetId;
           }
           document.body.appendChild(modal);
           if (window.initCojoinForms) {
-            window.initCojoinForms();
+            try {
+              window.initCojoinForms();
+            } catch (err) {
+              console.error('initCojoinForms failed:', err);
+            }
           }
           modal.style.display = 'flex';
           activeModal = modal;
