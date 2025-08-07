@@ -27,7 +27,7 @@ function createModal(serviceKey, lang) {
       </ul>
     </div>
     <div class="modal-actions">
-      <a href="${serviceData.learn}" class="modal-btn" data-key="modal-learn-more"></a>
+      <a href="${serviceData.learn}" class="modal-btn learn-more" data-key="modal-learn-more"></a>
     </div>
   `;
 

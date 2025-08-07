@@ -549,6 +549,11 @@ body.dark .ops-modal {
   outline: none;
 }
 
+.learn-more:focus {
+  outline: 2px solid var(--clr-primary);
+  outline-offset: 2px;
+}
+
 .modal-btn.cta:hover {
   background: linear-gradient(90deg, var(--clr-accent), var(--clr-primary));
 }
