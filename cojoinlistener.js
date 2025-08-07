@@ -34,6 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let activeModal = null;
   let overlay = null;
+  // Track the element that was focused before a modal opened so we can
+  // restore focus when the modal closes.
+  let lastFocused = null;
 
   window.hideActiveFabModal = () => {
     if (activeModal) {
@@ -93,6 +96,9 @@ document.addEventListener('DOMContentLoaded', () => {
   async function showModal(modalId) {
     const targetId = modalId === 'chatbot' ? 'chatbot-container' : `${modalId}-modal`;
 
+    // Remember the currently focused element to restore later
+    lastFocused = document.activeElement;
+
     // Hide any currently active modal before showing a new one
     if (activeModal && activeModal.id !== targetId) {
       hideModal(activeModal);
@@ -149,6 +155,16 @@ document.addEventListener('DOMContentLoaded', () => {
       if (window.initDraggableModal) {
         window.initDraggableModal(modal);
       }
+
+      // Shift keyboard focus into the modal. For chatbot we focus the input;
+      // otherwise focus the first interactive element.
+      const focusTarget =
+        modalId === 'chatbot'
+          ? modal.querySelector('#chatbot-input')
+          : modal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if (focusTarget && focusTarget.focus) {
+        focusTarget.focus();
+      }
     }
 
     fabContainer.classList.remove('open');
@@ -164,6 +180,11 @@ document.addEventListener('DOMContentLoaded', () => {
       activeModal = null;
     }
     removeOverlay();
+    // Restore focus to the element that triggered the modal
+    if (lastFocused && lastFocused.focus) {
+      lastFocused.focus();
+      lastFocused = null;
+    }
   }
 
   function removeOverlay() {
