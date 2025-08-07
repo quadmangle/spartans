@@ -204,6 +204,7 @@ function sanitizeInput(str) {
 document.addEventListener('DOMContentLoaded', async () => {
   const navToggle = document.querySelector('.nav-menu-toggle');
   const navLinks = document.querySelector('.nav-links');
+  const navBackdrop = document.querySelector('.nav-backdrop');
   if (navToggle) {
     const updateToggleVisibility = () => {
       navToggle.style.display = window.innerWidth <= 768 ? 'block' : 'none';
@@ -237,6 +238,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     function openMenu() {
       navLinks.classList.add('open');
       navToggle.setAttribute('aria-expanded', 'true');
+      if (navBackdrop) {
+        navBackdrop.classList.add('open');
+        navBackdrop.removeAttribute('hidden');
+        navBackdrop.addEventListener('click', closeMenu);
+      }
       const focusable = navLinks.querySelectorAll('a, button');
       firstFocusable = focusable[0];
       lastFocusable = focusable[focusable.length - 1];
@@ -250,6 +256,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     function closeMenu() {
       navLinks.classList.remove('open');
       navToggle.setAttribute('aria-expanded', 'false');
+      if (navBackdrop) {
+        navBackdrop.classList.remove('open');
+        navBackdrop.setAttribute('hidden', '');
+        navBackdrop.removeEventListener('click', closeMenu);
+      }
       document.removeEventListener('keydown', trapFocus);
       if (lastFocusedElement) {
         lastFocusedElement.focus();
