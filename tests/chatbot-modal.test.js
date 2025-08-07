@@ -164,10 +164,6 @@ function createChatbotModal() {
   themeCtrl.textContent = 'Dark';
   controls.appendChild(themeCtrl);
 
-  const closeBtn = new Element('button');
-  closeBtn.className = 'modal-close';
-  controls.appendChild(closeBtn);
-
   header.appendChild(controls);
   container.appendChild(header);
 
@@ -189,6 +185,10 @@ function createChatbotModal() {
   send.id = 'chatbot-send';
   send.disabled = true;
   form.appendChild(send);
+
+  const closeBtn = new Element('button');
+  closeBtn.className = 'modal-close';
+  form.appendChild(closeBtn);
   formContainer.appendChild(form);
 
   const label = new Element('label');

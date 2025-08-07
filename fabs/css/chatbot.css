@@ -40,6 +40,7 @@ body.dark{--clr-bg:var(--clr-bg-dark);--clr-tx:var(--clr-tx-dark)}
   padding:.75rem 1rem;
   cursor: move;
 }
+#chatbot-header #title{color:#000;}
 @media (max-width: 767px) {
   #chatbot-container {
     width: 100%;
@@ -63,7 +64,7 @@ body.dark{--clr-bg:var(--clr-bg-dark);--clr-tx:var(--clr-tx-dark)}
 #chatbot-form-container{background:#220f3a;border-top:1px solid var(--clr-accent);padding:.55rem .7rem}
 #chatbot-input-row{display:flex;gap:.6rem}
 #chatbot-input{flex:1;background:transparent;border:none;color:#fff;font-size:.95rem;padding:.55rem .6rem}
-#chatbot-send{
+#chatbot-send, #chatbot-close{
   display:flex;
   align-items:center;
   gap:6px;
@@ -74,10 +75,11 @@ body.dark{--clr-bg:var(--clr-bg-dark);--clr-tx:var(--clr-tx-dark)}
   padding:.5rem .9rem;
   border-radius:8px;
   cursor:pointer;
-  transition:.3s
+  transition:.3s;
 }
-#chatbot-send i{transition:transform .3s}
+#chatbot-send i{font-size:0.5em;transition:transform .3s}
 #chatbot-send:hover i{transform:rotate(-45deg)}
 #chatbot-send:disabled{background:#555;cursor:not-allowed}
+#chatbot-close{margin-left:.3rem}
 .human-check{color:#ddd;font-size:.85rem;display:flex;align-items:center;margin-top:.3rem}
 .human-check input{margin-right:.4rem}
