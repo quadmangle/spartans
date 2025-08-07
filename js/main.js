@@ -175,7 +175,7 @@ function sanitizeInput(str) {
 
 document.addEventListener('DOMContentLoaded', () => {
   const navToggle = document.querySelector('.nav-menu-toggle');
-  const navLinks = document.getElementById('primary-nav');
+  const navLinks = document.querySelector('.nav-links');
   if (navToggle) {
     const updateToggleVisibility = () => {
       navToggle.style.display = window.innerWidth <= 768 ? 'block' : 'none';
@@ -199,17 +199,26 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
-  // --- Card Modal Logic ---
-  const cardsContainer = document.getElementById('cards-section');
-  if (cardsContainer) {
-    cardsContainer.addEventListener('click', (event) => {
-      const card = event.target.closest('.card');
-      if (card) {
-        const serviceKey = card.getAttribute('data-service-key');
-        createModal(serviceKey, currentLanguage);
+
+  // --- Card Learn More Buttons ---
+  const learnButtons = document.querySelectorAll('#cards-section .card .learn-more');
+  learnButtons.forEach(btn => {
+    const card = btn.closest('.card');
+    if (!card) return;
+    const serviceKey = card.getAttribute('data-service-key');
+    const serviceData = translations.services[serviceKey];
+    if (serviceData && serviceData.learn) {
+      btn.setAttribute('href', serviceData.learn);
+    }
+    btn.addEventListener('click', (event) => {
+      // Allow default behavior for modified clicks (new tab, etc.)
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+        return;
       }
+      event.preventDefault();
+      createModal(serviceKey, currentLanguage);
     });
-  }
+  });
 
   // --- Form Submission Logic ---
   const forms = document.querySelectorAll('form');
