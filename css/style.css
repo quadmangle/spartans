@@ -658,17 +658,26 @@ body.dark .ops-modal {
   }
 
   .nav-links {
-    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 70%;
+    max-width: 300px;
+    display: flex;
     flex-direction: column;
-    width: 100%;
-    margin-top: 0.5rem;
+    margin-top: 0;
     background: var(--clr-background);
-    border: 1px solid var(--clr-form-border);
-    border-radius: 5px;
+    border-left: 1px solid var(--clr-form-border);
+    border-radius: 5px 0 0 5px;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    padding: var(--space-xl) var(--space-md);
+    z-index: 1000;
   }
 
   .nav-links.open {
-    display: flex;
+    transform: translateX(0);
   }
 
   .nav-link {

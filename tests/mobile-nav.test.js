@@ -21,24 +21,17 @@ function getMediaBlock(css, query) {
 
 // Verify CSS rules for mobile navigation
 
-test('mobile nav links hidden by default and scrollable when opened', () => {
+test('mobile nav links use off-canvas layout', () => {
   const css = fs.readFileSync(path.join(root, 'css', 'style.css'), 'utf-8');
-  const block = getMediaBlock(css, '@media (max-width: 768px)');
-  assert.notStrictEqual(block, '', 'mobile media query missing');
+  const offCanvasMatch = css.match(/@media \(max-width: 768px\)[\s\S]*?\.nav-links\s*{[\s\S]*?position: fixed[\s\S]*?}/);
+  assert.ok(offCanvasMatch, 'nav links should be positioned off-canvas');
+  const navLinks = offCanvasMatch[0];
+  assert.ok(navLinks.includes('right: 0'), 'nav links should align to the right');
+  assert.ok(navLinks.includes('transform: translateX(100%)'), 'nav links should be translated off screen');
+  assert.ok(navLinks.includes('transition: transform 0.3s'), 'nav links should animate when toggled');
 
-  const navLinksMatch = block.match(/\.nav-links\s*{[^}]*}/);
-  assert.ok(navLinksMatch, '.nav-links rule missing');
-  const navLinks = navLinksMatch[0];
-  assert.ok(navLinks.includes('display: none'), 'nav links should be hidden by default');
-  assert.ok(navLinks.includes('flex-direction: row'), 'nav links should arrange items horizontally');
-  assert.ok(navLinks.includes('overflow-x: auto'), 'nav links should allow horizontal scrolling');
-  assert.ok(navLinks.includes('white-space: nowrap'), 'nav links should prevent wrapping');
-  assert.ok(navLinks.includes('-webkit-overflow-scrolling: touch'), 'nav links should support touch momentum scrolling');
-
-  const openMatch = block.match(/\.nav-links\.open\s*{[^}]*}/);
-  assert.ok(openMatch, '.nav-links.open rule missing');
-  const navOpen = openMatch[0];
-  assert.ok(navOpen.includes('display: flex'), 'nav links should be visible when open');
+  const openMatch = css.match(/@media \(max-width: 768px\)[\s\S]*?\.nav-links\.open\s*{[\s\S]*?transform: translateX\(0\)[^}]*}/);
+  assert.ok(openMatch, 'nav links should slide in when open');
 });
 
 // Verify HTML structure defaults (nav links closed)
@@ -46,7 +39,7 @@ const pages = ['index.html', 'contact-center.html', 'it-support.html', 'professi
 for (const page of pages) {
   test(`nav links closed by default on ${page}`, () => {
     const html = fs.readFileSync(path.join(root, page), 'utf-8');
-    assert.match(html, /<div class="nav-links">/);
+    assert.match(html, /<div class="nav-links"[^>]*>/);
     assert.ok(!/<div class="nav-links open"/.test(html), 'nav links should not be open by default');
   });
 }
