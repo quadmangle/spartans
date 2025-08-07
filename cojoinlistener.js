@@ -33,6 +33,19 @@ document.addEventListener('DOMContentLoaded', () => {
   fabOptions.appendChild(chatbotFab);
 
   let activeModal = null;
+  let overlay = null;
+
+  window.hideActiveFabModal = () => {
+    if (activeModal) {
+      hideModal(activeModal);
+    }
+  };
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && activeModal) {
+      hideModal(activeModal);
+    }
+  });
 
   // Main FAB click handler
   fabMain.addEventListener('click', () => {
@@ -124,10 +137,18 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // Initialize draggable on window load, then update on resize
-    // This function is expected to be defined in fabs/js/cojoin.js
-    if (window.initDraggableModal) {
-      window.initDraggableModal(modal);
+    if (modal) {
+      removeOverlay();
+      overlay = document.createElement('div');
+      overlay.className = 'modal-overlay';
+      overlay.addEventListener('click', () => hideModal(modal));
+      document.body.appendChild(overlay);
+
+      // Initialize draggable on window load, then update on resize
+      // This function is expected to be defined in fabs/js/cojoin.js
+      if (window.initDraggableModal) {
+        window.initDraggableModal(modal);
+      }
     }
 
     fabContainer.classList.remove('open');
@@ -141,6 +162,21 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modal) {
       modal.style.display = 'none';
       activeModal = null;
+    }
+    removeOverlay();
+  }
+
+  function removeOverlay() {
+    if (overlay) {
+      if (overlay.remove) {
+        overlay.remove();
+      } else if (overlay.parentNode && overlay.parentNode.children) {
+        const idx = overlay.parentNode.children.indexOf(overlay);
+        if (idx > -1) {
+          overlay.parentNode.children.splice(idx, 1);
+        }
+      }
+      overlay = null;
     }
   }
 

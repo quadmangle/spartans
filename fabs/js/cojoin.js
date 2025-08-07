@@ -141,6 +141,9 @@ function initCojoinForms() {
     alert('Contact form submitted successfully!');
     await sendToCloudflareWorker(sanitizedData);
     form.reset();
+    if (window.hideActiveFabModal) {
+      window.hideActiveFabModal();
+    }
   }
 
   /**
@@ -184,6 +187,9 @@ function initCojoinForms() {
     await sendToCloudflareWorker(sanitizedData);
     form.reset();
     resetJoinFormState();
+    if (window.hideActiveFabModal) {
+      window.hideActiveFabModal();
+    }
   }
 
   /**

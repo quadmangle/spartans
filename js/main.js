@@ -27,7 +27,7 @@ function createModal(serviceKey, lang) {
       </ul>
     </div>
     <div class="modal-actions">
-      <a href="${serviceData.learn}" class="modal-btn" data-key="modal-learn-more"></a>
+      <a href="${serviceData.learn}" class="modal-btn learn-more" data-key="modal-learn-more"></a>
     </div>
   `;
 
@@ -194,7 +194,7 @@ function sanitizeInput(str) {
 
 document.addEventListener('DOMContentLoaded', () => {
   const navToggle = document.querySelector('.nav-menu-toggle');
-  const navLinks = document.getElementById('primary-nav');
+  const navLinks = document.querySelector('.nav-links');
   if (navToggle) {
     const updateToggleVisibility = () => {
       navToggle.style.display = window.innerWidth <= 768 ? 'block' : 'none';
@@ -203,32 +203,79 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', updateToggleVisibility);
   }
   if (navToggle && navLinks) {
+    let lastFocusedElement;
+    let firstFocusable;
+    let lastFocusable;
+
+    function trapFocus(e) {
+      if (e.key === 'Tab') {
+        if (e.shiftKey) {
+          if (document.activeElement === firstFocusable) {
+            e.preventDefault();
+            lastFocusable.focus();
+          }
+        } else {
+          if (document.activeElement === lastFocusable) {
+            e.preventDefault();
+            firstFocusable.focus();
+          }
+        }
+      } else if (e.key === 'Escape') {
+        closeMenu();
+      }
+    }
+
+    function openMenu() {
+      navLinks.classList.add('open');
+      navToggle.setAttribute('aria-expanded', 'true');
+      const focusable = navLinks.querySelectorAll('a, button');
+      firstFocusable = focusable[0];
+      lastFocusable = focusable[focusable.length - 1];
+      lastFocusedElement = document.activeElement;
+      if (firstFocusable) {
+        firstFocusable.focus();
+      }
+      document.addEventListener('keydown', trapFocus);
+    }
+
+    function closeMenu() {
+      navLinks.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+      document.removeEventListener('keydown', trapFocus);
+      if (lastFocusedElement) {
+        lastFocusedElement.focus();
+      }
+    }
+
     navToggle.addEventListener('click', () => {
-      const expanded = navToggle.getAttribute('aria-expanded') === 'true';
-      navToggle.setAttribute('aria-expanded', String(!expanded));
-      navLinks.classList.toggle('open');
+      const isOpen = navLinks.classList.contains('open');
+      if (isOpen) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
     });
 
     navLinks.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         if (window.innerWidth <= 768) {
-          navLinks.classList.remove('open');
-          navToggle.setAttribute('aria-expanded', 'false');
+          closeMenu();
         }
       });
     });
   }
-  // --- Card Modal Logic ---
-  const cardsContainer = document.getElementById('cards-section');
-  if (cardsContainer) {
-    cardsContainer.addEventListener('click', (event) => {
-      const card = event.target.closest('.card');
-      if (card) {
-        const serviceKey = card.getAttribute('data-service-key');
-        createModal(serviceKey, currentLanguage);
-      }
-    });
-  }
+
+  // --- Card Learn More Buttons ---
+  const learnButtons = document.querySelectorAll('#cards-section .card .learn-more');
+  learnButtons.forEach(btn => {
+    const card = btn.closest('.card');
+    if (!card) return;
+    const serviceKey = card.getAttribute('data-service-key');
+    const serviceData = translations.services[serviceKey];
+    if (serviceData && serviceData.learn) {
+      btn.setAttribute('href', serviceData.learn);
+    }
+  });
 
   // --- Form Submission Logic ---
   const forms = document.querySelectorAll('form');
