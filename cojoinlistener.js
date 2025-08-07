@@ -53,10 +53,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Main FAB click handler
   fabMain.addEventListener('click', () => {
     fabContainer.classList.toggle('open');
-    fabMain.classList.add('shine');
-    setTimeout(() => {
-      fabMain.classList.remove('shine');
-    }, 600);
+    // Removed shine animation to prevent spinning effect on click
+    // fabMain.classList.add('shine');
+    // setTimeout(() => {
+    //   fabMain.classList.remove('shine');
+    // }, 600);
     // If FABs close, also close the active modal
     if (!fabContainer.classList.contains('open') && activeModal) {
       hideModal(activeModal);
