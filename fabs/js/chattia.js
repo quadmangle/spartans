@@ -67,29 +67,44 @@ function initChatbot() {
 
       const msg = input.value.trim();
       if (!msg) return;
-      addMsg(msg, 'user');
+
+      const sanitizedMsg = sanitizeInput(msg);
+      addMsg(sanitizedMsg, 'user');
       input.value = '';
       send.disabled = true;
       addMsg('…', 'bot');
 
       try {
+        // In a real application, the client would obtain a short-lived token
+        // from the server and use it to authenticate with the chatbot API.
         const r = await fetch('https://your-cloudflare-worker.example.com/chat', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer placeholder_token'
           },
           body: JSON.stringify({
-            message: msg
+            message: sanitizedMsg
           })
         });
         const d = await r.json();
         log.lastChild.textContent = d.reply || 'No reply.';
-      } catch {
+      } catch (err) {
+        console.error('Chatbot API request failed:', err);
+        // In a real application, we would send this error to a logging service.
+        // logError(err);
         log.lastChild.textContent = 'Error: Can’t reach AI.';
       }
       send.disabled = false;
     };
   }
+}
+
+function sanitizeInput(str) {
+  // In a real application, we would use a library like DOMPurify here.
+  // This is a placeholder to simulate the sanitization process.
+  const sanitized = str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return sanitized;
 }
 
 window.initChatbot = initChatbot;

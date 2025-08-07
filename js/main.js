@@ -121,9 +121,10 @@ function updateModalContent(modalElement, lang) {
 
 // Basic sanitization helper
 function sanitizeInput(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.textContent;
+  // In a real application, we would use a library like DOMPurify here.
+  // This is a placeholder to simulate the sanitization process.
+  const sanitized = str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return sanitized;
 }
 
 // Function to handle form submission
@@ -139,38 +140,56 @@ function sanitizeInput(str) {
     }
 
     const formData = new FormData(event.target);
+    const hcaptchaResponse = formData.get('h-captcha-response');
+
+    if (!hcaptchaResponse) {
+      alert('Please complete the CAPTCHA.');
+      return;
+    }
+
     const sanitized = {};
     formData.forEach((value, key) => {
-      if (key !== 'hp') {
+      if (key !== 'hp' && key !== 'h-captcha-response') {
         sanitized[key] = sanitizeInput(value);
       }
     });
 
-  try {
-    await fetch('https://example.com/api/contact', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      mode: 'cors',
-      body: JSON.stringify(sanitized)
-    });
-    alert('Thank you for your submission!');
-    event.target.reset();
-    const dialog = event.target.closest('dialog');
-    if (dialog) {
-      dialog.close();
-    } else {
-      const modal = event.target.closest('.ops-modal');
-      if (modal) {
-        modal.remove();
+    // Add CSRF token to the sanitized data.
+    // In a real application, this token would be fetched from the server.
+    sanitized.csrf_token = 'placeholder_csrf_token';
+
+    try {
+      const response = await fetch('https://example.com/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        mode: 'cors',
+        body: JSON.stringify({ ...sanitized, 'h-captcha-response': hcaptchaResponse })
+      });
+
+      if (response.ok) {
+        alert('Thank you for your submission!');
+        event.target.reset();
+        const dialog = event.target.closest('dialog');
+        if (dialog) {
+          dialog.close();
+        } else {
+          const modal = event.target.closest('.ops-modal');
+          if (modal) {
+            modal.remove();
+          }
+        }
+      } else {
+        alert('Form submission failed. Please try again.');
       }
+    } catch (err) {
+      console.error('Form submission failed:', err);
+      // In a real application, we would send this error to a logging service.
+      // logError(err);
+      alert('Unable to submit form at this time.');
     }
-  } catch (err) {
-    console.error('Form submission failed:', err);
-    alert('Unable to submit form at this time.');
-  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
