@@ -46,10 +46,44 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  overflow: visible;
+  isolation: isolate;
 }
 
 .fab-main:hover {
   transform: scale(1.1);
+}
+
+.fab-main::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, transparent, #ff9966, #ff9966, #ff9966, #ff9966, transparent);
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.fab-main.shine::before {
+  opacity: 1;
+  animation: fab-shine-rotate 600ms linear;
+}
+
+@keyframes fab-shine-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fab-main.shine::before {
+    animation: none;
+  }
 }
 
 .fab-options {
