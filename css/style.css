@@ -364,7 +364,6 @@ li {
   transition: transform 0.18s, box-shadow 0.18s;
   position: relative;
   overflow: hidden;
-  cursor: pointer;
   min-height: 170px;
   font-size: 0.93em;
   max-width: 25rem;
@@ -402,6 +401,15 @@ li {
 .card .content {
   grid-area: content;
   margin-top: 0.6rem;
+}
+
+.card .learn-more {
+  display: inline-block;
+  margin-top: 0.6rem;
+  font-weight: 600;
+  text-decoration: underline;
+  color: var(--clr-text);
+  cursor: pointer;
 }
 
 .card::after {
