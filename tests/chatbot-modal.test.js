@@ -5,6 +5,8 @@ const path = require('node:path');
 const vm = require('node:vm');
 
 // Minimal DOM implementation for tests
+let currentDocument;
+
 class Element {
   constructor(tag) {
     this.tagName = tag.toUpperCase();
@@ -34,6 +36,9 @@ class Element {
       },
       contains: cls => this.className.split(/\s+/).includes(cls)
     };
+  }
+  focus() {
+    currentDocument.activeElement = this;
   }
   get lastChild() {
     return this.children[this.children.length - 1] || null;
@@ -89,6 +94,8 @@ class Document {
     this.body = new Element('body');
     this.documentElement.appendChild(this.body);
     this.listeners = {};
+    currentDocument = this;
+    this.activeElement = this.body;
   }
   createElement(tag) { return new Element(tag); }
   getElementById(id) { return this.querySelector('#' + id); }
@@ -164,10 +171,6 @@ function createChatbotModal() {
   themeCtrl.textContent = 'Dark';
   controls.appendChild(themeCtrl);
 
-  const closeBtn = new Element('button');
-  closeBtn.className = 'modal-close';
-  controls.appendChild(closeBtn);
-
   header.appendChild(controls);
   container.appendChild(header);
 
@@ -189,6 +192,13 @@ function createChatbotModal() {
   send.id = 'chatbot-send';
   send.disabled = true;
   form.appendChild(send);
+
+  const closeBtn = new Element('button');
+  closeBtn.id = 'chatbot-close';
+  closeBtn.className = 'modal-close';
+  closeBtn.setAttribute('aria-label', 'Close');
+  closeBtn.textContent = 'Close';
+  form.appendChild(closeBtn);
   formContainer.appendChild(form);
 
   const label = new Element('label');
@@ -246,10 +256,19 @@ test('chatbot modal initializes and handlers work', async () => {
 
   // Invoke chatbot FAB handler
   const chatbotFab = document.getElementById('fab-chatbot');
+  // Simulate keyboard activation so focus tracking works
+  chatbotFab.focus();
   chatbotFab.eventHandlers.click[0]();
   await new Promise(r => setImmediate(r));
 
   assert.ok(called, 'initChatbot called after loading modal');
+
+  const closeBtn = document.getElementById('chatbot-close');
+  assert.ok(closeBtn, 'close button present');
+  assert.strictEqual(closeBtn.getAttribute('aria-label'), 'Close');
+
+  const input = document.getElementById('chatbot-input');
+  assert.strictEqual(document.activeElement, input, 'focus moved to input');
 
   // Test language toggle
   const langCtrl = document.getElementById('langCtrl');
@@ -272,7 +291,6 @@ test('chatbot modal initializes and handlers work', async () => {
 
   // Test chat submit
   const form = document.getElementById('chatbot-input-row');
-  const input = document.getElementById('chatbot-input');
   const log = document.getElementById('chat-log');
   input.value = 'Hi';
   await form.onsubmit({ preventDefault() {} });
@@ -280,6 +298,10 @@ test('chatbot modal initializes and handlers work', async () => {
   assert.strictEqual(log.children[0].textContent, 'Hi');
   assert.strictEqual(log.children[1].textContent, 'hello');
   assert.ok(!send.disabled);
+
+  // Close the modal via the close button and ensure focus returns to the FAB
+  closeBtn.eventHandlers.click[0]();
+  assert.strictEqual(document.activeElement, chatbotFab, 'focus restored to FAB after close');
 });
 
 test('chatbot not initialized when HTML missing', async () => {
