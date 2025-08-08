@@ -98,15 +98,23 @@ body {
   transform: scale(1);
 }
 
+/* Lock body scrolling when a modal is open */
+html[data-lock="true"],
+body[data-lock="true"] {
+  overflow: hidden;
+}
+
 /* Modal and Form Styles */
-.modal-overlay {
+.backdrop {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: rgba(0, 0, 0, 0.5);
   z-index: 1000;
+  display: none;
+}
+
+.backdrop[data-open="true"] {
+  display: block;
 }
 
 .modal-container {
@@ -114,9 +122,10 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 90%;
+  width: 90vw;
   max-width: 600px;
-  max-height: 90vh;
+  height: 90dvh;
+  max-height: 90dvh;
   background: var(--clr-bg);
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
@@ -130,8 +139,8 @@ body {
   .modal-container {
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100dvh;
     max-width: none;
     max-height: none;
     transform: none;
@@ -150,6 +159,9 @@ body {
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   cursor: move; /* Draggable on large screens */
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 @media (max-width: 767px) {
@@ -289,6 +301,10 @@ input, select, textarea {
 .modal-footer {
   margin-top: 2rem;
   text-align: center;
+  position: sticky;
+  bottom: 0;
+  background: var(--clr-bg);
+  padding-bottom: 1rem;
 }
 
 button.submit-btn {
