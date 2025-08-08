@@ -125,9 +125,8 @@ function updateModalContent(modalElement, lang) {
 // Basic sanitization helper
 function sanitizeInput(str) {
   // In a real application, we would use a library like DOMPurify here.
-  // This is a placeholder to simulate the sanitization process.
-  const sanitized = str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  return sanitized;
+  // This placeholder strips simple HTML tags to reduce XSS risk.
+  return str.replace(/<[^>]*>/g, '');
 }
 
 // Function to generate a random string for the CSRF token
@@ -224,7 +223,7 @@ async function handleFormSubmit(event) {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   // Generate and set the CSRF token when the page loads
   const csrfToken = generateCsrfToken();
   setCookie('csrf_token', csrfToken, 1);
@@ -321,15 +320,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- Card Learn More Buttons ---
-  const learnButtons = document.querySelectorAll('#cards-section .card .learn-more');
-  learnButtons.forEach(btn => {
-    const card = btn.closest('.card');
-    if (!card) return;
-    const serviceKey = card.getAttribute('data-service-key');
-    const serviceData = translations.services[serviceKey];
-    if (serviceData && serviceData.learn) {
-      btn.setAttribute('href', serviceData.learn);
+  // --- Learn More Links & Buttons ---
+  // langtheme.js runs its own DOMContentLoaded handler before this script,
+  // so translated text is available when wiring up the links.
+  const learnMoreEls = document.querySelectorAll('.learn-more');
+  learnMoreEls.forEach(el => {
+    const card = el.closest('[data-service-key]');
+    if (card) {
+      const serviceKey = card.getAttribute('data-service-key');
+      const service = translations.services[serviceKey];
+      if (service && service.learn) {
+        el.setAttribute('href', service.learn);
+      }
+      return;
+    }
+
+    const target = el.getAttribute('data-target');
+    if (target) {
+      el.addEventListener('click', e => {
+        e.preventDefault();
+        createModal(target, currentLanguage);
+      });
     }
   });
 
