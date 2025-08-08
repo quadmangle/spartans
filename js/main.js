@@ -260,9 +260,9 @@ async function handleFormSubmit(event) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-  // Generate and set the CSRF token when the page loads
-  const csrfToken = generateCsrfToken();
-  setCookie('csrf_token', csrfToken, 1);
+  // Generate and set an initial CSRF token cookie when the page loads
+  const initialToken = generateCsrfToken();
+  setCookie('csrf_token', initialToken, 1);
   const navToggle = document.querySelector('.nav-menu-toggle');
   const navLinks = document.querySelector('.nav-links');
   // Backdrop element shown behind the mobile menu; clicking it closes the menu
@@ -383,6 +383,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const forms = document.querySelectorAll('form');
   try {
     const res = await fetch('/api/csrf-token', { credentials: 'include' });
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
+    }
     const data = await res.json();
     csrfToken = data.token;
     forms.forEach(form => {
@@ -394,6 +397,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   } catch (err) {
     console.error('Failed to retrieve CSRF token', err);
+    forms.forEach(form => {
+      const message = document.createElement('p');
+      message.className = 'error';
+      message.textContent = 'Security token unavailable. Please try again later.';
+      form.prepend(message);
+    });
   }
 
   // --- Form Submission Logic ---
