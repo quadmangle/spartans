@@ -15,26 +15,26 @@
   <nav class="ops-nav">
     <a href="index.html" class="ops-logo" aria-label="OPS Home">OPS</a>
     <div class="nav-links" id="primary-nav">
-      <a href="index.html" class="nav-link active"><span data-en>Business Operations</span><span data-es>Gestion</span></a>
-      <a href="contact-center.html" class="nav-link"><span data-en>Contact Center</span><span data-es>Centro de Contacto</span></a>
-      <a href="it-support.html" class="nav-link"><span data-en>IT Support</span><span data-es>Soporte IT</span></a>
-      <a href="professional-services.html" class="nav-link"><span data-en>Professionals</span><span data-es>Profesionales</span></a>
+      <a href="index.html" class="nav-link active" data-key="nav-business-ops"></a>
+      <a href="contact-center.html" class="nav-link" data-key="nav-contact-center"></a>
+      <a href="it-support.html" class="nav-link" data-key="nav-it-support"></a>
+      <a href="professional-services.html" class="nav-link" data-key="nav-professionals"></a>
     </div>
     <div class="toggles">
       <button type="button" class="toggle-btn lang-toggle" aria-pressed="false" aria-label="" data-aria-label-key="aria-toggle-language">EN</button>
       <button type="button" class="toggle-btn theme-toggle" aria-pressed="false" aria-label="" data-aria-label-key="aria-toggle-theme">Dark</button>
       <button type="button" class="toggle-btn nav-menu-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="" data-aria-label-key="aria-nav-menu">
         <i class="fa-solid fa-bars" aria-hidden="true"></i>
-        <span class="sr-only"><span data-en>Menu</span><span data-es>Menú</span></span>
+        <span class="sr-only" data-key="nav-menu"></span>
       </button>
     </div>
   </nav>
   <div class="nav-backdrop" hidden></div>
   <main id="page-content">
     <header>
-      <h1><span data-en>Empower Your Business. Simplify Your Life.</span><span data-es>Potencie su empresa. Simplifique su vida.</span></h1>
-      <p><span data-en>From operational efficiency to expert staffing, we've got your back.</span><span data-es>Desde la eficiencia operativa hasta el personal experto, estamos a su lado.</span></p>
-      <a href="#cards-section" class="cta-button business-ops" aria-label="" data-aria-label-key="aria-cta-explore"><span data-en>Explore Services</span><span data-es>Explorar Servicios</span></a>
+      <h1 data-key="header-heading"></h1>
+      <p data-key="header-subheading"></p>
+      <a href="#cards-section" class="cta-button business-ops" aria-label="" data-aria-label-key="aria-cta-explore" data-key="cta-explore"></a>
     </header>
     <section id="cards-section" class="grid-container">
       <div class="card" data-service-key="ops">
@@ -63,7 +63,7 @@
       </div>
     </section>
     <section id="form" class="contact-form-section business-ops-form">
-      <h2><span data-en>Request a Free Consultation</span><span data-es>Solicite una Consulta Gratuita</span></h2>
+        <h2 data-key="form-heading"></h2>
       <form>
         <div class="form-errors" aria-live="polite"></div>
         <input type="text" placeholder="" data-key="form-name" required />
@@ -75,11 +75,11 @@
           <label for="hp-field">Leave this field blank</label>
           <input type="text" id="hp-field" name="hp" tabindex="-1" autocomplete="off" />
         </div>
-        <button type="submit" class="submit-button"><span data-en>Request Now</span><span data-es>Solicitar Ahora</span></button>
+          <button type="submit" class="submit-button" data-key="form-submit"></button>
       </form>
     </section>
   </main>
-  <footer class="ops-footer" role="contentinfo"><span data-en>© 2025 OPS Online Support.</span><span data-es>© 2025 OPS Online Support.</span></footer>
+    <footer class="ops-footer" role="contentinfo" data-key="footer-copyright"></footer>
   <div id="modal-root"></div>
   <script src="js/langtheme.js" defer></script>
   <script src="js/main.js" defer></script>
