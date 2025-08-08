@@ -125,9 +125,8 @@ function updateModalContent(modalElement, lang) {
 // Basic sanitization helper
 function sanitizeInput(str) {
   // In a real application, we would use a library like DOMPurify here.
-  // This is a placeholder to simulate the sanitization process.
-  const sanitized = str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  return sanitized;
+  // This placeholder strips simple HTML tags to reduce XSS risk.
+  return str.replace(/<[^>]*>/g, '');
 }
 
 // Function to generate a random string for the CSRF token
@@ -224,7 +223,7 @@ async function handleFormSubmit(event) {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   // Generate and set the CSRF token when the page loads
   const csrfToken = generateCsrfToken();
   setCookie('csrf_token', csrfToken, 1);
