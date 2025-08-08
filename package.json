@@ -1,16 +1,19 @@
 {
-  "name": "improved-fortnight",
-  "version": "1.0.0",
+  "author": "",
   "description": "",
-  "main": "server.js",
-  "scripts": {
-    "test": "NODE_PATH=./node_modules node --test"
-  },
   "devDependencies": {
-    "jsdom": "24.0.0"
+    "axe-core": "^4.9.1",
+    "jsdom": "24.0.0",
+    "playwright": "^1.47.2"
   },
   "keywords": [],
-  "author": "",
   "license": "ISC",
-  "type": "commonjs"
+  "main": "server.js",
+  "name": "improved-fortnight",
+  "scripts": {
+    "ci:test": "node ops_mobile_ci.js",
+    "test": "NODE_PATH=./node_modules node --test"
+  },
+  "type": "commonjs",
+  "version": "1.0.0"
 }
