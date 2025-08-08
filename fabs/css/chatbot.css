@@ -43,8 +43,8 @@ body.dark{--clr-bg:var(--clr-bg-dark);--clr-tx:var(--clr-tx-dark)}
 #chatbot-header #title{color:#000;}
 @media (max-width: 47.9375rem) {
   #chatbot-container {
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100dvh;
     border-radius: 0;
     top: 0;
     left: 0;

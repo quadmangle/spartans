@@ -59,7 +59,6 @@ body.dark {
 /* ==================================== */
 /* 2. Base & Utility Styles */
 /* ==================================== */
-
 * {
   box-sizing: border-box;
 }
@@ -152,7 +151,6 @@ li {
 /* ==================================== */
 /* 3. Navigation */
 /* ==================================== */
-
 .ops-nav {
   position: sticky;
   top: 0;
@@ -268,11 +266,9 @@ li {
   border-top: 0.0625rem solid var(--clr-form-border);
 }
 
-
 /* ==================================== */
 /* 4. Components */
 /* ==================================== */
-
 /* CTA Buttons */
 .cta-button {
   margin-top: 3.125rem;
@@ -459,7 +455,6 @@ body.dark .card .icon > i {
   filter: drop-shadow(0 0 0.125rem #00c4ff55);
 }
 
-
 /* Testimonial Blockquote */
 .client-story-section blockquote {
   font-style: italic;
@@ -605,11 +600,9 @@ body.dark .ops-modal {
   z-index: 3;
 }
 
-
 /* ==================================== */
 /* 5. Responsive */
 /* ==================================== */
-
 /* Optional: keep only if further desktop-specific tweaks needed */
 @media (min-width: 64rem) {
   .grid-container {

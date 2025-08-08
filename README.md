@@ -24,3 +24,8 @@ npm test
 For production deployments, scan the live site with tools like [Mozilla
 Observatory](https://observatory.mozilla.org/) to verify these headers are
 served correctly.
+
+## Governance
+
+Operational policies for mobile and tablet platforms are documented in the [OPS Mobile & Tablet Annex v1.1](docs/OPS-Mobile-Tablet-Annex.md).
+
