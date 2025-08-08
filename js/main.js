@@ -334,15 +334,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  // --- Card Learn More Buttons ---
-  const learnButtons = document.querySelectorAll('#cards-section .card .learn-more');
-  learnButtons.forEach(btn => {
-    const card = btn.closest('.card');
-    if (!card) return;
-    const serviceKey = card.getAttribute('data-service-key');
-    const serviceData = translations.services[serviceKey];
-    if (serviceData && serviceData.learn) {
-      btn.setAttribute('href', serviceData.learn);
+  // --- Learn More Links & Buttons ---
+  // langtheme.js runs its own DOMContentLoaded handler before this script,
+  // so translated text is available when wiring up the links.
+  const learnMoreEls = document.querySelectorAll('.learn-more');
+  learnMoreEls.forEach(el => {
+    const card = el.closest('[data-service-key]');
+    if (card) {
+      const serviceKey = card.getAttribute('data-service-key');
+      const service = translations.services[serviceKey];
+      if (service && service.learn) {
+        el.setAttribute('href', service.learn);
+      }
+      return;
+    }
+
+    const target = el.getAttribute('data-target');
+    if (target) {
+      el.addEventListener('click', e => {
+        e.preventDefault();
+        createModal(target, currentLanguage);
+      });
     }
   });
 
