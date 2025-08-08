@@ -612,13 +612,13 @@ body.dark .ops-modal {
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
   .grid-container {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
   /* Hide navigation links on small screens until toggled and allow
      horizontal scrolling so users can swipe through the options */
   .nav-links {
@@ -651,7 +651,7 @@ body.dark .ops-modal {
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 480px) {
   .grid-container {
     grid-template-columns: 1fr; /* Stack cards on very small screens */
     padding: 0 1rem;
@@ -665,7 +665,7 @@ body.dark .ops-modal {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
   /* When the viewport is narrow the nav may overflow horizontally;
      enable horizontal scrolling so the controls remain reachable. */
   .ops-nav {
