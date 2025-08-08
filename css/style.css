@@ -116,7 +116,7 @@ h1, h2 {
 }
 
 h1 {
-  font-size: 2.8rem;
+  font-size: 2.2rem;
 }
 
 h2 {
@@ -160,36 +160,61 @@ li {
   margin: 0 auto;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   padding: 1.2rem 2rem;
   font-weight: 600;
+  overflow-x: auto;
 }
 
 .ops-logo {
   font-family: "Segoe UI", Arial, sans-serif;
   font-weight: bold;
-  font-size: 2rem;
+  font-size: 3rem;
   color: var(--clr-text);
   text-decoration: none;
   letter-spacing: 2px;
   text-shadow: 0 0 8px var(--clr-logo-shadow);
   user-select: none;
-  position: absolute;
-  left: 2rem;
+  position: static;
+  left: auto;
+  flex-shrink: 0;
 }
 
 .nav-links {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 70%;
+  max-width: 300px;
   display: flex;
-  gap: 2.2rem;
+  flex-direction: column;
+  margin-top: 0;
+  background: var(--clr-background);
+  border-left: 1px solid var(--clr-form-border);
+  border-radius: 5px 0 0 5px;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  padding: var(--space-xl) var(--space-md);
+  z-index: 1000;
+}
+
+.nav-links.open {
+  transform: translateX(0);
 }
 
 .nav-link {
   color: inherit;
   font-size: 1.09rem;
-  padding: 0.15em 0.3em;
+  padding: 0.75rem 1rem;
   position: relative;
   transition: color 0.18s;
   text-decoration: none;
+  border-bottom: 1px solid var(--clr-form-border);
+}
+
+.nav-link:last-child {
+  border-bottom: none;
 }
 
 .nav-link:hover, .nav-link:focus {
@@ -204,9 +229,11 @@ li {
 .toggles {
   display: flex;
   gap: 0.5rem;
-  position: absolute;
-  top: 1.2rem;
-  right: 2rem;
+  flex-direction: row;
+  position: static;
+  margin-bottom: 0;
+  align-items: center;
+  align-self: auto;
 }
 
 .toggle-btn,
@@ -239,11 +266,26 @@ li {
 }
 
 .nav-menu-toggle {
-  display: none;
+  display: block;
 }
 
 .nav-menu-toggle:focus {
   outline: none;
+}
+
+.nav-backdrop {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.nav-backdrop.open {
+  display: block;
 }
 
 /* Footer */
@@ -291,8 +333,8 @@ li {
 
 .cta-button.it-and-contact {
   background: linear-gradient(45deg, var(--clr-cta-other), #7e57c2);
-  padding: 16px 38px;
-  font-size: 1.15rem;
+  padding: 14px 30px;
+  font-size: 1.1rem;
   border-radius: 10px;
   box-shadow: 0 8px 25px rgba(171, 71, 188, 0.6);
 }
@@ -304,10 +346,10 @@ li {
 
 /* Forms */
 .contact-form-section {
-  max-width: 480px;
+  max-width: 100%;
   margin: 0 auto var(--space-3xl);
   background: var(--clr-form-bg);
-  padding: 30px 30px 40px;
+  padding: 0 15px;
   border-radius: 14px;
   box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
   transition: background 0.3s, color 0.3s;
@@ -366,7 +408,8 @@ li {
   margin-top: 2.8rem;
   display: grid;
   gap: 50px; /* ≈200 px total spacing (3 gaps × 50px + 50px outer margins) */
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: 1fr;
+  padding: 0 1rem;
 }
 
 .card {
@@ -546,8 +589,8 @@ body.dark .ops-modal {
 .modal-actions {
   display: flex;
   gap: 0.8em;
-  justify-content: flex-end;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: stretch;
   margin-top: 1.4em;
 }
 
@@ -562,6 +605,7 @@ body.dark .ops-modal {
   font-weight: 600;
   margin-top: 0.5em;
   transition: background 0.17s;
+  width: 100%;
 }
 
 .modal-btn.cta {
@@ -602,155 +646,83 @@ body.dark .ops-modal {
 /* 5. Responsive */
 /* ==================================== */
 
-/* Optional: keep only if further desktop-specific tweaks needed */
-@media (min-width: 1024px) {
-  .grid-container {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  }
-}
-
-@media (max-width: 900px) {
+@media (min-width: 500px) {
   .grid-container {
     grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  /* Hide navigation links on small screens until toggled and allow
-     horizontal scrolling so users can swipe through the options */
-  .nav-links {
-    display: none;
-    flex-direction: row;
-    overflow-x: auto;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* When navigation is open, display links in a horizontal strip */
-  .nav-links.open {
-    display: flex;
-  }
-
-  h1 {
-    font-size: 2.2rem;
-  }
-  .cta-button.it-and-contact {
-    padding: 14px 30px;
-    font-size: 1.1rem;
-  }
-  .contact-form-section {
-    padding: 0 15px;
-    max-width: 100%;
-  }
-  .toggles {
-    position: static;
-    margin-top: var(--space-sm);
-  }
-}
-
-@media (max-width: 500px) {
-  .grid-container {
-    grid-template-columns: 1fr; /* Stack cards on very small screens */
-    padding: 0 1rem;
+    padding: 0;
   }
   .modal-actions {
-    flex-direction: column; /* Stack buttons vertically on small screens */
-    align-items: stretch;
+    flex-direction: row;
+    justify-content: flex-end;
+    flex-wrap: wrap;
   }
   .modal-btn {
-    width: 100%; /* Full width buttons on mobile */
+    width: auto;
   }
 }
 
-@media (max-width: 768px) {
-  /* When the viewport is narrow the nav may overflow horizontally;
-     enable horizontal scrolling so the controls remain reachable. */
-  .ops-nav {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    overflow-x: auto;
-  }
-
-  .ops-nav .ops-logo {
-    font-size: 3rem;
-    position: static;
-    left: auto;
-    flex-shrink: 0;
-  }
-
+@media (min-width: 768px) {
   h1 {
-    font-size: 2.2rem;
+    font-size: 2.8rem;
   }
-
   .cta-button.it-and-contact {
-    padding: 14px 30px;
-    font-size: 1.1rem;
+    padding: 16px 38px;
+    font-size: 1.15rem;
   }
-
   .contact-form-section {
-    padding: 0 15px;
-    max-width: 100%;
+    padding: 30px 30px 40px;
+    max-width: 480px;
   }
-
-  .toggles {
-    flex-direction: row;
-    position: static;
-    margin-bottom: 0;
-    align-items: center;
-    align-self: auto;
+  .ops-nav {
+    justify-content: center;
+    overflow: visible;
   }
-
+  .ops-nav .ops-logo {
+    font-size: 2rem;
+    position: absolute;
+    left: 2rem;
+  }
   .nav-links {
-    position: fixed;
-    top: 0;
-    right: 0;
-    height: 100%;
-    width: 70%;
-    max-width: 300px;
-    display: flex;
-    flex-direction: column;
-    margin-top: 0;
-    background: var(--clr-background);
-    border-left: 1px solid var(--clr-form-border);
-    border-radius: 5px 0 0 5px;
-    transform: translateX(100%);
-    transition: transform 0.3s ease;
-    padding: var(--space-xl) var(--space-md);
-    z-index: 1000;
+    position: static;
+    height: auto;
+    width: auto;
+    max-width: none;
+    flex-direction: row;
+    background: none;
+    border: none;
+    border-radius: 0;
+    transform: none;
+    transition: none;
+    padding: 0;
+    z-index: auto;
+    gap: 2.2rem;
   }
-
   .nav-links.open {
-    transform: translateX(0);
+    transform: none;
   }
-
   .nav-link {
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid var(--clr-form-border);
+    padding: 0.15em 0.3em;
+    border-bottom: none;
   }
-
   .nav-link:last-child {
     border-bottom: none;
   }
-
   .nav-menu-toggle {
-    display: block;
-    margin-top: 0;
+    display: none;
   }
-
   .nav-backdrop {
     display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
   }
+  .toggles {
+    position: absolute;
+    top: 1.2rem;
+    right: 2rem;
+  }
+}
 
-  .nav-backdrop.open {
-    display: block;
+@media (min-width: 900px) {
+  .grid-container {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   }
 }
 
