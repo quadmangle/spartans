@@ -241,6 +241,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Backdrop element shown behind the mobile menu; clicking it closes the menu
   const navBackdrop = document.querySelector('.nav-backdrop');
   if (navToggle) {
+    const ariaKey = navToggle.getAttribute('data-aria-label-key');
+    const langData = (typeof translations !== 'undefined' && translations[currentLanguage]) || {};
+    const navLabel = langData[ariaKey] || 'Menu';
+    navToggle.setAttribute('aria-label', navLabel);
+
     const updateToggleVisibility = () => {
       navToggle.style.display = window.innerWidth <= 768 ? 'block' : 'none';
     };

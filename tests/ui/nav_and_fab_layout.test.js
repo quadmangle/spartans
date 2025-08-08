@@ -30,7 +30,7 @@ test('mobile menu closes on backdrop or outside click', async () => {
       <div class="toggles">
         <button type="button" class="toggle-btn lang-toggle">EN</button>
         <button type="button" class="toggle-btn theme-toggle">Dark</button>
-        <button type="button" class="toggle-btn nav-menu-toggle" aria-expanded="false" aria-controls="primary-nav">
+        <button type="button" class="toggle-btn nav-menu-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="" data-aria-label-key="aria-nav-menu">
           <i class="fa-solid fa-bars"></i><span class="sr-only">Menu</span>
         </button>
       </div>
