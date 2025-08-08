@@ -23,7 +23,7 @@ body {
 /* Floating Action Button (FAB) Container */
 .fab-container {
   position: fixed;
-  bottom: 15px;
+  bottom: 40px;
   right: 10px;
   z-index: 1000;
   display: flex;

@@ -113,11 +113,19 @@ function initChatbot() {
   }
 }
 
-function sanitizeInput(str) {
-  // In a real application, we would use a library like DOMPurify here.
-  // This is a placeholder to simulate the sanitization process.
-  const sanitized = str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  return sanitized;
-}
+  function sanitizeInput(str) {
+    // In a real application, we would use a library like DOMPurify here.
+    // Remove any HTML tags; when DOM is available, use it, otherwise fallback to regex.
+    if (typeof document !== 'undefined') {
+      const div = document.createElement('div');
+      if (typeof div.innerHTML === 'string') {
+        div.innerHTML = str;
+        return div.textContent || '';
+      }
+      div.textContent = str;
+      return div.textContent.replace(/<[^>]*>/g, '');
+    }
+    return str.replace(/<[^>]*>/g, '');
+  }
 
 window.initChatbot = initChatbot;
