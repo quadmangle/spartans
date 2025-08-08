@@ -7,6 +7,7 @@
   --clr-bg-dark:#121212;
   --clr-tx   :#333333;
   --clr-tx-dark:#f0f0f0;
+  --vh: 1vh;
 }
 body.dark{--clr-bg:var(--clr-bg-dark);--clr-tx:var(--clr-tx-dark)}
 
