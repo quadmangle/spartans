@@ -65,6 +65,10 @@ body.dark {
   box-sizing: border-box;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 /* Visually hidden content for screen readers */
 .sr-only {
   position: absolute;
@@ -267,7 +271,9 @@ li {
 
 .nav-menu-toggle {
   width: 2.5rem;
-  display: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .toggle-btn:hover,
@@ -694,6 +700,9 @@ body.dark .ops-modal {
     padding: 30px 30px 40px;
     max-width: 480px;
   }
+}
+
+@media (min-width: 1025px) {
   .ops-nav {
     justify-content: center;
     overflow: visible;
