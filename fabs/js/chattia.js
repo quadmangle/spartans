@@ -9,7 +9,7 @@ function initChatbot() {
   const qs = s => document.querySelector(s),
         qsa = s => [...document.querySelectorAll(s)];
 
-  const chatbotContainer = qs('#chatbot-container');
+  const chatbotContainer = qs('#modal-chatbot');
   if (!chatbotContainer) return;
 
   /* === Language toggle === */

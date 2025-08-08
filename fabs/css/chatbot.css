@@ -12,11 +12,10 @@
 body.dark{--clr-bg:var(--clr-bg-dark);--clr-tx:var(--clr-tx-dark)}
 
 /* ---------- CHATBOT ---------- */
-#chatbot-container{
-  width: 90vw;
+#modal-chatbot{
+  width: 75vw;
   max-width: 400px;
-  height: 90vh;
-  height: calc(var(--vh, 1vh) * 90);
+  height: 85dvh;
   max-height: 600px;
   background:#251541;
   border:0.125rem solid var(--clr-accent);
@@ -48,22 +47,31 @@ body.dark{--clr-bg:var(--clr-bg-dark);--clr-tx:var(--clr-tx-dark)}
   z-index: 1;
 }
 #chatbot-header #title{color:#000;}
-@media (max-width: 47.9375rem) {
-  #chatbot-container {
-    width: 100vw;
-    height: 100vh;
-    height: calc(var(--vh, 1vh) * 100);
-    border-radius: 0;
-    top: 0;
-    left: 0;
-    transform: none;
-    overflow-y: auto;
-    max-width: none;
-    max-height: none;
+@media (min-width:48rem) and (max-width:63.9375rem){
+  #modal-chatbot{
+    width:70vw;
+    height:75dvh;
   }
-  #chatbot-header {
-    cursor: default;
+}
+@media (max-width:47.9375rem){
+  #modal-chatbot{
+    width:85vw;
+    height:85dvh;
   }
+}
+@media (max-height:35rem){
+  #modal-chatbot{
+    width:100vw;
+    height:100dvh;
+    border-radius:0;
+    top:0;
+    left:0;
+    transform:none;
+    overflow-y:auto;
+    max-width:none;
+    max-height:none;
+  }
+  #chatbot-header{cursor:default;}
 }
 #chatbot-header .ctrl{cursor:pointer;font-size:.75rem;font-weight:500;user-select:none;opacity:.85}
 #chatbot-header .ctrl:hover{opacity:1}
