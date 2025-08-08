@@ -34,6 +34,14 @@ test('mobile nav links use off-canvas layout', () => {
   assert.ok(openMatch, 'nav links should slide in when open');
 });
 
+test('ops-nav enables horizontal scrolling when cramped', () => {
+  const css = fs.readFileSync(path.join(root, 'css', 'style.css'), 'utf-8');
+  const navMatch = css.match(/@media \(max-width: 768px\)[\s\S]*?\.ops-nav\s*{[\s\S]*?}/);
+  assert.ok(navMatch, '.ops-nav rules for mobile not found');
+  const navBlock = navMatch[0];
+  assert.ok(navBlock.includes('overflow-x: auto'), '.ops-nav should allow horizontal scrolling');
+});
+
 // Verify HTML structure defaults (nav links closed)
 const pages = ['index.html', 'contact-center.html', 'it-support.html', 'professional-services.html'];
 for (const page of pages) {
@@ -41,6 +49,13 @@ for (const page of pages) {
     const html = fs.readFileSync(path.join(root, page), 'utf-8');
     assert.match(html, /<div class="nav-links" id="primary-nav">/);
     assert.ok(!/<div class="nav-links open"/.test(html), 'nav links should not be open by default');
+  });
+  test(`mobile nav contains required controls on ${page}`, () => {
+    const html = fs.readFileSync(path.join(root, page), 'utf-8');
+    assert.match(html, /<a[^>]*class="[^"]*ops-logo[^"]*"/i, 'OPS logo missing');
+    assert.match(html, /<button[^>]*class="[^"]*lang-toggle[^"]*"/i, 'language toggle missing');
+    assert.match(html, /<button[^>]*class="[^"]*theme-toggle[^"]*"/i, 'theme toggle missing');
+    assert.match(html, /<button[^>]*class="[^"]*nav-menu-toggle[^"]*"/i, 'menu toggle missing');
   });
 }
 

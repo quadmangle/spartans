@@ -230,6 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setCookie('csrf_token', csrfToken, 1);
   const navToggle = document.querySelector('.nav-menu-toggle');
   const navLinks = document.querySelector('.nav-links');
+  // Backdrop element shown behind the mobile menu; clicking it closes the menu
   const navBackdrop = document.querySelector('.nav-backdrop');
   if (navToggle) {
     const updateToggleVisibility = () => {
@@ -261,13 +262,20 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    function handleClickOutside(e) {
+      // Close the menu when clicking outside the nav links or on the backdrop
+      if (!navLinks.contains(e.target) && e.target !== navToggle) {
+        closeMenu();
+      }
+    }
+
     function openMenu() {
       navLinks.classList.add('open');
       navToggle.setAttribute('aria-expanded', 'true');
       if (navBackdrop) {
         navBackdrop.classList.add('open');
         navBackdrop.removeAttribute('hidden');
-        navBackdrop.addEventListener('click', closeMenu);
+        navBackdrop.addEventListener('click', closeMenu); // Clicking the overlay closes the menu
       }
       const focusable = navLinks.querySelectorAll('a, button');
       firstFocusable = focusable[0];
@@ -277,6 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
         firstFocusable.focus();
       }
       document.addEventListener('keydown', trapFocus);
+      document.addEventListener('click', handleClickOutside);
     }
 
     function closeMenu() {
@@ -288,6 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
         navBackdrop.removeEventListener('click', closeMenu);
       }
       document.removeEventListener('keydown', trapFocus);
+      document.removeEventListener('click', handleClickOutside);
       if (lastFocusedElement) {
         lastFocusedElement.focus();
       }
