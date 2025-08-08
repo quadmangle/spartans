@@ -15,8 +15,9 @@ test('learn-more buttons link to service pages', () => {
   </body></html>`;
 
   const dom = new JSDOM(html, { runScripts: 'outside-only', url: 'http://example.com/' });
-  const { window } = dom;
-  window.currentLanguage = 'en';
+    const { window } = dom;
+    window.currentLanguage = 'en';
+    window.fetch = async () => ({ json: async () => ({ token: 'test' }) });
   window.translations = {
     services: {
       cc: { learn: 'contact-center.html' }
