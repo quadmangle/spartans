@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://placehold.co https://*.hcaptcha.com; style-src 'self' https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css https://*.hcaptcha.com; font-src 'self' https://cdnjs.cloudflare.com; script-src 'self' 'sha256-4c8551ea60359723cbf8d33588ce9cfc11ba0841b8053ec6720bcea21a63a6eb' 'sha256-9af4270cfe68577b4026bac190e45957f471ba3e3bf6beda4dd353b10d0ccf65' 'sha256-3fa65aa46ad3e855cbc0c69536eb383d3f788f7561d271f7e535982acc173b9a' 'sha256-1712eb7f144fbb26d28e689e5f82933bbd3f876a41bf4551c1764e17ab0aea77' 'sha256-47b5eea8ed1cb5829fecdf8c01e8d2d63018b26330323255d5c5e8c396a14518' https://*.hcaptcha.com; connect-src 'self' https://*.hcaptcha.com; object-src 'none'; base-uri 'self'; frame-src https://*.hcaptcha.com;" />
@@ -9,23 +9,27 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="fabs/css/cojoin.css">
   <link rel="stylesheet" href="fabs/css/chatbot.css">
+  <style>
+    [data-lang="en"] [data-es],
+    [data-lang="es"] [data-en] { display: none; }
+  </style>
   <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
 </head>
 <body class="page-contact-center">
   <nav class="ops-nav">
     <a href="index.html" class="ops-logo" aria-label="OPS Home">OPS</a>
     <div class="nav-links" id="primary-nav">
-      <a href="index.html" class="nav-link" data-key="nav-business-ops">Business Operations</a>
-      <a href="contact-center.html" class="nav-link active" data-key="nav-contact-center">Contact Center</a>
-      <a href="it-support.html" class="nav-link" data-key="nav-it-support">IT Support</a>
-      <a href="professional-services.html" class="nav-link" data-key="nav-professionals">Professionals</a>
+      <a href="index.html" class="nav-link"><span data-en>Business Operations</span><span data-es>Gestion</span></a>
+      <a href="contact-center.html" class="nav-link active"><span data-en>Contact Center</span><span data-es>Centro de Contacto</span></a>
+      <a href="it-support.html" class="nav-link"><span data-en>IT Support</span><span data-es>Soporte IT</span></a>
+      <a href="professional-services.html" class="nav-link"><span data-en>Professionals</span><span data-es>Profesionales</span></a>
     </div>
     <div class="toggles">
       <button type="button" class="toggle-btn lang-toggle" aria-label="Toggle language" aria-pressed="false">EN</button>
       <button type="button" class="toggle-btn theme-toggle" aria-label="Toggle theme" aria-pressed="false">Dark</button>
       <button type="button" class="toggle-btn nav-menu-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="" data-aria-label-key="aria-nav-menu">
         <i class="fa-solid fa-bars" aria-hidden="true"></i>
-        <span class="sr-only" data-key="nav-menu">Menu</span>
+        <span class="sr-only"><span data-en>Menu</span><span data-es>Menú</span></span>
       </button>
     </div>
   </nav>
@@ -34,33 +38,34 @@
 
   <main id="page-content">
     <header>
-      <h1 data-key="header-heading">Connect with Your Customers.</h1>
-      <p data-key="header-subheading">Enhance customer engagement with multilingual, multichannel support—24/7, data-driven, and empathetic.</p>
-      <a href="#form" class="cta-button it-and-contact learn-more" data-key="cta-learn-more">Learn More</a>
+      <h1><span data-en>Connect with Your Customers.</span><span data-es>Conéctese con sus clientes.</span></h1>
+      <p><span data-en>Enhance customer engagement with multilingual, multichannel support—24/7, data-driven, and empathetic.</span><span data-es>Mejore la experiencia del cliente con soporte multicanal y multilingüe—24/7, basado en datos y con empatía.</span></p>
+      <a href="#form" class="cta-button it-and-contact learn-more"><span data-en>Learn More</span><span data-es>Aprende Más</span></a>
     </header>
 
     <section>
-      <h2 data-key="services-heading">Our Contact Center Services</h2>
+      <h2><span data-en>Our Contact Center Services</span><span data-es>Nuestros Servicios de Centro de Contacto</span></h2>
       <ul>
-        <li data-key="service-1">24/7 inbound/outbound call management</li>
-        <li data-key="service-2">Multilingual chat/email support</li>
-        <li data-key="service-3">CRM integration (e.g., HubSpot, Salesforce)</li>
-        <li data-key="service-4">Social media engagement & sentiment tracking</li>
-        <li data-key="service-5">Customer experience analytics & quality monitoring</li>
+        <li><span data-en>24/7 inbound/outbound call management</span><span data-es>Gestión de llamadas entrantes y salientes 24/7</span></li>
+        <li><span data-en>Multilingual chat/email support</span><span data-es>Soporte por chat y correo electrónico en varios idiomas</span></li>
+        <li><span data-en>CRM integration (e.g., HubSpot, Salesforce)</span><span data-es>Integración con plataformas CRM (por ejemplo, HubSpot, Salesforce)</span></li>
+        <li><span data-en>Social media engagement & sentiment tracking</span><span data-es>Interacción en redes sociales y seguimiento de sentimiento</span></li>
+        <li><span data-en>Customer experience analytics & quality monitoring</span><span data-es>Análisis de experiencia del cliente y monitoreo de calidad</span></li>
       </ul>
     </section>
 
     <section class="client-story-section">
-      <h2 data-key="client-story-heading">Real Client Impact</h2>
+      <h2><span data-en>Real Client Impact</span><span data-es>Impacto Real en el Cliente</span></h2>
       <figure class="testimonial">
-        <blockquote data-key="client-quote">“Their team felt like an extension of our own. Customer satisfaction scores jumped 20% in the first quarter.”</blockquote>
-        <figcaption class="testimonial-author" data-key="client-author">– Director, E-commerce</figcaption>
+        <blockquote><span data-en>“Their team felt like an extension of our own. Customer satisfaction scores jumped 20% in the first quarter.”</span><span data-es>“Su equipo se sintió como una extensión del nuestro. La satisfacción del cliente subió un 20% en el primer trimestre.”</span></blockquote>
+        <figcaption class="testimonial-author"><span data-en>– Director, E-commerce</span><span data-es>– Director, Comercio electrónico</span></figcaption>
       </figure>
     </section>
 
     <section id="form" class="contact-form-section">
-      <h2 data-key="form-heading">Request Your Free Needs Assessment</h2>
+      <h2><span data-en>Request Your Free Needs Assessment</span><span data-es>Solicite su Evaluación de Necesidades Gratis</span></h2>
       <form>
+        <div class="form-errors" aria-live="polite"></div>
         <input type="text" placeholder="" data-key="form-name" required />
         <input type="email" placeholder="" data-key="form-email" required />
         <input type="tel" placeholder="" data-key="form-phone" required />
@@ -70,11 +75,11 @@
           <label for="hp-field">Leave this field blank</label>
           <input type="text" id="hp-field" name="hp" tabindex="-1" autocomplete="off" />
         </div>
-        <button type="submit" class="submit-button" data-key="form-submit">Request Now</button>
+        <button type="submit" class="submit-button"><span data-en>Request Now</span><span data-es>Solicitar Ahora</span></button>
       </form>
     </section>
   </main>
-  <footer class="ops-footer" data-key="footer-copyright" role="contentinfo">© 2025 OPS Online Support.</footer>
+  <footer class="ops-footer" role="contentinfo"><span data-en>© 2025 OPS Online Support.</span><span data-es>© 2025 OPS Online Support.</span></footer>
   <div id="modal-root"></div>
   <script src="js/langtheme.js" defer></script>
   <script src="js/main.js" defer></script>

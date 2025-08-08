@@ -3,6 +3,18 @@ const session = require('express-session');
 const crypto = require('crypto');
 
 const app = express();
+const isProduction = process.env.NODE_ENV === 'production';
+
+// Enforce HTTPS and secure cookies in production. During local development,
+// set NODE_ENV=development to disable these checks.
+if (isProduction) {
+  app.use((req, res, next) => {
+    if (req.headers['x-forwarded-proto'] !== 'https') {
+      return res.redirect(`https://${req.headers.host}${req.url}`);
+    }
+    next();
+  });
+}
 
 app.use(express.json());
 app.use(
@@ -13,7 +25,7 @@ app.use(
     cookie: {
       httpOnly: true,
       sameSite: 'strict',
-      secure: false,
+      secure: isProduction,
     },
   })
 );

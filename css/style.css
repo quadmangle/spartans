@@ -35,6 +35,8 @@
   --space-xl: 2.5rem;
   --space-2xl: 3.125rem;
   --space-3xl: 3.75rem;
+  /* Fallback viewport unit */
+  --vh: 1vh;
 }
 
 /* Dark Theme Variables */
@@ -78,7 +80,8 @@ body.dark {
 
 body {
   font-family: "Segoe UI", Arial, sans-serif;
-  min-height: 100dvh;
+  min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
   margin: 0;
   color: var(--clr-text-subtle);
   padding-top: env(safe-area-inset-top);
@@ -162,7 +165,8 @@ li {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.2rem 2rem;
+  height: 64px;
+  padding: 0 2rem;
   padding-left: calc(2rem + env(safe-area-inset-left));
   padding-right: calc(2rem + env(safe-area-inset-right));
   font-weight: 600;
@@ -523,14 +527,15 @@ body.dark .card .icon > i {
   min-width: 19.375rem;
   max-width: 50rem;
   width: 80vw;
-  max-height: 80dvh;
+  max-height: 80vh;
+  max-height: calc(var(--vh, 1vh) * 80);
   background: #fff;
   color: #1a1930;
   border-radius: 2rem;
   border: 0.0625rem solid rgba(0, 0, 0, 0.1);
   box-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.15);
   padding: 2.1rem 2.2rem 1.3rem 2.2rem;
-  transition: box-shadow 0.17s;
+  transition: box-shadow 0.25s;
   cursor: default;
   z-index: 3000;
   display: flex;
@@ -608,7 +613,7 @@ body.dark .ops-modal {
   cursor: pointer;
   font-weight: 600;
   margin-top: 0.5em;
-  transition: background 0.17s;
+  transition: background 0.25s;
   width: 100%;
 }
 
@@ -746,5 +751,15 @@ body.dark .ops-modal {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  body {
+    animation: none !important;
+  }
 }
 

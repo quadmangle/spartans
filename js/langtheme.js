@@ -266,6 +266,9 @@ function updateContent() {
   const ariaElements = document.querySelectorAll('[data-aria-label-key]');
   const langButtons = document.querySelectorAll('.lang-toggle');
   const langData = translations[currentLanguage];
+  if (document.documentElement) {
+    document.documentElement.setAttribute('data-lang', currentLanguage);
+  }
 
   elements.forEach(el => {
     const key = el.getAttribute('data-key');
