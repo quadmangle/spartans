@@ -165,7 +165,8 @@ li {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.2rem 2rem;
+  height: 64px;
+  padding: 0 2rem;
   padding-left: calc(2rem + env(safe-area-inset-left));
   padding-right: calc(2rem + env(safe-area-inset-right));
   font-weight: 600;
@@ -650,7 +651,7 @@ body.dark .ops-modal {
 }
 
 /* ==================================== */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .nav-links {
     position: fixed;
     top: 0;
@@ -674,6 +675,10 @@ body.dark .ops-modal {
   }
   .ops-nav {
     overflow-x: auto;
+    height: 56px;
+    padding: 0 1.5rem;
+    padding-left: calc(1.5rem + env(safe-area-inset-left));
+    padding-right: calc(1.5rem + env(safe-area-inset-right));
   }
 }
 
