@@ -24,8 +24,8 @@ body {
 /* Floating Action Button (FAB) Stack */
 .fab-stack {
   position: fixed;
-  bottom: calc(env(safe-area-inset-bottom) + 20px);
-  right: calc(env(safe-area-inset-right) + 10px);
+  bottom: calc(env(safe-area-inset-bottom) + 16px);
+  right: calc(env(safe-area-inset-right) + 16px);
   z-index: 1000;
   display: flex;
   flex-direction: column;
