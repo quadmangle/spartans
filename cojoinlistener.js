@@ -142,10 +142,10 @@ document.addEventListener('DOMContentLoaded', () => {
           modal.classList.add('is-visible');
           activeModal = modal;
 
-          const closeBtn = modal.querySelector('.modal-close');
-          if (closeBtn) {
-            closeBtn.addEventListener('click', () => hideModal(modal));
-          }
+            const closeBtns = modal.querySelectorAll('.modal-close');
+            closeBtns.forEach(btn => {
+              btn.addEventListener('click', () => hideModal(modal));
+            });
 
           if (modalKey === 'chatbot' && window.initChatbot) {
             window.initChatbot();
