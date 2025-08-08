@@ -64,6 +64,20 @@ body {
 .fab--chatbot { background: var(--clr-accent-dark); }
 .fab--menu { background: var(--clr-primary); }
 
+@media (max-width: 480px) {
+  .fab {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .fab {
+    width: 64px;
+    height: 64px;
+  }
+}
+
 /* Lock body scrolling when a modal is open */
 html[data-lock="true"],
 body[data-lock="true"] {
