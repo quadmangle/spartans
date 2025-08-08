@@ -123,11 +123,20 @@ function updateModalContent(modalElement, lang) {
 }
 
 // Basic sanitization helper
-function sanitizeInput(str) {
-  // In a real application, we would use a library like DOMPurify here.
-  // This placeholder strips simple HTML tags to reduce XSS risk.
-  return str.replace(/<[^>]*>/g, '');
-}
+  function sanitizeInput(str) {
+    // In a real application, we would use a library like DOMPurify here.
+    // For now, remove any HTML tags with a simple regex fallback.
+    if (typeof document !== 'undefined') {
+      const div = document.createElement('div');
+      if (typeof div.innerHTML === 'string') {
+        div.innerHTML = str;
+        return div.textContent || '';
+      }
+      div.textContent = str;
+      return div.textContent.replace(/<[^>]*>/g, '');
+    }
+    return str.replace(/<[^>]*>/g, '');
+  }
 
 // Function to generate a random string for the CSRF token
 function generateCsrfToken() {
@@ -232,6 +241,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Backdrop element shown behind the mobile menu; clicking it closes the menu
   const navBackdrop = document.querySelector('.nav-backdrop');
   if (navToggle) {
+    const ariaKey = navToggle.getAttribute('data-aria-label-key');
+    const langData = (typeof translations !== 'undefined' && translations[currentLanguage]) || {};
+    const navLabel = langData[ariaKey] || 'Menu';
+    navToggle.setAttribute('aria-label', navLabel);
+
     const updateToggleVisibility = () => {
       navToggle.style.display = window.innerWidth <= 768 ? 'block' : 'none';
     };
