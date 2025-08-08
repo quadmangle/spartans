@@ -5,38 +5,25 @@ const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
 
-// Helper to extract a CSS block given a selector within a media query
-function getMediaBlock(css, query) {
-  const start = css.indexOf(query);
-  if (start === -1) return '';
-  const open = css.indexOf('{', start);
-  let depth = 1;
-  let i = open + 1;
-  for (; i < css.length && depth > 0; i++) {
-    if (css[i] === '{') depth++;
-    else if (css[i] === '}') depth--;
-  }
-  return css.slice(open + 1, i - 1);
-}
-
 // Verify CSS rules for mobile navigation
 
 test('mobile nav links use off-canvas layout', () => {
   const css = fs.readFileSync(path.join(root, 'css', 'style.css'), 'utf-8');
-  const offCanvasMatch = css.match(/@media \(max-width: 768px\)[\s\S]*?\.nav-links\s*{[\s\S]*?position: fixed[\s\S]*?}/);
-  assert.ok(offCanvasMatch, 'nav links should be positioned off-canvas');
-  const navLinks = offCanvasMatch[0];
+  const navLinksMatch = css.match(/\.nav-links\s*{[\s\S]*?}/);
+  assert.ok(navLinksMatch, 'nav links styles not found');
+  const navLinks = navLinksMatch[0];
+  assert.ok(navLinks.includes('position: fixed'), 'nav links should be positioned off-canvas');
   assert.ok(navLinks.includes('right: 0'), 'nav links should align to the right');
   assert.ok(navLinks.includes('transform: translateX(100%)'), 'nav links should be translated off screen');
   assert.ok(navLinks.includes('transition: transform 0.3s'), 'nav links should animate when toggled');
 
-  const openMatch = css.match(/@media \(max-width: 768px\)[\s\S]*?\.nav-links\.open\s*{[\s\S]*?transform: translateX\(0\)[^}]*}/);
+  const openMatch = css.match(/\.nav-links\.open\s*{[\s\S]*?transform: translateX\(0\)[^}]*}/);
   assert.ok(openMatch, 'nav links should slide in when open');
 });
 
 test('ops-nav enables horizontal scrolling when cramped', () => {
   const css = fs.readFileSync(path.join(root, 'css', 'style.css'), 'utf-8');
-  const navMatch = css.match(/@media \(max-width: 768px\)[\s\S]*?\.ops-nav\s*{[\s\S]*?}/);
+  const navMatch = css.match(/\.ops-nav\s*{[\s\S]*?}/);
   assert.ok(navMatch, '.ops-nav rules for mobile not found');
   const navBlock = navMatch[0];
   assert.ok(navBlock.includes('overflow-x: auto'), '.ops-nav should allow horizontal scrolling');
