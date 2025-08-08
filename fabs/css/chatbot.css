@@ -31,6 +31,10 @@ body.dark{--clr-bg:var(--clr-bg-dark);--clr-tx:var(--clr-tx-dark)}
   z-index: 1001;
   display: none;
 }
+
+#modal-chatbot.is-visible {
+  display: flex;
+}
 #chatbot-header{
   display:flex;
   justify-content:space-between;
