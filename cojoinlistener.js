@@ -33,10 +33,31 @@ document.addEventListener('DOMContentLoaded', () => {
   fabOptions.appendChild(chatbotFab);
 
   let activeModal = null;
+  let overlay = null;
+  // Track the element that was focused before a modal opened so we can
+  // restore focus when the modal closes.
+  let lastFocused = null;
+
+  window.hideActiveFabModal = () => {
+    if (activeModal) {
+      hideModal(activeModal);
+    }
+  };
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && activeModal) {
+      hideModal(activeModal);
+    }
+  });
 
   // Main FAB click handler
   fabMain.addEventListener('click', () => {
     fabContainer.classList.toggle('open');
+    // Removed shine animation to prevent spinning effect on click
+    // fabMain.classList.add('shine');
+    // setTimeout(() => {
+    //   fabMain.classList.remove('shine');
+    // }, 600);
     // If FABs close, also close the active modal
     if (!fabContainer.classList.contains('open') && activeModal) {
       hideModal(activeModal);
@@ -74,11 +95,27 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /**
+   * Basic HTML sanitization. Uses DOMPurify when available and falls back to
+   * stripping script tags otherwise.
+   * @param {string} dirty The HTML string to sanitize.
+   * @returns {string} A sanitized HTML string.
+   */
+  function sanitizeHTML(dirty) {
+    if (window.DOMPurify && typeof window.DOMPurify.sanitize === 'function') {
+      return window.DOMPurify.sanitize(dirty);
+    }
+    return dirty.replace(/<script[^>]*>.*?<\/script>/gi, '');
+  }
+
+  /**
    * Displays the specified modal, dynamically loading it if not already present.
    * @param {string} modalId The ID of the modal to show ('contact', 'join', or 'chatbot').
    */
   async function showModal(modalId) {
     const targetId = modalId === 'chatbot' ? 'chatbot-container' : `${modalId}-modal`;
+
+    // Remember the currently focused element to restore later
+    lastFocused = document.activeElement;
 
     // Hide any currently active modal before showing a new one
     if (activeModal && activeModal.id !== targetId) {
@@ -92,18 +129,36 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       // Dynamic loading logic: fetch HTML from 'fabs/' directory
       try {
-        const htmlContent = await fetch(`fabs/${modalId}.html`).then(res => res.text());
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = htmlContent;
+        const url = `fabs/${modalId}.html`;
+        const response = await fetch(url, { credentials: 'same-origin' });
+        const responseURL = response.url || '';
+        if (responseURL && !responseURL.startsWith(window.location.origin)) {
+          throw new Error('Cross-origin fetch blocked');
+        }
+        const type = (response.headers && response.headers.get
+          ? response.headers.get('Content-Type')
+          : '') || '';
+        if (type && !type.toLowerCase().startsWith('text/html')) {
+          throw new Error(`Unexpected content type: ${type}`);
+        }
+        const htmlContent = await response.text();
+        const sanitized = sanitizeHTML(htmlContent);
+        const template = document.createElement('template');
+        template.innerHTML = sanitized;
 
-        modal = tempDiv.querySelector('.modal-container') || tempDiv.querySelector('#chatbot-container');
+        const root = template.content || template;
+        modal = root.querySelector('.modal-container') || root.querySelector('#chatbot-container');
         if (modal) {
           if (modalId !== 'chatbot') {
             modal.id = targetId;
           }
           document.body.appendChild(modal);
           if (window.initCojoinForms) {
-            window.initCojoinForms();
+            try {
+              window.initCojoinForms();
+            } catch (err) {
+              console.error('initCojoinForms failed:', err);
+            }
           }
           modal.style.display = 'flex';
           activeModal = modal;
@@ -124,10 +179,28 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // Initialize draggable on window load, then update on resize
-    // This function is expected to be defined in fabs/js/cojoin.js
-    if (window.initDraggableModal) {
-      window.initDraggableModal(modal);
+    if (modal) {
+      removeOverlay();
+      overlay = document.createElement('div');
+      overlay.className = 'modal-overlay';
+      overlay.addEventListener('click', () => hideModal(modal));
+      document.body.appendChild(overlay);
+
+      // Initialize draggable on window load, then update on resize
+      // This function is expected to be defined in fabs/js/cojoin.js
+      if (window.initDraggableModal) {
+        window.initDraggableModal(modal);
+      }
+
+      // Shift keyboard focus into the modal. For chatbot we focus the input;
+      // otherwise focus the first interactive element.
+      const focusTarget =
+        modalId === 'chatbot'
+          ? modal.querySelector('#chatbot-input')
+          : modal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if (focusTarget && focusTarget.focus) {
+        focusTarget.focus();
+      }
     }
 
     fabContainer.classList.remove('open');
@@ -141,6 +214,26 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modal) {
       modal.style.display = 'none';
       activeModal = null;
+    }
+    removeOverlay();
+    // Restore focus to the element that triggered the modal
+    if (lastFocused && lastFocused.focus) {
+      lastFocused.focus();
+      lastFocused = null;
+    }
+  }
+
+  function removeOverlay() {
+    if (overlay) {
+      if (overlay.remove) {
+        overlay.remove();
+      } else if (overlay.parentNode && overlay.parentNode.children) {
+        const idx = overlay.parentNode.children.indexOf(overlay);
+        if (idx > -1) {
+          overlay.parentNode.children.splice(idx, 1);
+        }
+      }
+      overlay = null;
     }
   }
 

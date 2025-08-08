@@ -198,6 +198,11 @@ const translations = {
     'cta-strategy-call': "Book Free Strategy Call",
     // Modal button
     'modal-learn-more': "Learn More",
+    'nav-menu': 'Menu',
+    'aria-toggle-language': 'Switch language to Spanish',
+    'aria-toggle-theme': 'Toggle dark mode',
+    'aria-nav-menu': 'Toggle navigation menu',
+    'aria-cta-explore': 'Explore services section',
     'footer-copyright': '© 2025 OPS Online Support.',
   },
   es: {
@@ -244,6 +249,11 @@ const translations = {
     'cta-strategy-call': "Reservar Llamada de Estrategia Gratis",
     // Modal button
     'modal-learn-more': "Aprende Más",
+    'nav-menu': 'Menú',
+    'aria-toggle-language': 'Cambiar idioma a inglés',
+    'aria-toggle-theme': 'Cambiar modo de color',
+    'aria-nav-menu': 'Desplegar menú de navegación',
+    'aria-cta-explore': 'Explorar la sección de servicios',
     'footer-copyright': '© 2025 OPS Online Support.',
   },
 };
@@ -253,6 +263,7 @@ let currentTheme = localStorage.getItem('theme') || 'light';
 
 function updateContent() {
   const elements = document.querySelectorAll('[data-key]');
+  const ariaElements = document.querySelectorAll('[data-aria-label-key]');
   const langButtons = document.querySelectorAll('.lang-toggle');
   const langData = translations[currentLanguage];
 
@@ -278,6 +289,14 @@ function updateContent() {
       } else {
         el.textContent = translation;
       }
+    }
+  });
+
+  ariaElements.forEach(el => {
+    const ariaKey = el.getAttribute('data-aria-label-key');
+    const ariaTranslation = langData[ariaKey];
+    if (ariaTranslation) {
+      el.setAttribute('aria-label', ariaTranslation);
     }
   });
 

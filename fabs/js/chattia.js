@@ -50,6 +50,16 @@ function initChatbot() {
 
   if (guard) {
     guard.onchange = () => send.disabled = !guard.checked;
+  } else {
+    // No human verification checkbox present; enable sending by default
+    send.disabled = false;
+  }
+
+  // Focus the input field when the chatbot initializes so keyboard users
+  // can immediately begin typing. The close button remains reachable via
+  // Tab navigation within the form.
+  if (input && input.focus) {
+    input.focus();
   }
 
   function addMsg(txt, cls) {
@@ -96,6 +106,9 @@ function initChatbot() {
         log.lastChild.textContent = 'Error: Can’t reach AI.';
       }
       send.disabled = false;
+      if (window.hideActiveFabModal) {
+        window.hideActiveFabModal();
+      }
     };
   }
 }
