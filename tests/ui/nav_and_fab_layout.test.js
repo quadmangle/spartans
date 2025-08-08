@@ -7,15 +7,33 @@ const { JSDOM } = require('jsdom');
 const root = path.resolve(__dirname, '..', '..');
 
 // Ensure FAB container positioning
-
-test('fab stack fixed to viewport corner', () => {
+test('fab stack uses safe-area margins and button sizes', () => {
   const css = fs.readFileSync(path.join(root, 'fabs', 'css', 'cojoin.css'), 'utf-8');
-  const match = css.match(/\.fab-stack\s*{[\s\S]*?}/);
-  assert.ok(match, 'fab-stack styles not found');
-  const block = match[0];
-  assert.ok(/position:\s*fixed/.test(block), 'fab stack should be fixed');
-  assert.ok(/bottom:\s*40px/.test(block), 'fab stack should be 40px from bottom');
-  assert.ok(/right:\s*10px/.test(block), 'fab stack should be 10px from right');
+  const stackMatch = css.match(/\.fab-stack\s*{[\s\S]*?}/);
+  assert.ok(stackMatch, 'fab-stack styles not found');
+  const stackBlock = stackMatch[0];
+  assert.ok(/position:\s*fixed/.test(stackBlock), 'fab stack should be fixed');
+  assert.ok(/bottom:\s*calc\(env\(safe-area-inset-bottom\) \+ 16px\)/.test(stackBlock), 'bottom margin should use safe-area inset');
+  assert.ok(/right:\s*calc\(env\(safe-area-inset-right\) \+ 16px\)/.test(stackBlock), 'right margin should use safe-area inset');
+
+  const btnMatch = css.match(/\.fab-stack__button\s*{[\s\S]*?}/);
+  assert.ok(btnMatch, 'fab-stack__button styles not found');
+  const btnBlock = btnMatch[0];
+  const width = parseInt(btnBlock.match(/width:\s*(\d+)px/)[1], 10);
+  const height = parseInt(btnBlock.match(/height:\s*(\d+)px/)[1], 10);
+  assert.ok(width >= 48, 'fab width should be at least 48px');
+  assert.ok(height >= 48, 'fab height should be at least 48px');
+});
+
+test('fab stack renders buttons in order', () => {
+  const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', { runScripts: 'dangerously', url: 'http://localhost' });
+  const { window } = dom;
+  window.fetch = async () => ({ text: async () => '<div></div>' });
+  const code = fs.readFileSync(path.join(root, 'cojoinlistener.js'), 'utf-8');
+  window.eval(code);
+  window.document.dispatchEvent(new window.Event('DOMContentLoaded'));
+  const ids = Array.from(window.document.querySelectorAll('.fab-stack__button')).map(b => b.id);
+  assert.deepStrictEqual(ids, ['fab-contact', 'fab-join', 'fab-chatbot', 'fab-menu']);
 });
 
 // Ensure clicking outside or on backdrop closes mobile menu
