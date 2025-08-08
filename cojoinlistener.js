@@ -57,18 +57,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function removeFabStack() {
-    if (fabStack) {
-      fabStack.remove();
-      fabStack = null;
-    }
-  }
-
   function checkFabVisibility() {
-    if (window.innerWidth <= 768) {
+    if (!fabStack) {
       buildFabStack();
-    } else {
-      removeFabStack();
     }
   }
 
