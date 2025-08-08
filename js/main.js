@@ -168,23 +168,49 @@ function getCookie(name) {
   return null;
 }
 
+function showFormError(form, message) {
+  const region = form.querySelector('.form-errors');
+  if (region) {
+    region.textContent = message;
+  }
+}
+
+function clearFormError(form) {
+  const region = form.querySelector('.form-errors');
+  if (region) {
+    region.textContent = '';
+  }
+}
+
 // Function to handle form submission
 async function handleFormSubmit(event) {
   event.preventDefault();
 
-  // Honeypot check: block bots that fill hidden fields
-  const honeypot = event.target.querySelector('input[name="hp"]');
-  if (honeypot && honeypot.value !== '') {
-    console.warn('Honeypot filled. Blocking form submission.');
-    event.target.reset();
+  const form = event.target;
+  clearFormError(form);
+
+  if (!form.checkValidity()) {
+    showFormError(form, 'Please fill out all required fields.');
+    if (form.reportValidity) {
+      form.reportValidity();
+    }
     return;
   }
 
-  const formData = new FormData(event.target);
+  // Honeypot check: block bots that fill hidden fields
+  const honeypot = form.querySelector('input[name="hp"]');
+  if (honeypot && honeypot.value !== '') {
+    console.warn('Honeypot filled. Blocking form submission.');
+    showFormError(form, 'Invalid submission.');
+    form.reset();
+    return;
+  }
+
+  const formData = new FormData(form);
   const hcaptchaResponse = formData.get('h-captcha-response');
 
   if (!hcaptchaResponse) {
-    alert('Please complete the CAPTCHA.');
+    showFormError(form, 'Please complete the CAPTCHA.');
     return;
   }
 
@@ -211,24 +237,25 @@ async function handleFormSubmit(event) {
 
     if (response.ok) {
       alert('Thank you for your submission!');
-      event.target.reset();
-      const dialog = event.target.closest('dialog');
+      form.reset();
+      clearFormError(form);
+      const dialog = form.closest('dialog');
       if (dialog) {
         dialog.close();
       } else {
-        const modal = event.target.closest('.ops-modal');
+        const modal = form.closest('.ops-modal');
         if (modal) {
           modal.remove();
         }
       }
     } else {
-      alert('Form submission failed. Please try again.');
+      showFormError(form, 'Form submission failed. Please try again.');
     }
   } catch (err) {
     console.error('Form submission failed:', err);
     // In a real application, we would send this error to a logging service.
     // logError(err);
-    alert('Unable to submit form at this time.');
+    showFormError(form, 'Unable to submit form at this time.');
   }
 }
 

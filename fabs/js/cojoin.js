@@ -11,6 +11,20 @@ function initCojoinForms() {
   const contactForm = document.getElementById('contactForm');
   const joinForm = document.getElementById('joinForm');
 
+  function showFormError(form, message) {
+    const region = form.querySelector('.form-errors');
+    if (region) {
+      region.textContent = message;
+    }
+  }
+
+  function clearFormError(form) {
+    const region = form.querySelector('.form-errors');
+    if (region) {
+      region.textContent = '';
+    }
+  }
+
   if (contactForm && !contactForm.dataset.cojoinInitialized) {
     contactForm.addEventListener('submit', handleContactSubmit);
     contactForm.dataset.cojoinInitialized = 'true';
@@ -185,15 +199,26 @@ function initCojoinForms() {
   async function handleContactSubmit(e) {
     e.preventDefault();
 
+    const form = e.target;
+    clearFormError(form);
+
+    if (!form.checkValidity()) {
+      showFormError(form, 'Please fill out all required fields.');
+      if (form.reportValidity) {
+        form.reportValidity();
+      }
+      return;
+    }
+
     // 1. Honeypot check: Block if this hidden field is filled
     const honeypotField = document.getElementById('honeypot-contact');
     if (honeypotField && honeypotField.value !== '') {
       console.warn('Honeypot filled. Blocking form submission.');
-      e.target.reset(); // Reset form to clear any malicious data
+      showFormError(form, 'Invalid submission.');
+      form.reset(); // Reset form to clear any malicious data
       return;
     }
 
-    const form = e.target;
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
 
@@ -208,6 +233,7 @@ function initCojoinForms() {
     alert('Contact form submitted successfully!');
     await sendToCloudflareWorker(sanitizedData);
     form.reset();
+    clearFormError(form);
     if (window.hideActiveFabModal) {
       window.hideActiveFabModal();
     }
@@ -220,15 +246,26 @@ function initCojoinForms() {
   async function handleJoinSubmit(e) {
     e.preventDefault();
 
+    const form = e.target;
+    clearFormError(form);
+
+    if (!form.checkValidity()) {
+      showFormError(form, 'Please fill out all required fields.');
+      if (form.reportValidity) {
+        form.reportValidity();
+      }
+      return;
+    }
+
     // 1. Honeypot check
     const honeypotField = document.getElementById('honeypot-join');
     if (honeypotField && honeypotField.value !== '') {
       console.warn('Honeypot filled. Blocking form submission.');
-      e.target.reset();
+      showFormError(form, 'Invalid submission.');
+      form.reset();
       return;
     }
 
-    const form = e.target;
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
 
@@ -237,7 +274,7 @@ function initCojoinForms() {
     for (const section of formSections) {
       const inputs = section.querySelectorAll('input[type=text]');
       if (inputs.length > 0 && !section.classList.contains('completed')) {
-        alert(`Please accept your entries in "${section.querySelector('h2').textContent}" or remove them.`);
+        showFormError(form, `Please accept your entries in "${section.querySelector('h2').textContent}" or remove them.`);
         return;
       }
     }
@@ -253,6 +290,7 @@ function initCojoinForms() {
     alert('Join form submitted successfully!');
     await sendToCloudflareWorker(sanitizedData);
     form.reset();
+    clearFormError(form);
     resetJoinFormState();
     if (window.hideActiveFabModal) {
       window.hideActiveFabModal();
@@ -307,15 +345,16 @@ function initCojoinForms() {
         acceptBtn.addEventListener('click', () => {
           const inputs = inputsContainer.querySelectorAll('input[type=text], textarea');
           if (inputs.length === 0) {
-            alert('Add at least one entry.');
+            showFormError(joinForm, 'Add at least one entry.');
             return;
           }
           for (const input of inputs) {
             if (!input.value.trim()) {
-              alert('Please fill out all fields before accepting.');
+              showFormError(joinForm, 'Please fill out all fields before accepting.');
               return;
             }
           }
+          clearFormError(joinForm);
           toggleSectionState(section, true);
         });
       }
