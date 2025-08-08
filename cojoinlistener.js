@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modal) {
       removeOverlay();
       overlay = document.createElement('div');
-      overlay.className = 'modal-overlay';
+      overlay.className = 'backdrop';
       overlay.dataset.open = 'true';
       overlay.addEventListener('click', () => hideModal(modal));
       document.body.appendChild(overlay);
@@ -232,14 +232,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       overlay = null;
     }
-    if (document.documentElement.removeAttribute) {
-      document.documentElement.removeAttribute('data-lock');
-    } else {
+    if (document.documentElement && document.documentElement.dataset) {
       delete document.documentElement.dataset.lock;
     }
-    if (document.body.removeAttribute) {
-      document.body.removeAttribute('data-lock');
-    } else {
+    if (document.body && document.body.dataset) {
       delete document.body.dataset.lock;
     }
   }
