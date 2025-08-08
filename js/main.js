@@ -74,6 +74,11 @@ function makeDraggable(modal) {
   let isDragging = false;
   let offsetX, offsetY;
   header.addEventListener('mousedown', (e) => {
+    // Skip dragging when interacting with buttons or other controls
+    if (e.target.closest('button, [href], input, select, textarea')) {
+      return;
+    }
+
     isDragging = true;
 
     // We calculate the offset from the top-left of the modal.
