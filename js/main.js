@@ -121,59 +121,110 @@ function updateModalContent(modalElement, lang) {
 
 // Basic sanitization helper
 function sanitizeInput(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.textContent;
+  // In a real application, we would use a library like DOMPurify here.
+  // This is a placeholder to simulate the sanitization process.
+  const sanitized = str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return sanitized;
+}
+
+// Function to generate a random string for the CSRF token
+function generateCsrfToken() {
+  const randomBytes = new Uint8Array(32);
+  window.crypto.getRandomValues(randomBytes);
+  return Array.from(randomBytes).map(byte => byte.toString(16).padStart(2, '0')).join('');
+}
+
+// Function to set a cookie
+function setCookie(name, value, days) {
+  let expires = '';
+  if (days) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    expires = '; expires=' + date.toUTCString();
+  }
+  document.cookie = name + '=' + (value || '') + expires + '; path=/; SameSite=Strict; Secure';
+}
+
+// Function to get a cookie
+function getCookie(name) {
+  const nameEQ = name + '=';
+  const ca = document.cookie.split(';');
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+  }
+  return null;
 }
 
 // Function to handle form submission
-  async function handleFormSubmit(event) {
-    event.preventDefault();
+async function handleFormSubmit(event) {
+  event.preventDefault();
 
-    // Honeypot check: block bots that fill hidden fields
-    const honeypot = event.target.querySelector('input[name="hp"]');
-    if (honeypot && honeypot.value !== '') {
-      console.warn('Honeypot filled. Blocking form submission.');
-      event.target.reset();
-      return;
+  // Honeypot check: block bots that fill hidden fields
+  const honeypot = event.target.querySelector('input[name="hp"]');
+  if (honeypot && honeypot.value !== '') {
+    console.warn('Honeypot filled. Blocking form submission.');
+    event.target.reset();
+    return;
+  }
+
+  const formData = new FormData(event.target);
+  const hcaptchaResponse = formData.get('h-captcha-response');
+
+  if (!hcaptchaResponse) {
+    alert('Please complete the CAPTCHA.');
+    return;
+  }
+
+  const sanitized = {};
+  formData.forEach((value, key) => {
+    if (key !== 'hp' && key !== 'h-captcha-response') {
+      sanitized[key] = sanitizeInput(value);
     }
+  });
 
-    const formData = new FormData(event.target);
-    const sanitized = {};
-    formData.forEach((value, key) => {
-      if (key !== 'hp') {
-        sanitized[key] = sanitizeInput(value);
-      }
-    });
+  // Add CSRF token to the sanitized data.
+  sanitized.csrf_token = getCookie('csrf_token');
 
   try {
-    await fetch('https://example.com/api/contact', {
+    const response = await fetch('https://example.com/api/contact', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
       mode: 'cors',
-      body: JSON.stringify(sanitized)
+      body: JSON.stringify({ ...sanitized, 'h-captcha-response': hcaptchaResponse })
     });
-    alert('Thank you for your submission!');
-    event.target.reset();
-    const dialog = event.target.closest('dialog');
-    if (dialog) {
-      dialog.close();
-    } else {
-      const modal = event.target.closest('.ops-modal');
-      if (modal) {
-        modal.remove();
+
+    if (response.ok) {
+      alert('Thank you for your submission!');
+      event.target.reset();
+      const dialog = event.target.closest('dialog');
+      if (dialog) {
+        dialog.close();
+      } else {
+        const modal = event.target.closest('.ops-modal');
+        if (modal) {
+          modal.remove();
+        }
       }
+    } else {
+      alert('Form submission failed. Please try again.');
     }
   } catch (err) {
     console.error('Form submission failed:', err);
+    // In a real application, we would send this error to a logging service.
+    // logError(err);
     alert('Unable to submit form at this time.');
   }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Generate and set the CSRF token when the page loads
+  const csrfToken = generateCsrfToken();
+  setCookie('csrf_token', csrfToken, 1);
   const navToggle = document.querySelector('.nav-menu-toggle');
   const navLinks = document.getElementById('primary-nav');
   if (navToggle) {
