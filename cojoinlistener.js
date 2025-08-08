@@ -7,20 +7,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const body = document.body;
 
-  // Build FAB stack container
-  const fabStack = document.createElement('div');
-  fabStack.className = 'fab-stack';
-  body.appendChild(fabStack);
-
-  // Create individual FABs
-  const contactFab = createFab('contact', '<i class="fa fa-envelope"></i>', 'Contact Us', 'fab-stack__contact');
-  const joinFab = createFab('join', '<i class="fa fa-user-plus"></i>', 'Join Us', 'fab-stack__join');
-  const chatbotFab = createFab('chatbot', '<i class="fa fa-comments"></i>', 'Chatbot', 'fab-stack__chatbot');
-  const menuFab = createFab('menu', '<i class="fa fa-bars"></i>', 'Menu', 'fab-stack__menu');
-  fabStack.appendChild(contactFab);
-  fabStack.appendChild(joinFab);
-  fabStack.appendChild(chatbotFab);
-  fabStack.appendChild(menuFab);
+  let fabStack = null;
   let activeModal = null;
   let overlay = null;
   let lastFocused = null; // Remember focus to restore when modal closes
@@ -37,16 +24,51 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Attach handlers
-  contactFab.addEventListener('click', () => showModal('contact'));
-  joinFab.addEventListener('click', () => showModal('join'));
-  chatbotFab.addEventListener('click', () => showModal('chatbot'));
-  menuFab.addEventListener('click', () => {
-    const navToggle = document.querySelector('.nav-menu-toggle');
-    if (navToggle && navToggle.click) {
-      navToggle.click();
+  function buildFabStack() {
+    if (fabStack) return;
+
+    fabStack = document.createElement('div');
+    fabStack.className = 'fab-stack';
+    body.appendChild(fabStack);
+
+    const contactFab = createFab('contact', '<i class="fa fa-envelope"></i>', 'Contact Us', 'fab-stack__contact');
+    const joinFab = createFab('join', '<i class="fa fa-user-plus"></i>', 'Join Us', 'fab-stack__join');
+    const chatbotFab = createFab('chatbot', '<i class="fa fa-comments"></i>', 'Chatbot', 'fab-stack__chatbot');
+    const menuFab = createFab('menu', '<i class="fa fa-bars"></i>', 'Menu', 'fab-stack__menu');
+
+    fabStack.appendChild(contactFab);
+    fabStack.appendChild(joinFab);
+    fabStack.appendChild(chatbotFab);
+    fabStack.appendChild(menuFab);
+
+    contactFab.addEventListener('click', () => showModal('contact'));
+    joinFab.addEventListener('click', () => showModal('join'));
+    chatbotFab.addEventListener('click', () => showModal('chatbot'));
+    menuFab.addEventListener('click', () => {
+      const navToggle = document.querySelector('.nav-menu-toggle');
+      if (navToggle && navToggle.click) {
+        navToggle.click();
+      }
+    });
+  }
+
+  function removeFabStack() {
+    if (fabStack) {
+      fabStack.remove();
+      fabStack = null;
     }
-  });
+  }
+
+  function checkFabVisibility() {
+    if (window.innerWidth <= 768) {
+      buildFabStack();
+    } else {
+      removeFabStack();
+    }
+  }
+
+  checkFabVisibility();
+  window.addEventListener('resize', checkFabVisibility);
 
   /**
    * Create a single FAB button.

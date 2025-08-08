@@ -245,12 +245,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const langData = (typeof translations !== 'undefined' && translations[currentLanguage]) || {};
     const navLabel = langData[ariaKey] || 'Menu';
     navToggle.setAttribute('aria-label', navLabel);
-
-    const updateToggleVisibility = () => {
-      navToggle.style.display = window.innerWidth <= 768 ? 'block' : 'none';
-    };
-    updateToggleVisibility();
-    window.addEventListener('resize', updateToggleVisibility);
   }
   if (navToggle && navLinks) {
     let lastFocusedElement;
