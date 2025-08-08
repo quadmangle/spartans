@@ -13,8 +13,8 @@ test('fab stack uses safe-area margins and button sizes', () => {
   assert.ok(stackMatch, 'fab-stack styles not found');
   const stackBlock = stackMatch[0];
   assert.ok(/position:\s*fixed/.test(stackBlock), 'fab stack should be fixed');
-  assert.ok(/bottom:\s*calc\(env\(safe-area-inset-bottom\) \+ 20px\)/.test(stackBlock), 'bottom margin should use safe-area inset');
-  assert.ok(/right:\s*calc\(env\(safe-area-inset-right\) \+ 10px\)/.test(stackBlock), 'right margin should use safe-area inset');
+  assert.ok(/bottom:\s*calc\(env\(safe-area-inset-bottom\) \+ 16px\)/.test(stackBlock), 'bottom margin should use safe-area inset');
+  assert.ok(/right:\s*calc\(env\(safe-area-inset-right\) \+ 16px\)/.test(stackBlock), 'right margin should use safe-area inset');
 
   const btnMatch = css.match(/\.fab-stack__button\s*{[\s\S]*?}/);
   assert.ok(btnMatch, 'fab-stack__button styles not found');
