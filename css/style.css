@@ -260,6 +260,7 @@ li {
 
 .nav-menu-toggle {
   width: 2.5rem;
+  display: none;
 }
 
 .toggle-btn:hover,
@@ -268,9 +269,6 @@ li {
   background: var(--clr-accent);
 }
 
-.nav-menu-toggle {
-  display: block;
-}
 
 .nav-menu-toggle:focus {
   outline: none;
@@ -645,6 +643,33 @@ body.dark .ops-modal {
 }
 
 /* ==================================== */
+@media (max-width: 768px) {
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 70%;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+    background: var(--clr-background);
+    border-left: 1px solid var(--clr-form-border);
+    border-radius: 5px 0 0 5px;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    padding: var(--space-xl) var(--space-md);
+    z-index: 1000;
+  }
+  .nav-links.open {
+    transform: translateX(0);
+  }
+  .ops-nav {
+    overflow-x: auto;
+  }
+}
+
 /* 5. Responsive */
 /* ==================================== */
 @media (min-width: 500px) {

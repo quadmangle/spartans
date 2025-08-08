@@ -229,6 +229,7 @@ function runScripts(context, files) {
 test('chatbot modal initializes and handlers work', async () => {
   const document = new Document();
   const window = { document };
+  window.innerWidth = 500;
   window.addEventListener = () => {};
   window.dispatchEvent = () => {};
   const context = vm.createContext({ window, document, console, setTimeout, fetch: null });
@@ -307,6 +308,7 @@ test('chatbot modal initializes and handlers work', async () => {
 test('chatbot not initialized when HTML missing', async () => {
   const document = new Document();
   const window = { document };
+  window.innerWidth = 500;
   window.addEventListener = () => {};
   window.dispatchEvent = () => {};
   const context = vm.createContext({ window, document, console, fetch: null, setTimeout });
@@ -331,6 +333,7 @@ test('chatbot not initialized when HTML missing', async () => {
 test('chatbot FAB click is idempotent', async () => {
   const document = new Document();
   const window = { document };
+  window.innerWidth = 500;
   window.addEventListener = () => {};
   window.dispatchEvent = () => {};
   const context = vm.createContext({ window, document, console, fetch: null, setTimeout });
