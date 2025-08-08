@@ -35,6 +35,8 @@
   --space-xl: 2.5rem;
   --space-2xl: 3.125rem;
   --space-3xl: 3.75rem;
+  /* Fallback viewport unit */
+  --vh: 1vh;
 }
 
 /* Dark Theme Variables */
@@ -78,7 +80,8 @@ body.dark {
 
 body {
   font-family: "Segoe UI", Arial, sans-serif;
-  min-height: 100dvh;
+  min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
   margin: 0;
   color: var(--clr-text-subtle);
   padding-top: env(safe-area-inset-top);
@@ -523,7 +526,8 @@ body.dark .card .icon > i {
   min-width: 19.375rem;
   max-width: 50rem;
   width: 80vw;
-  max-height: 80dvh;
+  max-height: 80vh;
+  max-height: calc(var(--vh, 1vh) * 80);
   background: #fff;
   color: #1a1930;
   border-radius: 2rem;
