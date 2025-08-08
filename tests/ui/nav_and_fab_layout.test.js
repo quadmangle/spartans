@@ -8,14 +8,14 @@ const root = path.resolve(__dirname, '..', '..');
 
 // Ensure FAB container positioning
 
-test('fab container fixed to viewport corner', () => {
+test('fab stack fixed to viewport corner', () => {
   const css = fs.readFileSync(path.join(root, 'fabs', 'css', 'cojoin.css'), 'utf-8');
-  const match = css.match(/\.fab-container\s*{[\s\S]*?}/);
-  assert.ok(match, 'fab-container styles not found');
+  const match = css.match(/\.fab-stack\s*{[\s\S]*?}/);
+  assert.ok(match, 'fab-stack styles not found');
   const block = match[0];
-  assert.ok(/position:\s*fixed/.test(block), 'fab container should be fixed');
-  assert.ok(/bottom:\s*calc\(env\(safe-area-inset-bottom\) \+ 16px\)/.test(block), 'fab container should respect bottom safe-area');
-  assert.ok(/right:\s*calc\(env\(safe-area-inset-right\) \+ 16px\)/.test(block), 'fab container should respect right safe-area');
+  assert.ok(/position:\s*fixed/.test(block), 'fab stack should be fixed');
+  assert.ok(/bottom:\s*40px/.test(block), 'fab stack should be 40px from bottom');
+  assert.ok(/right:\s*10px/.test(block), 'fab stack should be 10px from right');
 });
 
 // Ensure clicking outside or on backdrop closes mobile menu
