@@ -183,8 +183,11 @@ document.addEventListener('DOMContentLoaded', () => {
       removeOverlay();
       overlay = document.createElement('div');
       overlay.className = 'modal-overlay';
+      overlay.dataset.open = 'true';
       overlay.addEventListener('click', () => hideModal(modal));
       document.body.appendChild(overlay);
+      document.documentElement.dataset.lock = 'true';
+      document.body.dataset.lock = 'true';
 
       // Initialize draggable on window load, then update on resize
       // This function is expected to be defined in fabs/js/cojoin.js
@@ -234,6 +237,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
       overlay = null;
+    }
+    if (document.documentElement.removeAttribute) {
+      document.documentElement.removeAttribute('data-lock');
+    } else {
+      delete document.documentElement.dataset.lock;
+    }
+    if (document.body.removeAttribute) {
+      document.body.removeAttribute('data-lock');
+    } else {
+      delete document.body.dataset.lock;
     }
   }
 
