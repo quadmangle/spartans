@@ -7,7 +7,6 @@ const { JSDOM } = require('jsdom');
 const root = path.resolve(__dirname, '..', '..');
 
 // Ensure FAB container positioning
-
 test('fab stack uses safe-area margins and button sizes', () => {
   const css = fs.readFileSync(path.join(root, 'fabs', 'css', 'cojoin.css'), 'utf-8');
   const stackMatch = css.match(/\.fab-stack\s*{[\s\S]*?}/);

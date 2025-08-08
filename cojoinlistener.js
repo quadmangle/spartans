@@ -4,7 +4,6 @@
  * Creates a stack of Floating Action Buttons (FABs) that launch
  * Contact, Join, Chatbot modals and the site navigation menu.
  */
-
 document.addEventListener('DOMContentLoaded', () => {
   const body = document.body;
 
@@ -18,12 +17,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const joinFab = createFab('join', '<i class="fa fa-user-plus"></i>', 'Join Us', 'fab-stack__join');
   const chatbotFab = createFab('chatbot', '<i class="fa fa-comments"></i>', 'Chatbot', 'fab-stack__chatbot');
   const menuFab = createFab('menu', '<i class="fa fa-bars"></i>', 'Menu', 'fab-stack__menu');
-
   fabStack.appendChild(contactFab);
   fabStack.appendChild(joinFab);
   fabStack.appendChild(chatbotFab);
   fabStack.appendChild(menuFab);
-
   let activeModal = null;
   let overlay = null;
   let lastFocused = null; // Remember focus to restore when modal closes
@@ -147,9 +144,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modal) {
       removeOverlay();
       overlay = document.createElement('div');
-      overlay.className = 'modal-overlay';
+      overlay.className = 'backdrop';
+      overlay.dataset.open = 'true';
       overlay.addEventListener('click', () => hideModal(modal));
       document.body.appendChild(overlay);
+      document.documentElement.dataset.lock = 'true';
+      document.body.dataset.lock = 'true';
 
       if (window.initDraggableModal) {
         window.initDraggableModal(modal);
@@ -191,6 +191,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
       overlay = null;
+    }
+    if (document.documentElement && document.documentElement.dataset) {
+      delete document.documentElement.dataset.lock;
+    }
+    if (document.body && document.body.dataset) {
+      delete document.body.dataset.lock;
     }
   }
 
