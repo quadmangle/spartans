@@ -35,7 +35,7 @@ function initCojoinForms() {
     let isDragging = false;
     let offsetX, offsetY;
 
-    const modalHeader = modal.querySelector('.modal-header') || modal.querySelector('#chatbot-header');
+    const modalHeader = modal.querySelector('.modal__header') || modal.querySelector('#chatbot-header');
     if (!modalHeader) return;
 
     modalHeader.addEventListener('mousedown', (e) => {
