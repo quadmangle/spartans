@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
    * @param {string} modalId 'contact', 'join', or 'chatbot'.
    */
   async function showModal(modalId) {
-    const targetId = modalId === 'chatbot' ? 'chatbot-container' : `${modalId}-modal`;
+    const targetId = modalId === 'chatbot' ? 'modal-chatbot' : `${modalId}-modal`;
     lastFocused = document.activeElement;
 
     if (activeModal && activeModal.id !== targetId) {
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
         template.innerHTML = sanitized;
 
         const root = template.content || template;
-        modal = root.querySelector('.modal-container') || root.querySelector('#chatbot-container');
+        modal = root.querySelector('.modal-container') || root.querySelector('#modal-chatbot');
         if (modal) {
           if (modalId !== 'chatbot') {
             modal.id = targetId;
