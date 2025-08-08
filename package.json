@@ -4,15 +4,10 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "NODE_PATH=./node_modules node --test",
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "express": "^5.1.0",
-    "express-session": "^1.17.3"
+    "test": "NODE_PATH=./node_modules node --test"
   },
   "devDependencies": {
-    "jsdom": "26.1.0"
+    "jsdom": "24.0.0"
   },
   "keywords": [],
   "author": "",
