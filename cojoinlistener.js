@@ -1,42 +1,32 @@
 /**
  * cojoinlistener.js
  *
- * This script creates and manages the Floating Action Buttons (FABs)
- * for the Contact, Join, and Chatbot modals. It handles the toggle
- * logic and dynamically loads the modal content from the 'fabs' directory.
+ * Creates a stack of Floating Action Buttons (FABs) that launch
+ * Contact, Join, Chatbot modals and the site navigation menu.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-
   const body = document.body;
 
-  // Create the FAB container and buttons
-  const fabContainer = document.createElement('div');
-  fabContainer.className = 'fab-container';
-  body.appendChild(fabContainer);
+  // Build FAB stack container
+  const fabStack = document.createElement('div');
+  fabStack.className = 'fab-stack';
+  body.appendChild(fabStack);
 
-  const fabMain = document.createElement('button');
-  fabMain.className = 'fab-main';
-  fabMain.innerHTML = '<i class="fas fa-plus"></i>';
-  fabContainer.appendChild(fabMain);
+  // Create individual FABs
+  const contactFab = createFab('contact', '<i class="fa fa-envelope"></i>', 'Contact Us', 'fab-stack__contact');
+  const joinFab = createFab('join', '<i class="fa fa-user-plus"></i>', 'Join Us', 'fab-stack__join');
+  const chatbotFab = createFab('chatbot', '<i class="fa fa-comments"></i>', 'Chatbot', 'fab-stack__chatbot');
+  const menuFab = createFab('menu', '<i class="fa fa-bars"></i>', 'Menu', 'fab-stack__menu');
 
-  const fabOptions = document.createElement('div');
-  fabOptions.className = 'fab-options';
-  fabContainer.appendChild(fabOptions);
-
-  const contactFab = createFabOption('contact', '<i class="fa fa-envelope"></i>', 'Contact Us');
-  const joinFab = createFabOption('join', '<i class="fa fa-user-plus"></i>', 'Join Us');
-  const chatbotFab = createFabOption('chatbot', '<i class="fa fa-comments"></i>', 'Chatbot');
-
-  fabOptions.appendChild(contactFab);
-  fabOptions.appendChild(joinFab);
-  fabOptions.appendChild(chatbotFab);
+  fabStack.appendChild(contactFab);
+  fabStack.appendChild(joinFab);
+  fabStack.appendChild(chatbotFab);
+  fabStack.appendChild(menuFab);
 
   let activeModal = null;
   let overlay = null;
-  // Track the element that was focused before a modal opened so we can
-  // restore focus when the modal closes.
-  let lastFocused = null;
+  let lastFocused = null; // Remember focus to restore when modal closes
 
   window.hideActiveFabModal = () => {
     if (activeModal) {
@@ -50,43 +40,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Main FAB click handler
-  fabMain.addEventListener('click', () => {
-    fabContainer.classList.toggle('open');
-    // Removed shine animation to prevent spinning effect on click
-    // fabMain.classList.add('shine');
-    // setTimeout(() => {
-    //   fabMain.classList.remove('shine');
-    // }, 600);
-    // If FABs close, also close the active modal
-    if (!fabContainer.classList.contains('open') && activeModal) {
-      hideModal(activeModal);
+  // Attach handlers
+  contactFab.addEventListener('click', () => showModal('contact'));
+  joinFab.addEventListener('click', () => showModal('join'));
+  chatbotFab.addEventListener('click', () => showModal('chatbot'));
+  menuFab.addEventListener('click', () => {
+    const navToggle = document.querySelector('.nav-menu-toggle');
+    if (navToggle && navToggle.click) {
+      navToggle.click();
     }
   });
 
-  // Individual FAB click handlers
-  contactFab.addEventListener('click', () => {
-    showModal('contact');
-  });
-
-  joinFab.addEventListener('click', () => {
-    showModal('join');
-  });
-
-  chatbotFab.addEventListener('click', () => {
-    showModal('chatbot');
-  });
-
   /**
-   * Creates a single FAB option button.
-   * @param {string} id The unique ID for the button.
-   * @param {string} icon The HTML for the Font Awesome icon.
-   * @param {string} title The title/aria-label for accessibility.
-   * @returns {HTMLButtonElement} The created button element.
+   * Create a single FAB button.
+   * @param {string} id Unique identifier for the button.
+   * @param {string} icon HTML for the icon.
+   * @param {string} title Tooltip/aria label.
+   * @param {string} extraClass Additional class name.
+   * @returns {HTMLButtonElement}
    */
-  function createFabOption(id, icon, title) {
+  function createFab(id, icon, title, extraClass) {
     const button = document.createElement('button');
-    button.className = 'fab-option';
+    button.className = `fab-stack__button ${extraClass}`;
     button.id = `fab-${id}`;
     button.innerHTML = icon;
     button.title = title;
@@ -95,10 +70,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /**
-   * Basic HTML sanitization. Uses DOMPurify when available and falls back to
-   * stripping script tags otherwise.
-   * @param {string} dirty The HTML string to sanitize.
-   * @returns {string} A sanitized HTML string.
+   * Basic HTML sanitization using DOMPurify when available.
+   * Falls back to removing script tags.
    */
   function sanitizeHTML(dirty) {
     if (window.DOMPurify && typeof window.DOMPurify.sanitize === 'function') {
@@ -109,15 +82,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /**
    * Displays the specified modal, dynamically loading it if not already present.
-   * @param {string} modalId The ID of the modal to show ('contact', 'join', or 'chatbot').
+   * @param {string} modalId 'contact', 'join', or 'chatbot'.
    */
   async function showModal(modalId) {
     const targetId = modalId === 'chatbot' ? 'chatbot-container' : `${modalId}-modal`;
-
-    // Remember the currently focused element to restore later
     lastFocused = document.activeElement;
 
-    // Hide any currently active modal before showing a new one
     if (activeModal && activeModal.id !== targetId) {
       hideModal(activeModal);
     }
@@ -127,7 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
       modal.style.display = 'flex';
       activeModal = modal;
     } else {
-      // Dynamic loading logic: fetch HTML from 'fabs/' directory
       try {
         const url = `fabs/${modalId}.html`;
         const response = await fetch(url, { credentials: 'same-origin' });
@@ -135,9 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (responseURL && !responseURL.startsWith(window.location.origin)) {
           throw new Error('Cross-origin fetch blocked');
         }
-        const type = (response.headers && response.headers.get
-          ? response.headers.get('Content-Type')
-          : '') || '';
+        const type = (response.headers && response.headers.get ? response.headers.get('Content-Type') : '') || '';
         if (type && !type.toLowerCase().startsWith('text/html')) {
           throw new Error(`Unexpected content type: ${type}`);
         }
@@ -163,9 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
           modal.style.display = 'flex';
           activeModal = modal;
 
-          // Add close button functionality
           const closeBtn = modal.querySelector('.modal-close');
-          // For chatbot, the close button is part of the header, but we can still target it if needed
           if (closeBtn) {
             closeBtn.addEventListener('click', () => hideModal(modal));
           }
@@ -186,14 +151,10 @@ document.addEventListener('DOMContentLoaded', () => {
       overlay.addEventListener('click', () => hideModal(modal));
       document.body.appendChild(overlay);
 
-      // Initialize draggable on window load, then update on resize
-      // This function is expected to be defined in fabs/js/cojoin.js
       if (window.initDraggableModal) {
         window.initDraggableModal(modal);
       }
 
-      // Shift keyboard focus into the modal. For chatbot we focus the input;
-      // otherwise focus the first interactive element.
       const focusTarget =
         modalId === 'chatbot'
           ? modal.querySelector('#chatbot-input')
@@ -202,13 +163,10 @@ document.addEventListener('DOMContentLoaded', () => {
         focusTarget.focus();
       }
     }
-
-    fabContainer.classList.remove('open');
   }
 
   /**
-   * Hides the specified modal.
-   * @param {HTMLElement} modal The modal element to hide.
+   * Hides the specified modal and cleans up overlay/focus.
    */
   function hideModal(modal) {
     if (modal) {
@@ -216,7 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
       activeModal = null;
     }
     removeOverlay();
-    // Restore focus to the element that triggered the modal
     if (lastFocused && lastFocused.focus) {
       lastFocused.focus();
       lastFocused = null;
@@ -237,11 +194,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Handle window resizing to adjust draggable functionality
+  // Adjust draggable on resize
   window.addEventListener('resize', () => {
     if (activeModal && window.initDraggableModal) {
       window.initDraggableModal(activeModal);
     }
   });
-
 });
