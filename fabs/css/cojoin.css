@@ -266,19 +266,19 @@ input, select, textarea {
 button.submit-btn {
   width: 7.5rem;
   height: 3rem;
-  background: var(--clr-primary);
+  background: transparent;
   border: none;
   border-radius: 0.75rem;
-  color: white;
+  color: var(--clr-primary);
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
-  box-shadow: 0 0.25rem 0.5rem #0004;
-  transition: background 0.3s;
+  box-shadow: none;
+  transition: color 0.3s;
 }
 
 button.submit-btn:hover {
-  background: var(--clr-accent-dark);
+  color: var(--clr-accent-dark);
 }
 
 /* Honeypot fields to be hidden */
