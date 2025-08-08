@@ -647,6 +647,8 @@ body.dark .ops-modal {
 }
 
 @media (max-width: 768px) {
+  /* When the viewport is narrow the nav may overflow horizontally;
+     enable horizontal scrolling so the controls remain reachable. */
   .ops-nav {
     flex-direction: row;
     justify-content: space-between;

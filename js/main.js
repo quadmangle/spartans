@@ -204,6 +204,7 @@ function sanitizeInput(str) {
 document.addEventListener('DOMContentLoaded', async () => {
   const navToggle = document.querySelector('.nav-menu-toggle');
   const navLinks = document.querySelector('.nav-links');
+  // Backdrop element shown behind the mobile menu; clicking it closes the menu
   const navBackdrop = document.querySelector('.nav-backdrop');
   if (navToggle) {
     const updateToggleVisibility = () => {
@@ -236,6 +237,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function handleClickOutside(e) {
+      // Close the menu when clicking outside the nav links or on the backdrop
       if (!navLinks.contains(e.target) && e.target !== navToggle) {
         closeMenu();
       }
@@ -247,7 +249,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (navBackdrop) {
         navBackdrop.classList.add('open');
         navBackdrop.removeAttribute('hidden');
-        navBackdrop.addEventListener('click', closeMenu);
+        navBackdrop.addEventListener('click', closeMenu); // Clicking the overlay closes the menu
       }
       const focusable = navLinks.querySelectorAll('a, button');
       firstFocusable = focusable[0];
