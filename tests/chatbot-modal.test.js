@@ -50,7 +50,7 @@ class Element {
   set innerHTML(html) {
     this._innerHTML = html;
     this.children = [];
-    if (html.includes('chatbot-container')) {
+    if (html.includes('modal-chatbot')) {
       const modal = createChatbotModal();
       modal.parentNode = this;
       this.children.push(modal);
@@ -147,7 +147,7 @@ function querySelectorFrom(root, selector, all) {
 
 function createChatbotModal() {
   const container = new Element('div');
-  container.id = 'chatbot-container';
+  container.id = 'modal-chatbot';
 
   const header = new Element('div');
   header.id = 'chatbot-header';
@@ -236,7 +236,7 @@ test('chatbot modal initializes and handlers work', async () => {
   context.window.initDraggableModal = () => {};
 
   // fetch stub for modal and chat responses
-  const chatbotHtml = '<div id="chatbot-container"></div>';
+  const chatbotHtml = '<div id="modal-chatbot"></div>';
   context.fetch = async (url) => {
     if (url.endsWith('chatbot.html')) {
       return { text: async () => chatbotHtml };
@@ -340,7 +340,7 @@ test('chatbot FAB click is idempotent', async () => {
   context.window.initDraggableModal = () => {};
 
   // fetch stub for modal and chat responses
-  const chatbotHtml = '<div id="chatbot-container"></div>';
+  const chatbotHtml = '<div id="modal-chatbot"></div>';
   context.fetch = async (url) => ({ text: async () => chatbotHtml });
 
   // Load scripts
@@ -365,7 +365,7 @@ test('chatbot FAB click is idempotent', async () => {
   assert.strictEqual(count, 1, 'initChatbot only called once');
 
   // Ensure only one chatbot container exists
-  const containers = document.querySelectorAll('#chatbot-container');
+  const containers = document.querySelectorAll('#modal-chatbot');
   assert.strictEqual(containers.length, 1, 'only one chatbot container appended');
 });
 
