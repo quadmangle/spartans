@@ -53,6 +53,11 @@ function initCojoinForms() {
     if (!modalHeader) return;
 
     modalHeader.addEventListener('mousedown', (e) => {
+      // Ignore drag initiation when interacting with buttons or form controls
+      if (e.target.closest('button, [href], input, select, textarea')) {
+        return;
+      }
+
       isDragging = true;
       offsetX = e.clientX - modal.getBoundingClientRect().left;
       offsetY = e.clientY - modal.getBoundingClientRect().top;

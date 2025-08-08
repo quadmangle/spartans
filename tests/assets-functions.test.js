@@ -88,7 +88,7 @@ test('makeDraggable updates modal position on drag', () => {
   makeDraggable(modal);
   assert.strictEqual(typeof header.events.mousedown, 'function');
 
-  header.events.mousedown({ clientX: 10, clientY: 10 });
+  header.events.mousedown({ clientX: 10, clientY: 10, target: { closest: () => null } });
   documentStub._events.mousemove({ clientX: 30, clientY: 40, preventDefault() {} });
   assert.strictEqual(modal.style.transform, 'none');
   assert.strictEqual(modal.style.left, '20px');
@@ -96,4 +96,25 @@ test('makeDraggable updates modal position on drag', () => {
 
   documentStub._events.mouseup();
   assert.ok(!documentStub._events.mousemove);
+});
+
+test('makeDraggable ignores mousedown on interactive elements', () => {
+  // Reset event registry
+  for (const k in documentStub._events) {
+    delete documentStub._events[k];
+  }
+
+  const header = { events: {}, addEventListener(type, handler) { this.events[type] = handler; } };
+  const modal = {
+    offsetLeft: 0,
+    offsetTop: 0,
+    style: {},
+    querySelector(sel) { return sel === '.modal-header' ? header : null; }
+  };
+
+  makeDraggable(modal);
+  const btn = { closest: sel => (sel.includes('button') ? btn : null) };
+  header.events.mousedown({ clientX: 10, clientY: 10, target: btn });
+
+  assert.ok(!documentStub._events.mousemove, 'mousemove listener should not be registered');
 });
