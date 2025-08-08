@@ -28,9 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const joinFab = createFabOption('join', '<i class="fa fa-user-plus"></i>', 'Join Us');
   const chatbotFab = createFabOption('chatbot', '<i class="fa fa-comments"></i>', 'Chatbot');
 
-  fabOptions.appendChild(contactFab);
-  fabOptions.appendChild(joinFab);
   fabOptions.appendChild(chatbotFab);
+  fabOptions.appendChild(joinFab);
+  fabOptions.appendChild(contactFab);
 
   let activeModal = null;
   let overlay = null;
