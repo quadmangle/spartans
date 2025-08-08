@@ -10,28 +10,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const body = document.body;
 
-  // Create the FAB container and buttons
-  const fabContainer = document.createElement('div');
-  fabContainer.className = 'fab-container';
-  body.appendChild(fabContainer);
+  // Create the FAB stack and buttons
+  const fabStack = document.createElement('div');
+  fabStack.className = 'fab-stack';
+  body.appendChild(fabStack);
 
-  const fabMain = document.createElement('button');
-  fabMain.className = 'fab-main';
-  fabMain.innerHTML = '<i class="fas fa-plus"></i>';
-  fabContainer.appendChild(fabMain);
+  const fabMenu = document.createElement('button');
+  fabMenu.className = 'fab fab--menu';
+  fabMenu.innerHTML = '<i class="fas fa-plus"></i>';
+  fabStack.appendChild(fabMenu);
 
-  const fabOptions = document.createElement('div');
-  fabOptions.className = 'fab-options';
-  fabContainer.appendChild(fabOptions);
-
-  const contactFab = createFabOption('contact', '<i class="fa fa-envelope"></i>', 'Contact Us');
-  const joinFab = createFabOption('join', '<i class="fa fa-user-plus"></i>', 'Join Us');
-  const chatbotFab = createFabOption('chatbot', '<i class="fa fa-comments"></i>', 'Chatbot');
-
-  fabOptions.appendChild(contactFab);
-  fabOptions.appendChild(joinFab);
-  fabOptions.appendChild(chatbotFab);
-
+  const contactFab = createFab('contact', '<i class="fa fa-envelope"></i>', 'Contact Us');
+  const joinFab = createFab('join', '<i class="fa fa-user-plus"></i>', 'Join Us');
+  const chatbotFab = createFab('chatbot', '<i class="fa fa-comments"></i>', 'Chatbot');
+  fabStack.appendChild(contactFab);
+  fabStack.appendChild(joinFab);
+  fabStack.appendChild(chatbotFab);
   let activeModal = null;
   let overlay = null;
   // Track the element that was focused before a modal opened so we can
@@ -51,15 +45,15 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Main FAB click handler
-  fabMain.addEventListener('click', () => {
-    fabContainer.classList.toggle('open');
+  fabMenu.addEventListener('click', () => {
+    fabStack.classList.toggle('open');
     // Removed shine animation to prevent spinning effect on click
-    // fabMain.classList.add('shine');
+    // fabMenu.classList.add('shine');
     // setTimeout(() => {
-    //   fabMain.classList.remove('shine');
+    //   fabMenu.classList.remove('shine');
     // }, 600);
     // If FABs close, also close the active modal
-    if (!fabContainer.classList.contains('open') && activeModal) {
+    if (!fabStack.classList.contains('open') && activeModal) {
       hideModal(activeModal);
     }
   });
@@ -78,15 +72,15 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /**
-   * Creates a single FAB option button.
+   * Creates a single FAB button.
    * @param {string} id The unique ID for the button.
    * @param {string} icon The HTML for the Font Awesome icon.
    * @param {string} title The title/aria-label for accessibility.
    * @returns {HTMLButtonElement} The created button element.
    */
-  function createFabOption(id, icon, title) {
+  function createFab(id, icon, title) {
     const button = document.createElement('button');
-    button.className = 'fab-option';
+    button.className = `fab fab--${id}`;
     button.id = `fab-${id}`;
     button.innerHTML = icon;
     button.title = title;
@@ -206,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    fabContainer.classList.remove('open');
+    fabStack.classList.remove('open');
   }
 
   /**
