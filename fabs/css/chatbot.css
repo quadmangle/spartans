@@ -15,7 +15,7 @@ body.dark{--clr-bg:var(--clr-bg-dark);--clr-tx:var(--clr-tx-dark)}
 #modal-chatbot{
   width: 90vw;
   max-width: 400px;
-  height: 85dvh;
+  height: calc(var(--vh, 1vh) * 90);
   max-height: 600px;
   background:#251541;
   border:0.125rem solid var(--clr-accent);
@@ -50,7 +50,7 @@ body.dark{--clr-bg:var(--clr-bg-dark);--clr-tx:var(--clr-tx-dark)}
 @media (max-width: 47.9375rem) {
   #modal-chatbot {
     width: 100vw;
-    height: 100dvh;
+    height: calc(var(--vh, 1vh) * 100);
     border-radius: 0;
     top: 0;
     left: 0;
@@ -63,13 +63,13 @@ body.dark{--clr-bg:var(--clr-bg-dark);--clr-tx:var(--clr-tx-dark)}
 @media (max-width:47.9375rem){
   #modal-chatbot{
     width:85vw;
-    height:85dvh;
+    height: calc(var(--vh, 1vh) * 90);
   }
 }
 @media (max-height:35rem){
   #modal-chatbot{
     width:100vw;
-    height:100dvh;
+    height: calc(var(--vh, 1vh) * 100);
     border-radius:0;
     top:0;
     left:0;

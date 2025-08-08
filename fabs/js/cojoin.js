@@ -56,8 +56,7 @@ function initCojoinForms() {
       isDragging = true;
       offsetX = e.clientX - modal.getBoundingClientRect().left;
       offsetY = e.clientY - modal.getBoundingClientRect().top;
-      modal.style.cursor = 'grabbing';
-      modal.style.transition = 'none'; // Disable transition while dragging
+      modal.classList.add('dragging', 'is-dragged');
     });
 
     document.addEventListener('mousemove', (e) => {
@@ -69,13 +68,11 @@ function initCojoinForms() {
 
       modal.style.left = `${newX}px`;
       modal.style.top = `${newY}px`;
-      modal.style.transform = 'none';
     });
 
     document.addEventListener('mouseup', () => {
       isDragging = false;
-      modal.style.cursor = 'move';
-      modal.style.transition = 'transform 0.3s ease'; // Re-enable transition
+      modal.classList.remove('dragging');
     });
   }
 
@@ -394,14 +391,14 @@ function initCojoinForms() {
     inputs.forEach(input => input.disabled = accepted);
 
     if (accepted) {
-      if (acceptBtn) acceptBtn.style.display = 'none';
-      if (editBtn) editBtn.style.display = 'inline-block';
+      if (acceptBtn) acceptBtn.classList.add('hidden');
+      if (editBtn) editBtn.classList.remove('hidden');
       if (addBtn) addBtn.disabled = true;
       if (removeBtn) removeBtn.disabled = true;
       section.classList.add('completed');
     } else {
-      if (acceptBtn) acceptBtn.style.display = 'inline-block';
-      if (editBtn) editBtn.style.display = 'none';
+      if (acceptBtn) acceptBtn.classList.remove('hidden');
+      if (editBtn) editBtn.classList.add('hidden');
       if (addBtn) addBtn.disabled = false;
       if (removeBtn) removeBtn.disabled = false;
       section.classList.remove('completed');

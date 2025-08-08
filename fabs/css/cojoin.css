@@ -21,6 +21,15 @@ body {
   color: var(--clr-tx);
 }
 
+/* Utility classes */
+.hidden {
+  display: none !important;
+}
+
+.mt-1 {
+  margin-top: 1rem;
+}
+
 /* Floating Action Button (FAB) Stack */
 .fab-stack {
   position: fixed;
@@ -80,7 +89,7 @@ body[data-lock="true"] {
   left: 50%;
   transform: translate(-50%, -50%);
   width: clamp(90vw, 91vw, 92vw);
-  height: 80dvh;
+  height: calc(var(--vh, 1vh) * 90);
   background: var(--clr-bg);
   border-radius: 0.75rem;
   box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.25);
@@ -88,6 +97,20 @@ body[data-lock="true"] {
   flex-direction: column;
   z-index: 1001;
   overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.modal-container.is-visible {
+  display: flex;
+}
+
+.modal-container.dragging {
+  cursor: grabbing;
+  transition: none;
+}
+
+.modal-container.is-dragged {
+  transform: none;
 }
 
 @media (min-width: 768px) {
@@ -100,7 +123,7 @@ body[data-lock="true"] {
 @media (max-height: 560px) {
   .modal-container {
     width: 100vw;
-    height: 100dvh;
+    height: calc(var(--vh, 1vh) * 100);
   }
 }
 
