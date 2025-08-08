@@ -29,3 +29,9 @@ served correctly.
 
 Operational policies for mobile and tablet platforms are documented in the [OPS Mobile & Tablet Annex v1.1](docs/OPS-Mobile-Tablet-Annex.md).
 
+## Local Development
+
+The server enforces HTTPS and sets `cookie.secure` when `NODE_ENV=production`.
+For local development over HTTP, set `NODE_ENV=development` before starting the
+server to disable HTTPS redirection and allow non-secure cookies.
+
