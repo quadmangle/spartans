@@ -5,6 +5,7 @@
   --clr-accent-dark: #e000be;
   --clr-bg: #fff;
   --clr-tx: #333;
+  --vh: 1vh;
 }
 
 /* Base Styles */
@@ -80,8 +81,10 @@ body[data-lock="true"] {
   transform: translate(-50%, -50%);
   width: 90vw;
   max-width: 600px;
-  height: 90dvh;
-  max-height: 90dvh;
+  height: 90vh;
+  height: calc(var(--vh, 1vh) * 90);
+  max-height: 90vh;
+  max-height: calc(var(--vh, 1vh) * 90);
   background: var(--clr-bg);
   border-radius: 0.75rem;
   box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.25);
@@ -96,7 +99,8 @@ body[data-lock="true"] {
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100dvh;
+    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
     max-width: none;
     max-height: none;
     top: 50%;
