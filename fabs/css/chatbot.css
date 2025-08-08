@@ -13,7 +13,7 @@ body.dark{--clr-bg:var(--clr-bg-dark);--clr-tx:var(--clr-tx-dark)}
 
 /* ---------- CHATBOT ---------- */
 #modal-chatbot{
-  width: 75vw;
+  width: 90vw;
   max-width: 400px;
   height: 85dvh;
   max-height: 600px;
@@ -47,10 +47,17 @@ body.dark{--clr-bg:var(--clr-bg-dark);--clr-tx:var(--clr-tx-dark)}
   z-index: 1;
 }
 #chatbot-header #title{color:#000;}
-@media (min-width:48rem) and (max-width:63.9375rem){
-  #modal-chatbot{
-    width:70vw;
-    height:75dvh;
+@media (max-width: 47.9375rem) {
+  #modal-chatbot {
+    width: 100vw;
+    height: 100dvh;
+    border-radius: 0;
+    top: 0;
+    left: 0;
+    transform: none;
+    overflow-y: auto;
+    max-width: none;
+    max-height: none;
   }
 }
 @media (max-width:47.9375rem){

@@ -11,6 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
   let activeModal = null;
   let overlay = null;
   let lastFocused = null; // Remember focus to restore when modal closes
+  const modalIds = {
+    contact: 'modal-contact-center',
+    join: 'modal-join-us',
+    chatbot: 'modal-chatbot'
+  };
 
   window.hideActiveFabModal = () => {
     if (activeModal) {
@@ -31,10 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
     fabStack.className = 'fab-stack';
     body.appendChild(fabStack);
 
-    const contactFab = createFab('contact', '<i class="fa fa-envelope"></i>', 'Contact Us', 'fab-stack__contact');
-    const joinFab = createFab('join', '<i class="fa fa-user-plus"></i>', 'Join Us', 'fab-stack__join');
-    const chatbotFab = createFab('chatbot', '<i class="fa fa-comments"></i>', 'Chatbot', 'fab-stack__chatbot');
-    const menuFab = createFab('menu', '<i class="fa fa-bars"></i>', 'Menu', 'fab-stack__menu');
+    const contactFab = createFab('contact', '<i class="fa fa-envelope"></i>', 'Contact Us', 'fab--contact');
+    const joinFab = createFab('join', '<i class="fa fa-user-plus"></i>', 'Join Us', 'fab--join');
+    const chatbotFab = createFab('chatbot', '<i class="fa fa-comments"></i>', 'Chatbot', 'fab--chatbot');
+    const menuFab = createFab('menu', '<i class="fa fa-bars"></i>', 'Menu', 'fab--menu');
 
     fabStack.appendChild(contactFab);
     fabStack.appendChild(joinFab);
@@ -80,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   function createFab(id, icon, title, extraClass) {
     const button = document.createElement('button');
-    button.className = `fab-stack__button ${extraClass}`;
+    button.className = `fab ${extraClass}`;
     button.id = `fab-${id}`;
     button.innerHTML = icon;
     button.title = title;
@@ -101,10 +106,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /**
    * Displays the specified modal, dynamically loading it if not already present.
-   * @param {string} modalId 'contact', 'join', or 'chatbot'.
+   * @param {string} modalKey 'contact', 'join', or 'chatbot'.
    */
-  async function showModal(modalId) {
-    const targetId = modalId === 'chatbot' ? 'modal-chatbot' : `${modalId}-modal`;
+  async function showModal(modalKey) {
+    const targetId = modalIds[modalKey];
     lastFocused = document.activeElement;
 
     if (activeModal && activeModal.id !== targetId) {
@@ -117,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
       activeModal = modal;
     } else {
       try {
-        const url = `fabs/${modalId}.html`;
+        const url = `fabs/${modalKey}.html`;
         const response = await fetch(url, { credentials: 'same-origin' });
         const responseURL = response.url || '';
         if (responseURL && !responseURL.startsWith(window.location.origin)) {
@@ -133,11 +138,8 @@ document.addEventListener('DOMContentLoaded', () => {
         template.innerHTML = sanitized;
 
         const root = template.content || template;
-        modal = root.querySelector('.modal-container') || root.querySelector('#modal-chatbot');
+        modal = root.querySelector(`#${targetId}`);
         if (modal) {
-          if (modalId !== 'chatbot') {
-            modal.id = targetId;
-          }
           document.body.appendChild(modal);
           if (window.initCojoinForms) {
             try {
@@ -154,12 +156,12 @@ document.addEventListener('DOMContentLoaded', () => {
             closeBtn.addEventListener('click', () => hideModal(modal));
           }
 
-          if (modalId === 'chatbot' && window.initChatbot) {
+          if (modalKey === 'chatbot' && window.initChatbot) {
             window.initChatbot();
           }
         }
       } catch (error) {
-        console.error(`Failed to load modal for ${modalId}:`, error);
+        console.error(`Failed to load modal for ${modalKey}:`, error);
       }
     }
 
@@ -178,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const focusTarget =
-        modalId === 'chatbot'
+        modalKey === 'chatbot'
           ? modal.querySelector('#chatbot-input')
           : modal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
       if (focusTarget && focusTarget.focus) {

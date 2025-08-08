@@ -33,7 +33,7 @@ body {
   gap: 10px;
 }
 
-.fab-stack__button {
+.fab {
   width: 56px;
   height: 56px;
   min-width: 48px;
@@ -50,10 +50,10 @@ body {
   justify-content: center;
 }
 
-.fab-stack__contact { background: var(--clr-primary); }
-.fab-stack__join { background: var(--clr-accent); }
-.fab-stack__chatbot { background: var(--clr-accent-dark); }
-.fab-stack__menu { background: var(--clr-primary); }
+.fab--contact { background: var(--clr-primary); }
+.fab--join { background: var(--clr-accent); }
+.fab--chatbot { background: var(--clr-accent-dark); }
+.fab--menu { background: var(--clr-primary); }
 
 /* Lock body scrolling when a modal is open */
 html[data-lock="true"],
