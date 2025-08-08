@@ -1,3 +1,18 @@
+/**
+ * Environment bindings required for this Worker.
+ *
+ * Configure these in `wrangler.toml` or via `wrangler secret put` so the
+ * referenced `env.*` variables resolve at runtime:
+ *
+ * - `APPS_SCRIPT_URL` **(secret)**: Webhook that receives test results. Used in
+ *   `notify` when posting `fetch(env.APPS_SCRIPT_URL)`.
+ * - `SECURITY_EMAIL`: Address for MailChannels alerts. Consumed by
+ *   `sendEmail`.
+ * - `PRIVATE_KEY` **(secret)**: PEM key for RSA-PSS SHA-256 signing in
+ *   `signPayload`.
+ * - `AUDIT_LOG`: KV namespace binding storing the `time | date | type | ip`
+ *   audit trail accessed by `logEvent` and `logAlertFailure`.
+ */
 let tests;
 
 async function runAll(env, ip) {
