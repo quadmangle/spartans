@@ -235,6 +235,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     }
 
+    function handleClickOutside(e) {
+      if (!navLinks.contains(e.target) && e.target !== navToggle) {
+        closeMenu();
+      }
+    }
+
     function openMenu() {
       navLinks.classList.add('open');
       navToggle.setAttribute('aria-expanded', 'true');
@@ -251,6 +257,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         firstFocusable.focus();
       }
       document.addEventListener('keydown', trapFocus);
+      document.addEventListener('click', handleClickOutside);
     }
 
     function closeMenu() {
@@ -262,6 +269,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         navBackdrop.removeEventListener('click', closeMenu);
       }
       document.removeEventListener('keydown', trapFocus);
+      document.removeEventListener('click', handleClickOutside);
       if (lastFocusedElement) {
         lastFocusedElement.focus();
       }

@@ -651,12 +651,14 @@ body.dark .ops-modal {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    overflow-x: auto;
   }
 
   .ops-nav .ops-logo {
-    font-size: 2.4rem;
+    font-size: 3rem;
     position: static;
     left: auto;
+    flex-shrink: 0;
   }
 
   h1 {
@@ -674,11 +676,11 @@ body.dark .ops-modal {
   }
 
   .toggles {
-    flex-direction: column;
+    flex-direction: row;
     position: static;
-    margin-bottom: 0.5rem;
-    align-self: flex-end;
-    align-items: flex-end;
+    margin-bottom: 0;
+    align-items: center;
+    align-self: auto;
   }
 
   .nav-links {
@@ -715,7 +717,7 @@ body.dark .ops-modal {
 
   .nav-menu-toggle {
     display: block;
-    margin-top: 0.5rem;
+    margin-top: 0;
   }
 
   .nav-backdrop {
