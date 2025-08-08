@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let modal = document.getElementById(targetId);
     if (modal) {
-      modal.style.display = 'flex';
+      modal.classList.add('is-visible');
       activeModal = modal;
     } else {
       try {
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
               console.error('initCojoinForms failed:', err);
             }
           }
-          modal.style.display = 'flex';
+          modal.classList.add('is-visible');
           activeModal = modal;
 
           const closeBtn = modal.querySelector('.modal-close');
@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   function hideModal(modal) {
     if (modal) {
-      modal.style.display = 'none';
+      modal.classList.remove('is-visible');
       activeModal = null;
     }
     removeOverlay();

@@ -21,6 +21,15 @@ body {
   color: var(--clr-tx);
 }
 
+/* Utility classes */
+.hidden {
+  display: none !important;
+}
+
+.mt-1 {
+  margin-top: 1rem;
+}
+
 /* Floating Action Button (FAB) Stack */
 .fab-stack {
   position: fixed;
@@ -88,6 +97,20 @@ body[data-lock="true"] {
   flex-direction: column;
   z-index: 1001;
   overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.modal-container.is-visible {
+  display: flex;
+}
+
+.modal-container.dragging {
+  cursor: grabbing;
+  transition: none;
+}
+
+.modal-container.is-dragged {
+  transform: none;
 }
 
 @media (min-width: 768px) {
