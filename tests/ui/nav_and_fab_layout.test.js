@@ -16,8 +16,8 @@ test('fab stack uses safe-area margins and button sizes', () => {
   assert.ok(/bottom:\s*calc\(env\(safe-area-inset-bottom\) \+ 20px\)/.test(stackBlock), 'bottom margin should use safe-area inset');
   assert.ok(/right:\s*calc\(env\(safe-area-inset-right\) \+ 10px\)/.test(stackBlock), 'right margin should use safe-area inset');
 
-  const btnMatch = css.match(/\.fab-stack__button\s*{[\s\S]*?}/);
-  assert.ok(btnMatch, 'fab-stack__button styles not found');
+  const btnMatch = css.match(/\.fab\s*{[\s\S]*?}/);
+  assert.ok(btnMatch, 'fab styles not found');
   const btnBlock = btnMatch[0];
   const width = parseInt(btnBlock.match(/width:\s*(\d+)px/)[1], 10);
   const height = parseInt(btnBlock.match(/height:\s*(\d+)px/)[1], 10);
@@ -33,7 +33,7 @@ test('fab stack renders buttons in order', () => {
   const code = fs.readFileSync(path.join(root, 'cojoinlistener.js'), 'utf-8');
   window.eval(code);
   window.document.dispatchEvent(new window.Event('DOMContentLoaded'));
-  const ids = Array.from(window.document.querySelectorAll('.fab-stack__button')).map(b => b.id);
+  const ids = Array.from(window.document.querySelectorAll('.fab')).map(b => b.id);
   assert.deepStrictEqual(ids, ['fab-contact', 'fab-join', 'fab-chatbot', 'fab-menu']);
 });
 

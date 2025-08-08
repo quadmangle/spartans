@@ -11,7 +11,7 @@
 body.dark{--clr-bg:var(--clr-bg-dark);--clr-tx:var(--clr-tx-dark)}
 
 /* ---------- CHATBOT ---------- */
-#chatbot-container{
+#modal-chatbot{
   width: 90vw;
   max-width: 400px;
   height: 90dvh;
@@ -47,7 +47,7 @@ body.dark{--clr-bg:var(--clr-bg-dark);--clr-tx:var(--clr-tx-dark)}
 }
 #chatbot-header #title{color:#000;}
 @media (max-width: 47.9375rem) {
-  #chatbot-container {
+  #modal-chatbot {
     width: 100vw;
     height: 100dvh;
     border-radius: 0;
