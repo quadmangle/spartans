@@ -70,8 +70,10 @@ function initCojoinForms() {
       if (!isDragging) return;
       e.preventDefault();
 
-      hasMoved = true;
-      modal.classList.add('is-dragged');
+      if (!hasMoved) {
+        hasMoved = true;
+        modal.classList.add('is-dragged');
+      }
 
       const newX = e.clientX - offsetX;
       const newY = e.clientY - offsetY;
