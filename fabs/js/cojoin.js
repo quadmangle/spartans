@@ -365,7 +365,7 @@ function initCojoinForms() {
 }
 
 function initBottomSheet() {
-  const drawers = document.querySelectorAll('#drawer-mobile');
+  const drawers = document.querySelectorAll('.drawer-mobile');
   drawers.forEach(drawer => {
     if (drawer.dataset.sheetInit) return;
     drawer.dataset.sheetInit = 'true';

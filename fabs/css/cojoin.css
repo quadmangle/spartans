@@ -104,7 +104,7 @@ body[data-lock="true"] {
 }
 
 /* Mobile Drawer */
-#drawer-mobile {
+.drawer-mobile {
   position: fixed;
   left: 50%;
   bottom: 0;
@@ -122,18 +122,18 @@ body[data-lock="true"] {
 }
 
 @media (min-width: 768px) {
-  #drawer-mobile {
+  .drawer-mobile {
     width: clamp(360px, 390px, 420px);
   }
 }
 
-#drawer-mobile[data-open="true"] {
+.drawer-mobile[data-open="true"] {
   display: block;
 }
 
-#drawer-mobile[data-snap="40"] { height: 40dvh; }
-#drawer-mobile[data-snap="70"] { height: 70dvh; }
-#drawer-mobile[data-snap="100"] { height: 100dvh; }
+.drawer-mobile[data-snap="40"] { height: 40dvh; }
+.drawer-mobile[data-snap="70"] { height: 70dvh; }
+.drawer-mobile[data-snap="100"] { height: 100dvh; }
 
 .modal-container {
   position: fixed;
