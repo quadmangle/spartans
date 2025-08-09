@@ -6,6 +6,15 @@ const { JSDOM } = require('jsdom');
 
 const root = path.resolve(__dirname, '..');
 
+function mockMatchMedia(win) {
+  win.matchMedia = query => ({
+    matches: win.innerWidth <= 1024,
+    media: query,
+    addEventListener: () => {},
+    removeEventListener: () => {}
+  });
+}
+
 // Ensure FAB container positioning
 test('fab stack uses safe-area margins and button sizes', () => {
   const css = fs.readFileSync(path.join(root, 'fabs', 'css', 'cojoin.css'), 'utf-8');
@@ -29,6 +38,7 @@ test('fab stack renders buttons in order', () => {
   const dom = new JSDOM('<!DOCTYPE html><html><body><button class="nav-menu-toggle"></button></body></html>', { runScripts: 'dangerously', url: 'http://localhost' });
   const { window } = dom;
   Object.defineProperty(window, 'innerWidth', { value: 500, configurable: true });
+  mockMatchMedia(window);
   window.fetch = async () => ({ text: async () => '<div></div>' });
   const code = fs.readFileSync(path.join(root, 'cojoinlistener.js'), 'utf-8');
   window.eval(code);
@@ -41,12 +51,29 @@ test('menu fab omitted when nav toggle missing', () => {
   const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', { runScripts: 'dangerously', url: 'http://localhost' });
   const { window } = dom;
   Object.defineProperty(window, 'innerWidth', { value: 500, configurable: true });
+  mockMatchMedia(window);
   window.fetch = async () => ({ text: async () => '<div></div>' });
   const code = fs.readFileSync(path.join(root, 'cojoinlistener.js'), 'utf-8');
   window.eval(code);
   window.document.dispatchEvent(new window.Event('DOMContentLoaded'));
   const ids = Array.from(window.document.querySelectorAll('.fab')).map(b => b.id);
   assert.deepStrictEqual(ids, ['fab-contact', 'fab-join', 'fab-chatbot']);
+});
+
+test('menu fab toggles around 1024px width', () => {
+  const dom = new JSDOM('<!DOCTYPE html><html><body><button class="nav-menu-toggle" aria-expanded="false"></button><div class="nav-links"></div></body></html>', { runScripts: 'dangerously', url: 'http://localhost' });
+  const { window } = dom;
+  Object.defineProperty(window, 'innerWidth', { value: 1024, configurable: true });
+  mockMatchMedia(window);
+  window.fetch = async () => ({ text: async () => '<div></div>' });
+  const code = fs.readFileSync(path.join(root, 'cojoinlistener.js'), 'utf-8');
+  window.eval(code);
+  window.document.dispatchEvent(new window.Event('DOMContentLoaded'));
+  assert.ok(window.document.getElementById('fab-menu'), 'menu fab should show at 1024px');
+
+  Object.defineProperty(window, 'innerWidth', { value: 1025, configurable: true });
+  window.dispatchEvent(new window.Event('resize'));
+  assert.ok(!window.document.getElementById('fab-menu'), 'menu fab should hide above 1024px');
 });
 
 test('nav toggles remain visible without shrinking', () => {
