@@ -1,11 +1,12 @@
 <!-- This is a fragment, intended to be loaded dynamically -->
 <div id="modal-contact-center" class="modal-container" role="dialog" aria-modal="true">
-  <div class="modal__header">
-    <h1>Contact Us</h1>
-    <button class="modal-close"><i class="fas fa-times"></i></button>
-  </div>
-  <div class="modal-content">
-    <form id="contactForm" autocomplete="off">
+  <div id="drawer-mobile">
+    <div class="modal__header">
+      <h1>Contact Us</h1>
+      <button class="modal-close"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-content">
+      <form id="contactForm" autocomplete="off">
       <div class="form-errors" aria-live="polite"></div>
       <div class="form-row">
         <div class="form-cell">
@@ -57,9 +58,10 @@
         <input type="text" id="honeypot-contact" name="honeypot-contact" />
       </div>
 
-      <div class="modal__footer">
-        <button type="submit" class="submit-btn">Send</button>
-      </div>
-    </form>
+        <div class="modal__footer">
+          <button type="submit" class="submit-btn">Send</button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
