@@ -37,68 +37,6 @@ function initCojoinForms() {
   }
 
   /**
-   * Enables draggable functionality for modals on large screens.
-   * @param {HTMLElement} modal The modal element to make draggable.
-  */
-  function makeDraggable(modal) {
-    if (modal.dataset.draggableInit) return;
-    // Only make draggable on larger screens where there is enough space.
-    if (window.innerWidth < 768) {
-      return;
-    }
-
-    let isDragging = false;
-    let hasMoved = false;
-    let offsetX, offsetY;
-
-    const modalHeader = modal.querySelector('.modal__header') || modal.querySelector('#chatbot-header');
-    if (!modalHeader) return;
-
-    modalHeader.addEventListener('pointerdown', (e) => {
-      // Ignore drag initiation when interacting with buttons or form controls
-      if (e.target.closest('button, [href], input, select, textarea')) {
-        return;
-      }
-
-      isDragging = true;
-      hasMoved = false;
-      offsetX = e.clientX - modal.getBoundingClientRect().left;
-      offsetY = e.clientY - modal.getBoundingClientRect().top;
-      modal.classList.add('dragging', 'is-dragged');
-      document.addEventListener('pointermove', onPointerMove);
-      document.addEventListener('pointerup', onPointerUp);
-    });
-
-    function onPointerMove(e) {
-      if (!isDragging) return;
-      e.preventDefault();
-
-      if (!hasMoved) {
-        hasMoved = true;
-        modal.classList.add('is-dragged');
-      }
-
-      const newX = e.clientX - offsetX;
-      const newY = e.clientY - offsetY;
-
-      modal.style.left = `${newX}px`;
-      modal.style.top = `${newY}px`;
-    }
-
-    function onPointerUp() {
-      isDragging = false;
-      modal.classList.remove('dragging');
-      document.removeEventListener('pointermove', onPointerMove);
-      document.removeEventListener('pointerup', onPointerUp);
-    }
-
-    modal.dataset.draggableInit = 'true';
-  }
-
-  // Expose the draggable function globally for use by the listener script
-  window.initDraggableModal = makeDraggable;
-
-  /**
    * Sanitizes input to prevent malicious code injection.
    * This is a simple client-side check and not a replacement for server-side validation.
    * @param {string} input The string to sanitize.
@@ -424,6 +362,9 @@ function initCojoinForms() {
     }
   }
 }
+
+// Expose the draggable function globally for use by the listener script
+window.initDraggableModal = window.makeDraggable;
 
 window.initCojoinForms = initCojoinForms;
 document.addEventListener('DOMContentLoaded', initCojoinForms);
