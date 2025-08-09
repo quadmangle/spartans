@@ -293,6 +293,9 @@ let currentTheme = localStorage.getItem('theme') || 'light';
 
 function updateContent() {
   const elements = document.querySelectorAll('[data-key]');
+  const dataLangElements = document.querySelectorAll('[data-en], [data-es]');
+  const dataPlaceholderElements = document.querySelectorAll('[data-en-placeholder], [data-es-placeholder]');
+  const dataTitleElements = document.querySelectorAll('[data-en-title], [data-es-title]');
   const ariaElements = document.querySelectorAll('[data-aria-label-key]');
   const langButtons = document.querySelectorAll('.lang-toggle');
   const langData = translations[currentLanguage];
@@ -322,6 +325,38 @@ function updateContent() {
       } else {
         el.textContent = translation;
       }
+    }
+  });
+
+  // Elements that store translations directly in data-en/data-es attributes
+  dataLangElements.forEach(el => {
+    const text = el.getAttribute(`data-${currentLanguage}`);
+    if (text !== null) {
+      if (el.tagName === 'IMG' && el.hasAttribute('alt')) {
+        el.alt = text;
+      } else if (el.tagName === 'TITLE') {
+        el.textContent = text;
+      } else if (el.tagName === 'INPUT' && !el.hasAttribute('data-en-placeholder') && !el.hasAttribute('data-es-placeholder')) {
+        el.value = text;
+      } else {
+        el.textContent = text;
+      }
+    }
+  });
+
+  // Update placeholders for inputs/textareas if provided
+  dataPlaceholderElements.forEach(el => {
+    const placeholder = el.getAttribute(`data-${currentLanguage}-placeholder`);
+    if (placeholder !== null) {
+      el.setAttribute('placeholder', placeholder);
+    }
+  });
+
+  // Update title attributes if provided
+  dataTitleElements.forEach(el => {
+    const title = el.getAttribute(`data-${currentLanguage}-title`);
+    if (title !== null) {
+      el.setAttribute('title', title);
     }
   });
 
@@ -375,3 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('click', toggleTheme);
   });
 });
+
+// Expose update functions for dynamically loaded content
+window.updateContent = updateContent;
+window.updateTheme = updateTheme;
