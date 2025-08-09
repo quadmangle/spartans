@@ -12,6 +12,15 @@ function initChatbot() {
   const chatbotContainer = qs('#modal-chatbot');
   if (!chatbotContainer) return;
 
+  const closeBtn = qs('#chatbot-close');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      if (window.hideActiveFabModal) {
+        window.hideActiveFabModal();
+      }
+    });
+  }
+
   /* === Language toggle === */
   const langCtrl = qs('#langCtrl'),
         transNodes = qsa('[data-en]'),
@@ -57,7 +66,7 @@ function initChatbot() {
 
   // Focus the input field when the chatbot initializes so keyboard users
   // can immediately begin typing. The close button remains reachable via
-  // Tab navigation within the form.
+  // Tab navigation within the header.
   if (input && input.focus) {
     input.focus();
   }
