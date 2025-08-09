@@ -4,12 +4,54 @@
  * This script contains the logic for both the Contact Us and Join Us forms.
  * It handles form submission, security checks (honeypot, malicious code),
  * and the dynamic form fields for the Join form.
- */
+*/
+
+(() => {
+  function lockScroll() {
+    document.documentElement.dataset.lock = 'true';
+    document.body.dataset.lock = 'true';
+  }
+
+  function unlockScroll() {
+    delete document.documentElement.dataset.lock;
+    delete document.body.dataset.lock;
+  }
+
+  function showBackdrop() {
+    let backdrop = document.querySelector('.backdrop');
+    if (!backdrop) {
+      backdrop = document.createElement('div');
+      backdrop.className = 'backdrop';
+      backdrop.addEventListener('click', () => {
+        if (window.hideActiveFabModal) {
+          window.hideActiveFabModal();
+        }
+      });
+      document.body.appendChild(backdrop);
+    }
+    backdrop.dataset.open = 'true';
+  }
+
+  function hideBackdrop() {
+    const backdrop = document.querySelector('.backdrop');
+    if (backdrop && backdrop.dataset) {
+      delete backdrop.dataset.open;
+    }
+  }
+
+  window.cojoinUI = {
+    lockScroll,
+    unlockScroll,
+    showBackdrop,
+    hideBackdrop,
+  };
+})();
 
 function initCojoinForms() {
-
   const contactForm = document.getElementById('contactForm');
   const joinForm = document.getElementById('joinForm');
+
+  initBottomSheet();
 
   function showFormError(form, message) {
     const region = form.querySelector('.form-errors');
@@ -361,6 +403,57 @@ function initCojoinForms() {
       section.classList.remove('completed');
     }
   }
+}
+
+function initBottomSheet() {
+  const drawers = document.querySelectorAll('.drawer-mobile');
+  drawers.forEach(drawer => {
+    if (drawer.dataset.sheetInit) return;
+    drawer.dataset.sheetInit = 'true';
+
+    const header = drawer.querySelector('.modal__header');
+    const snapPoints = [40, 70, 100];
+
+    const setSnap = (val) => {
+      let closest = snapPoints[0];
+      snapPoints.forEach(p => {
+        if (Math.abs(p - val) < Math.abs(closest - val)) {
+          closest = p;
+        }
+      });
+      drawer.dataset.snap = String(closest);
+      drawer.style.height = `${closest}dvh`;
+    };
+
+    let startY = 0;
+    let startHeight = 0;
+
+    function onPointerMove(e) {
+      const diff = startY - e.clientY;
+      const newHeight = ((startHeight + diff) / window.innerHeight) * 100;
+      drawer.style.height = `${newHeight}dvh`;
+    }
+
+    function onPointerUp(e) {
+      const diff = startY - e.clientY;
+      const newHeight = ((startHeight + diff) / window.innerHeight) * 100;
+      setSnap(newHeight);
+      document.removeEventListener('pointermove', onPointerMove);
+      document.removeEventListener('pointerup', onPointerUp);
+    }
+
+    if (header) {
+      header.addEventListener('pointerdown', (e) => {
+        startY = e.clientY;
+        startHeight = drawer.offsetHeight;
+        document.addEventListener('pointermove', onPointerMove);
+        document.addEventListener('pointerup', onPointerUp);
+      });
+    }
+
+    setSnap(40);
+    drawer.dataset.open = 'true';
+  });
 }
 
 if (typeof window.makeDraggable === 'function') {

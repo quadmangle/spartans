@@ -33,8 +33,8 @@ body {
 /* Floating Action Button (FAB) Stack */
 .fab-stack {
   position: fixed;
-  bottom: calc(env(safe-area-inset-bottom) + 16px);
-  right: calc(env(safe-area-inset-right) + 16px);
+  bottom: calc(env(safe-area-inset-bottom) + 20px);
+  right: calc(env(safe-area-inset-right) + 10px);
   z-index: 1000;
   display: flex;
   flex-direction: column;
@@ -42,11 +42,12 @@ body {
   gap: 10px;
 }
 
+/* Individual FAB buttons */
 .fab {
   width: 56px;
   height: 56px;
-  min-width: 48px;
-  min-height: 48px;
+  min-width: 48px; /* ensure touch target */
+  min-height: 48px; /* ensure touch target */
   background: var(--clr-accent);
   color: white;
   border-radius: 50%;
@@ -103,13 +104,46 @@ body[data-lock="true"] {
   display: block;
 }
 
+/* Mobile Drawer */
+.drawer-mobile {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: clamp(72vw, 80vw, 88vw);
+  max-height: 100dvh;
+  background: var(--clr-bg);
+  border-radius: 0.75rem 0.75rem 0 0;
+  box-shadow: 0 -0.5rem 1rem rgba(0, 0, 0, 0.25);
+  z-index: 1002;
+  display: none;
+  overflow: hidden;
+  touch-action: none;
+  transition: height 0.3s ease;
+}
+
+@media (min-width: 768px) {
+  .drawer-mobile {
+    width: clamp(360px, 390px, 420px);
+  }
+}
+
+.drawer-mobile[data-open="true"] {
+  display: block;
+}
+
+.drawer-mobile[data-snap="40"] { height: 40dvh; }
+.drawer-mobile[data-snap="70"] { height: 70dvh; }
+.drawer-mobile[data-snap="100"] { height: 100dvh; }
+
 .modal-container {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: clamp(90vw, 91vw, 92vw);
-  height: calc(var(--vh, 1vh) * 90);
+  width: clamp(92vw, 94vw, 96vw);
+  height: calc(var(--vh, 1vh) * 80);
+  height: 80dvh;
   background: var(--clr-bg);
   border-radius: 0.75rem;
   box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.25);
@@ -117,7 +151,7 @@ body[data-lock="true"] {
   flex-direction: column;
   z-index: 1001;
   overflow: hidden;
-  transition: transform 0.3s ease;
+  transition: transform 0.25s ease;
 }
 
 .modal-container.is-visible {
@@ -301,7 +335,8 @@ input, select, textarea {
   position: sticky;
   bottom: 0;
   background: var(--clr-bg);
-  padding-bottom: 1rem;
+  padding: 1rem 1.5rem;
+  z-index: 1;
 }
 
 button.submit-btn {
@@ -328,6 +363,9 @@ button.submit-btn:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .modal-container {
+    transition: none !important;
+  }
   *, *::before, *::after {
     animation: none !important;
     transition: none !important;

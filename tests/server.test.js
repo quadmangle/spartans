@@ -12,10 +12,22 @@ try {
 if (missingDeps) {
   test.skip('express and express-session must be installed for server tests');
 } else {
-  // Helper to start server with specific NODE_ENV
-  async function withServer(env, fn) {
-    const originalEnv = process.env.NODE_ENV;
+  // Helper to start server with specific environment variables
+  async function withServer(env, envOverrides, fn) {
+    if (typeof envOverrides === 'function') {
+      fn = envOverrides;
+      envOverrides = {};
+    }
+    const originalEnv = {
+      NODE_ENV: process.env.NODE_ENV,
+      COOKIE_SECURE: process.env.COOKIE_SECURE,
+    };
     process.env.NODE_ENV = env;
+    if (Object.prototype.hasOwnProperty.call(envOverrides, 'COOKIE_SECURE')) {
+      process.env.COOKIE_SECURE = envOverrides.COOKIE_SECURE;
+    } else {
+      delete process.env.COOKIE_SECURE;
+    }
     const serverPath = require.resolve('../server');
     delete require.cache[serverPath];
     const app = require('../server');
@@ -26,7 +38,12 @@ if (missingDeps) {
     } finally {
       await new Promise((resolve) => server.close(resolve));
       delete require.cache[serverPath];
-      process.env.NODE_ENV = originalEnv;
+      process.env.NODE_ENV = originalEnv.NODE_ENV;
+      if (originalEnv.COOKIE_SECURE === undefined) {
+        delete process.env.COOKIE_SECURE;
+      } else {
+        process.env.COOKIE_SECURE = originalEnv.COOKIE_SECURE;
+      }
     }
   }
 
@@ -49,8 +66,21 @@ if (missingDeps) {
       });
     });
 
-    await t.test('development allows HTTP and insecure cookies', async () => {
+    await t.test('default development uses secure cookies', async () => {
       await withServer('development', async (server) => {
+        const port = server.address().port;
+
+        const res = await fetch(`http://localhost:${port}/api/csrf-token`, {
+          redirect: 'manual',
+        });
+        const cookie = res.headers.get('set-cookie');
+        assert.ok(cookie && cookie.includes('Secure'));
+        assert.strictEqual(res.status, 200);
+      });
+    });
+
+    await t.test('COOKIE_SECURE=false disables Secure flag', async () => {
+      await withServer('development', { COOKIE_SECURE: 'false' }, async (server) => {
         const port = server.address().port;
 
         const res = await fetch(`http://localhost:${port}/api/csrf-token`, {
