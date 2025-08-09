@@ -39,8 +39,9 @@ function initCojoinForms() {
   /**
    * Enables draggable functionality for modals on large screens.
    * @param {HTMLElement} modal The modal element to make draggable.
-   */
+  */
   function makeDraggable(modal) {
+    if (modal.dataset.draggableInit) return;
     // Only make draggable on larger screens where there is enough space.
     if (window.innerWidth < 768) {
       return;
@@ -52,7 +53,7 @@ function initCojoinForms() {
     const modalHeader = modal.querySelector('.modal__header') || modal.querySelector('#chatbot-header');
     if (!modalHeader) return;
 
-    modalHeader.addEventListener('mousedown', (e) => {
+    modalHeader.addEventListener('pointerdown', (e) => {
       // Ignore drag initiation when interacting with buttons or form controls
       if (e.target.closest('button, [href], input, select, textarea')) {
         return;
@@ -62,9 +63,11 @@ function initCojoinForms() {
       offsetX = e.clientX - modal.getBoundingClientRect().left;
       offsetY = e.clientY - modal.getBoundingClientRect().top;
       modal.classList.add('dragging', 'is-dragged');
+      document.addEventListener('pointermove', onPointerMove);
+      document.addEventListener('pointerup', onPointerUp);
     });
 
-    document.addEventListener('mousemove', (e) => {
+    function onPointerMove(e) {
       if (!isDragging) return;
       e.preventDefault();
 
@@ -73,12 +76,16 @@ function initCojoinForms() {
 
       modal.style.left = `${newX}px`;
       modal.style.top = `${newY}px`;
-    });
+    }
 
-    document.addEventListener('mouseup', () => {
+    function onPointerUp() {
       isDragging = false;
       modal.classList.remove('dragging');
-    });
+      document.removeEventListener('pointermove', onPointerMove);
+      document.removeEventListener('pointerup', onPointerUp);
+    }
+
+    modal.dataset.draggableInit = 'true';
   }
 
   // Expose the draggable function globally for use by the listener script
