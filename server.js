@@ -1,6 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const crypto = require('crypto');
+const path = require('path');
 
 const app = express();
 const isProduction = process.env.NODE_ENV === 'production';
@@ -15,6 +16,9 @@ if (isProduction) {
     next();
   });
 }
+
+// Serve static files from the project root
+app.use(express.static(path.join(__dirname, '.')));
 
 app.use(express.json());
 app.use(

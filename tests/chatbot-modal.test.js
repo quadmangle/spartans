@@ -242,11 +242,14 @@ test('chatbot modal initializes and handlers work', async () => {
 
   // fetch stub for modal and chat responses
   const chatbotHtml = '<div id="modal-chatbot"></div>';
+  const aLittleLater = (val, delay = 100) => new Promise(r => setTimeout(() => r(val), delay));
+
   context.fetch = async (url) => {
     if (url.endsWith('chatbot.html')) {
       return { text: async () => chatbotHtml };
     }
-    return { json: async () => ({ reply: 'hello' }) };
+    // Simulate network latency for chat responses
+    return aLittleLater({ json: async () => ({ reply: 'hello' }) });
   };
 
   // Load scripts
@@ -299,11 +302,17 @@ test('chatbot modal initializes and handlers work', async () => {
   const form = document.getElementById('chatbot-input-row');
   const log = document.getElementById('chat-log');
   input.value = 'Hi';
-  await form.onsubmit({ preventDefault() {} });
-  assert.strictEqual(log.children.length, 2);
-  assert.strictEqual(log.children[0].textContent, 'Hi');
-  assert.strictEqual(log.children[1].textContent, 'hello');
-  assert.ok(!send.disabled);
+
+  // Fire submission and check intermediate state
+  const submitPromise = form.onsubmit({ preventDefault() {} });
+  assert.strictEqual(log.children.length, 2, 'user and bot messages added');
+  assert.strictEqual(log.children[1].textContent, '…', 'bot shows thinking indicator');
+  assert.ok(send.disabled, 'send button disabled while waiting');
+
+  // Wait for response and check final state
+  await submitPromise;
+  assert.strictEqual(log.children[1].textContent, 'hello', 'bot reply updated');
+  assert.ok(!send.disabled, 'send button re-enabled');
 
   // Close the modal via the close button and ensure focus returns to the FAB
   closeBtn.eventHandlers.click[0]();
