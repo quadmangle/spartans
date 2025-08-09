@@ -363,7 +363,6 @@ function initCojoinForms() {
   }
 }
 
-// Reference the shared draggable helper if available
 if (typeof window.makeDraggable === 'function') {
   window.initDraggableModal = window.makeDraggable;
 }
