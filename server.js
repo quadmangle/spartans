@@ -5,9 +5,10 @@ const path = require('path');
 
 const app = express();
 const isProduction = process.env.NODE_ENV === 'production';
+const useSecureCookies = process.env.COOKIE_SECURE !== 'false';
 
-// Enforce HTTPS and secure cookies in production. During local development,
-// set NODE_ENV=development to disable these checks.
+// Enforce HTTPS in production. Cookies are always set to secure unless
+// overridden with COOKIE_SECURE=false for local development.
 if (isProduction) {
   app.use((req, res, next) => {
     if (req.headers['x-forwarded-proto'] !== 'https') {
@@ -29,7 +30,7 @@ app.use(
     cookie: {
       httpOnly: true,
       sameSite: 'strict',
-      secure: isProduction,
+      secure: useSecureCookies,
     },
   })
 );

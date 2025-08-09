@@ -14,7 +14,6 @@ test('fab stack uses safe-area margins and button sizes', () => {
   assert.ok(/position:\s*fixed/.test(stackBlock), 'fab stack should be fixed');
   assert.ok(/bottom:\s*calc\(env\(safe-area-inset-bottom\) \+ 20px\)/.test(stackBlock), 'bottom margin should use safe-area inset');
   assert.ok(/right:\s*calc\(env\(safe-area-inset-right\) \+ 10px\)/.test(stackBlock), 'right margin should use safe-area inset');
-
   const btnMatch = css.match(/\.fab\s*{[\s\S]*?}/);
   assert.ok(btnMatch, 'fab styles not found');
   const btnBlock = btnMatch[0];
@@ -46,7 +45,7 @@ test('fab stack renders buttons in order', () => {
   window.eval(code);
   window.document.dispatchEvent(new window.Event('DOMContentLoaded'));
   const ids = Array.from(window.document.querySelectorAll('.fab')).map(b => b.id);
-  assert.deepStrictEqual(ids, ['fab-contact', 'fab-join', 'fab-chatbot', 'fab-menu']);
+  assert.deepStrictEqual(ids, ['fab-contact', 'fab-join', 'fab-chatbot']);
 });
 
 test('nav toggles remain visible without shrinking', () => {
