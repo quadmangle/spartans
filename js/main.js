@@ -354,6 +354,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     });
 
+    // Expose menu control functions for FABs
+    window.openOpsNavMenu = openMenu;
+    window.closeOpsNavMenu = closeMenu;
+
     navLinks.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         if (window.innerWidth <= 1024) {

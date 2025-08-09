@@ -57,9 +57,14 @@ document.addEventListener('DOMContentLoaded', () => {
     chatbotFab.addEventListener('click', () => showModal('chatbot'));
     if (menuFab) {
       menuFab.addEventListener('click', () => {
-        const navToggle = document.querySelector('.nav-menu-toggle');
-        if (navToggle && navToggle.click) {
-          navToggle.click();
+        const navLinks = document.querySelector('.nav-links');
+        if (!navLinks) return;
+
+        const isOpen = navLinks.classList.contains('open');
+        if (isOpen) {
+          if (window.closeOpsNavMenu) window.closeOpsNavMenu();
+        } else {
+          if (window.openOpsNavMenu) window.openOpsNavMenu();
         }
       });
     }
