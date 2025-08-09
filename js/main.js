@@ -361,6 +361,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
       });
     });
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 1024 && navLinks.classList.contains('open')) {
+        closeMenu();
+      }
+    });
   }
 
   // --- Learn More Links & Buttons ---
