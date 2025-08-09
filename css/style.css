@@ -745,7 +745,7 @@ body.dark .ops-modal {
     top: 1.2rem;
     right: 2rem;
   }
-  .nav-menu-toggle {
+  .toggles .nav-menu-toggle {
     display: none;
   }
 }
