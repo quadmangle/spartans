@@ -6,7 +6,6 @@
  */
 document.addEventListener('DOMContentLoaded', () => {
   const body = document.body;
-
   let fabStack = null;
   let menuFab = null;
   let activeModal = null;
@@ -39,21 +38,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function buildFabStack() {
     if (fabStack) return;
-
     fabStack = document.createElement('div');
     fabStack.className = 'fab-stack';
     body.appendChild(fabStack);
-
     const contactFab = createFab('contact', '<i class="fa fa-envelope"></i>', 'Contact Us', 'fab--contact');
     const joinFab = createFab('join', '<i class="fa fa-user-plus"></i>', 'Join Us', 'fab--join');
     const chatbotFab = createFab('chatbot', '<i class="fa fa-comments"></i>', 'Chatbot', 'fab--chatbot');
     menuFab = createFab('menu', '<i class="fa fa-bars"></i>', 'Menu', 'fab--menu');
-
     fabStack.appendChild(contactFab);
     fabStack.appendChild(joinFab);
     fabStack.appendChild(chatbotFab);
     fabStack.appendChild(menuFab);
-
     contactFab.addEventListener('click', () => showModal('contact'));
     joinFab.addEventListener('click', () => showModal('join'));
     chatbotFab.addEventListener('click', () => showModal('chatbot'));
@@ -88,7 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   checkFabVisibility();
-
   const handleMediaChange = () => {
     updateMenuFab();
     if (activeModal && window.initDraggableModal) {
