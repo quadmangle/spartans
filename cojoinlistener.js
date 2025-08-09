@@ -6,10 +6,9 @@
  */
 document.addEventListener('DOMContentLoaded', () => {
   const body = document.body;
-
   let fabStack = null;
+  let menuFab = null;
   let activeModal = null;
-  let overlay = null;
   let lastFocused = null; // Remember focus to restore when modal closes
   const modalIds = {
     contact: 'modal-contact-center',
@@ -29,32 +28,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  const mobileQuery = '(max-width: 1024px)';
+  const mobileMql = window.matchMedia
+    ? window.matchMedia(mobileQuery)
+    : {
+        matches: window.innerWidth <= 1024,
+        addEventListener: () => {},
+        addListener: () => {},
+      };
+  function isMobileWidth() {
+    return mobileMql.matches;
+  }
+
   function buildFabStack() {
     if (fabStack) return;
-
     fabStack = document.createElement('div');
     fabStack.className = 'fab-stack';
     body.appendChild(fabStack);
-
     const contactFab = createFab('contact', '<i class="fa fa-envelope"></i>', 'Contact Us', 'fab--contact');
     const joinFab = createFab('join', '<i class="fa fa-user-plus"></i>', 'Join Us', 'fab--join');
     const chatbotFab = createFab('chatbot', '<i class="fa fa-comments"></i>', 'Chatbot', 'fab--chatbot');
-    const navToggle = document.querySelector('.nav-menu-toggle');
-    let menuFab;
-    if (navToggle) {
-      menuFab = createFab('menu', '<i class="fa fa-bars"></i>', 'Menu', 'fab--menu');
-    }
-
+    menuFab = createFab('menu', '<i class="fa fa-bars"></i>', 'Menu', 'fab--menu');
     fabStack.appendChild(contactFab);
     fabStack.appendChild(joinFab);
     fabStack.appendChild(chatbotFab);
-    if (menuFab) {
-      fabStack.appendChild(menuFab);
-    }
-
+    fabStack.appendChild(menuFab);
     contactFab.addEventListener('click', () => showModal('contact'));
     joinFab.addEventListener('click', () => showModal('join'));
     chatbotFab.addEventListener('click', () => showModal('chatbot'));
+    menuFab.addEventListener('click', () => {
+      const navToggle = document.querySelector('.nav-menu-toggle');
+      if (navToggle && navToggle.click) {
+        navToggle.click();
+      }
+    });
+  }
+
+  function updateMenuFab() {
+    const navToggle = document.querySelector('.nav-menu-toggle');
+    const shouldShow = navToggle && isMobileWidth();
     if (menuFab) {
       menuFab.addEventListener('click', () => {
         const navLinks = document.querySelector('.nav-links');
@@ -74,10 +86,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!fabStack) {
       buildFabStack();
     }
+    updateMenuFab();
   }
 
   checkFabVisibility();
-  window.addEventListener('resize', checkFabVisibility);
+  const handleMediaChange = () => {
+    updateMenuFab();
+    if (activeModal && window.initDraggableModal) {
+      window.initDraggableModal(activeModal);
+    }
+  };
+
+  if (mobileMql.addEventListener) {
+    mobileMql.addEventListener('change', handleMediaChange);
+  } else if (mobileMql.addListener) {
+    mobileMql.addListener(handleMediaChange);
+  }
 
   /**
    * Create a single FAB button.
@@ -170,14 +194,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (modal) {
-      removeOverlay();
-      overlay = document.createElement('div');
-      overlay.className = 'backdrop';
-      overlay.dataset.open = 'true';
-      overlay.addEventListener('click', () => hideModal(modal));
-      document.body.appendChild(overlay);
-      document.documentElement.dataset.lock = 'true';
-      document.body.dataset.lock = 'true';
+      if (window.cojoinUI && window.cojoinUI.showBackdrop) {
+        window.cojoinUI.showBackdrop();
+      }
+      if (window.cojoinUI && window.cojoinUI.lockScroll) {
+        window.cojoinUI.lockScroll();
+      }
 
       if (window.initDraggableModal) {
         window.initDraggableModal(modal);
@@ -194,42 +216,28 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /**
-   * Hides the specified modal and cleans up overlay/focus.
+   * Hides the specified modal and cleans up backdrop/focus.
    */
   function hideModal(modal) {
     if (modal) {
       modal.classList.remove('is-visible');
       activeModal = null;
     }
-    removeOverlay();
+    if (window.cojoinUI && window.cojoinUI.hideBackdrop) {
+      window.cojoinUI.hideBackdrop();
+    }
+    if (window.cojoinUI && window.cojoinUI.unlockScroll) {
+      window.cojoinUI.unlockScroll();
+    }
     if (lastFocused && lastFocused.focus) {
       lastFocused.focus();
       lastFocused = null;
     }
   }
 
-  function removeOverlay() {
-    if (overlay) {
-      if (overlay.remove) {
-        overlay.remove();
-      } else if (overlay.parentNode && overlay.parentNode.children) {
-        const idx = overlay.parentNode.children.indexOf(overlay);
-        if (idx > -1) {
-          overlay.parentNode.children.splice(idx, 1);
-        }
-      }
-      overlay = null;
-    }
-    if (document.documentElement && document.documentElement.dataset) {
-      delete document.documentElement.dataset.lock;
-    }
-    if (document.body && document.body.dataset) {
-      delete document.body.dataset.lock;
-    }
-  }
-
-  // Adjust draggable on resize
+  // Adjust draggable on resize and toggle menu FAB
   window.addEventListener('resize', () => {
+    checkFabVisibility();
     if (activeModal && window.initDraggableModal) {
       window.initDraggableModal(activeModal);
     }

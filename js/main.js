@@ -68,46 +68,46 @@ function createModal(serviceKey, lang) {
   }
 }
 
-function makeDraggable(modal) {
+function makeDraggable(modal, headerSelector = '.modal-header, .modal__header, #chatbot-header') {
   if (modal.dataset.draggableInit) return;
-  const header = modal.querySelector('.modal-header');
+  if (window.innerWidth < 768) return;
+
+  const header = modal.querySelector(headerSelector);
   if (!header) return;
+
   let isDragging = false;
   let offsetX, offsetY;
+
   header.addEventListener('pointerdown', (e) => {
-    // Skip dragging when interacting with buttons or other controls
     if (e.target.closest('button, [href], input, select, textarea')) {
       return;
     }
 
+    const rect = modal.getBoundingClientRect();
+    offsetX = e.clientX - rect.left;
+    offsetY = e.clientY - rect.top;
+
+    modal.style.left = `${rect.left}px`;
+    modal.style.top = `${rect.top}px`;
+    modal.style.transform = 'none';
+    modal.classList.add('dragging', 'is-dragged');
+
     isDragging = true;
 
-    // We calculate the offset from the top-left of the modal.
-    // This prevents the modal from "jumping" to the cursor position.
-    offsetX = e.clientX - modal.offsetLeft;
-    offsetY = e.clientY - modal.offsetTop;
-
-    // The transform is removed to allow for smooth dragging based on top/left.
-    modal.style.transform = 'none';
-
-    // We add the listeners to the document so that dragging continues
-    // even if the cursor moves outside the modal header.
     document.addEventListener('pointermove', onPointerMove);
     document.addEventListener('pointerup', onPointerUp);
   });
+
   function onPointerMove(e) {
     if (!isDragging) return;
-
-    // Prevent text selection during drag
     e.preventDefault();
-    const newX = e.clientX - offsetX;
-    const newY = e.clientY - offsetY;
-    modal.style.left = `${newX}px`;
-    modal.style.top = `${newY}px`;
+    modal.style.left = `${e.clientX - offsetX}px`;
+    modal.style.top = `${e.clientY - offsetY}px`;
   }
 
   function onPointerUp() {
     isDragging = false;
+    modal.classList.remove('dragging');
     document.removeEventListener('pointermove', onPointerMove);
     document.removeEventListener('pointerup', onPointerUp);
   }
@@ -115,8 +115,8 @@ function makeDraggable(modal) {
   modal.dataset.draggableInit = 'true';
 }
 
-// Export the draggable helper for other modules
 window.makeDraggable = makeDraggable;
+window.initDraggableModal = makeDraggable;
 
 // Helper function to update content inside the modal after creation
 function updateModalContent(modalElement, lang) {
@@ -364,6 +364,12 @@ document.addEventListener('DOMContentLoaded', async () => {
           closeMenu();
         }
       });
+    });
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 1024 && navLinks.classList.contains('open')) {
+        closeMenu();
+      }
     });
   }
 

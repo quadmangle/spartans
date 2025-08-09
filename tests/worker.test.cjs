@@ -4,7 +4,7 @@ const assert = require('node:assert');
 let notify, logAlertFailure;
 
 test.before(async () => {
-  ({ notify, logAlertFailure } = await import('./testRunner.js'));
+  ({ notify, logAlertFailure } = await import('../worker/testRunner.js'));
 });
 
 test('notify routes channel failures to logAlertFailure', async (t) => {

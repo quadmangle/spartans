@@ -83,7 +83,9 @@ test('makeDraggable updates modal position on drag', () => {
     offsetTop: 0,
     style: {},
     dataset: {},
-    querySelector(sel) { return sel === '.modal-header' ? header : null; }
+    classList: { add() {}, remove() {} },
+    getBoundingClientRect() { return { left: this.offsetLeft, top: this.offsetTop }; },
+    querySelector() { return header; }
   };
 
   makeDraggable(modal);
@@ -117,7 +119,9 @@ test('makeDraggable ignores mousedown on interactive elements', () => {
     offsetTop: 0,
     style: {},
     dataset: {},
-    querySelector(sel) { return sel === '.modal-header' ? header : null; }
+    classList: { add() {}, remove() {} },
+    getBoundingClientRect() { return { left: this.offsetLeft, top: this.offsetTop }; },
+    querySelector() { return header; }
   };
 
   makeDraggable(modal);

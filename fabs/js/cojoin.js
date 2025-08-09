@@ -4,12 +4,54 @@
  * This script contains the logic for both the Contact Us and Join Us forms.
  * It handles form submission, security checks (honeypot, malicious code),
  * and the dynamic form fields for the Join form.
- */
+*/
+
+(() => {
+  function lockScroll() {
+    document.documentElement.dataset.lock = 'true';
+    document.body.dataset.lock = 'true';
+  }
+
+  function unlockScroll() {
+    delete document.documentElement.dataset.lock;
+    delete document.body.dataset.lock;
+  }
+
+  function showBackdrop() {
+    let backdrop = document.querySelector('.backdrop');
+    if (!backdrop) {
+      backdrop = document.createElement('div');
+      backdrop.className = 'backdrop';
+      backdrop.addEventListener('click', () => {
+        if (window.hideActiveFabModal) {
+          window.hideActiveFabModal();
+        }
+      });
+      document.body.appendChild(backdrop);
+    }
+    backdrop.dataset.open = 'true';
+  }
+
+  function hideBackdrop() {
+    const backdrop = document.querySelector('.backdrop');
+    if (backdrop && backdrop.dataset) {
+      delete backdrop.dataset.open;
+    }
+  }
+
+  window.cojoinUI = {
+    lockScroll,
+    unlockScroll,
+    showBackdrop,
+    hideBackdrop,
+  };
+})();
 
 function initCojoinForms() {
-
   const contactForm = document.getElementById('contactForm');
   const joinForm = document.getElementById('joinForm');
+
+  initBottomSheet();
 
   function showFormError(form, message) {
     const region = form.querySelector('.form-errors');
@@ -35,68 +77,6 @@ function initCojoinForms() {
     joinForm.dataset.cojoinInitialized = 'true';
     initJoinForm();
   }
-
-  /**
-   * Enables draggable functionality for modals on large screens.
-   * @param {HTMLElement} modal The modal element to make draggable.
-  */
-  function makeDraggable(modal) {
-    if (modal.dataset.draggableInit) return;
-    // Only make draggable on larger screens where there is enough space.
-    if (window.innerWidth < 768) {
-      return;
-    }
-
-    let isDragging = false;
-    let hasMoved = false;
-    let offsetX, offsetY;
-
-    const modalHeader = modal.querySelector('.modal__header') || modal.querySelector('#chatbot-header');
-    if (!modalHeader) return;
-
-    modalHeader.addEventListener('pointerdown', (e) => {
-      // Ignore drag initiation when interacting with buttons or form controls
-      if (e.target.closest('button, [href], input, select, textarea')) {
-        return;
-      }
-
-      isDragging = true;
-      hasMoved = false;
-      offsetX = e.clientX - modal.getBoundingClientRect().left;
-      offsetY = e.clientY - modal.getBoundingClientRect().top;
-      modal.classList.add('dragging', 'is-dragged');
-      document.addEventListener('pointermove', onPointerMove);
-      document.addEventListener('pointerup', onPointerUp);
-    });
-
-    function onPointerMove(e) {
-      if (!isDragging) return;
-      e.preventDefault();
-
-      if (!hasMoved) {
-        hasMoved = true;
-        modal.classList.add('is-dragged');
-      }
-
-      const newX = e.clientX - offsetX;
-      const newY = e.clientY - offsetY;
-
-      modal.style.left = `${newX}px`;
-      modal.style.top = `${newY}px`;
-    }
-
-    function onPointerUp() {
-      isDragging = false;
-      modal.classList.remove('dragging');
-      document.removeEventListener('pointermove', onPointerMove);
-      document.removeEventListener('pointerup', onPointerUp);
-    }
-
-    modal.dataset.draggableInit = 'true';
-  }
-
-  // Expose the draggable function globally for use by the listener script
-  window.initDraggableModal = makeDraggable;
 
   /**
    * Sanitizes input to prevent malicious code injection.
@@ -423,6 +403,61 @@ function initCojoinForms() {
       section.classList.remove('completed');
     }
   }
+}
+
+function initBottomSheet() {
+  const drawers = document.querySelectorAll('.drawer-mobile');
+  drawers.forEach(drawer => {
+    if (drawer.dataset.sheetInit) return;
+    drawer.dataset.sheetInit = 'true';
+
+    const header = drawer.querySelector('.modal__header');
+    const snapPoints = [40, 70, 100];
+
+    const setSnap = (val) => {
+      let closest = snapPoints[0];
+      snapPoints.forEach(p => {
+        if (Math.abs(p - val) < Math.abs(closest - val)) {
+          closest = p;
+        }
+      });
+      drawer.dataset.snap = String(closest);
+      drawer.style.height = `${closest}dvh`;
+    };
+
+    let startY = 0;
+    let startHeight = 0;
+
+    function onPointerMove(e) {
+      const diff = startY - e.clientY;
+      const newHeight = ((startHeight + diff) / window.innerHeight) * 100;
+      drawer.style.height = `${newHeight}dvh`;
+    }
+
+    function onPointerUp(e) {
+      const diff = startY - e.clientY;
+      const newHeight = ((startHeight + diff) / window.innerHeight) * 100;
+      setSnap(newHeight);
+      document.removeEventListener('pointermove', onPointerMove);
+      document.removeEventListener('pointerup', onPointerUp);
+    }
+
+    if (header) {
+      header.addEventListener('pointerdown', (e) => {
+        startY = e.clientY;
+        startHeight = drawer.offsetHeight;
+        document.addEventListener('pointermove', onPointerMove);
+        document.addEventListener('pointerup', onPointerUp);
+      });
+    }
+
+    setSnap(40);
+    drawer.dataset.open = 'true';
+  });
+}
+
+if (typeof window.makeDraggable === 'function') {
+  window.initDraggableModal = window.makeDraggable;
 }
 
 window.initCojoinForms = initCojoinForms;
