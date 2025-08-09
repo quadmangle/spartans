@@ -40,6 +40,10 @@ test('fab stack renders buttons in order', () => {
     }),
   });
   Object.defineProperty(window, 'innerWidth', { value: 500, configurable: true });
+  window.matchMedia = window.matchMedia || function() {
+    return { matches: true, addListener() {}, removeListener() {} };
+  };
+  
   window.fetch = async () => ({ text: async () => '<div></div>' });
   const code = fs.readFileSync(path.join(root, 'cojoinlistener.js'), 'utf-8');
   window.eval(code);
