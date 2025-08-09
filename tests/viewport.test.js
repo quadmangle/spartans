@@ -39,6 +39,6 @@ test('page and modal styles rely on --vh variable', () => {
   assert.ok(/#modal-chatbot\.is-visible\s*{[\s\S]*display\s*:\s*flex/.test(chatbotCss), 'chatbot modal should display when visible');
 
   const cojoinCss = fs.readFileSync(path.join(root, 'fabs', 'css', 'cojoin.css'), 'utf8');
-  assert.ok(/height:\s*calc\(var\(--vh, 1vh\) \* 90\)/.test(cojoinCss), 'cojoin modal should use --vh');
+  assert.ok(/height:\s*calc\(var\(--vh, 1vh\) \* 80\)/.test(cojoinCss), 'cojoin modal should use --vh');
   assert.ok(/height:\s*calc\(var\(--vh, 1vh\) \* 100\)/.test(cojoinCss), 'cojoin modal should expand using --vh on mobile');
 });
