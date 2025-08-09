@@ -68,10 +68,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const navToggle = document.querySelector('.nav-menu-toggle');
     const shouldShow = navToggle && isMobileWidth();
     if (menuFab) {
-      menuFab.hidden = !shouldShow;
-    }
-    if (!shouldShow && navToggle && navToggle.getAttribute('aria-expanded') === 'true' && navToggle.click) {
-      navToggle.click();
+      menuFab.addEventListener('click', () => {
+        const navLinks = document.querySelector('.nav-links');
+        if (!navLinks) return;
+
+        const isOpen = navLinks.classList.contains('open');
+        if (isOpen) {
+          if (window.closeOpsNavMenu) window.closeOpsNavMenu();
+        } else {
+          if (window.openOpsNavMenu) window.openOpsNavMenu();
+        }
+      });
     }
   }
 
