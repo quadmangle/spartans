@@ -39,22 +39,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const contactFab = createFab('contact', '<i class="fa fa-envelope"></i>', 'Contact Us', 'fab--contact');
     const joinFab = createFab('join', '<i class="fa fa-user-plus"></i>', 'Join Us', 'fab--join');
     const chatbotFab = createFab('chatbot', '<i class="fa fa-comments"></i>', 'Chatbot', 'fab--chatbot');
-    const menuFab = createFab('menu', '<i class="fa fa-bars"></i>', 'Menu', 'fab--menu');
+    const navToggle = document.querySelector('.nav-menu-toggle');
+    let menuFab;
+    if (navToggle) {
+      menuFab = createFab('menu', '<i class="fa fa-bars"></i>', 'Menu', 'fab--menu');
+    }
 
     fabStack.appendChild(contactFab);
     fabStack.appendChild(joinFab);
     fabStack.appendChild(chatbotFab);
-    fabStack.appendChild(menuFab);
+    if (menuFab) {
+      fabStack.appendChild(menuFab);
+    }
 
     contactFab.addEventListener('click', () => showModal('contact'));
     joinFab.addEventListener('click', () => showModal('join'));
     chatbotFab.addEventListener('click', () => showModal('chatbot'));
-    menuFab.addEventListener('click', () => {
-      const navToggle = document.querySelector('.nav-menu-toggle');
-      if (navToggle && navToggle.click) {
-        navToggle.click();
-      }
-    });
+    if (menuFab) {
+      menuFab.addEventListener('click', () => {
+        const navToggle = document.querySelector('.nav-menu-toggle');
+        if (navToggle && navToggle.click) {
+          navToggle.click();
+        }
+      });
+    }
   }
 
   function checkFabVisibility() {

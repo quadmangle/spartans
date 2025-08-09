@@ -21,13 +21,18 @@ test('mobile nav links use off-canvas layout', () => {
   assert.ok(openMatch, 'nav links should slide in when open');
 });
 
-test('ops-nav enables horizontal scrolling when cramped', () => {
-  const css = fs.readFileSync(path.join(root, 'css', 'style.css'), 'utf-8');
-  const navMatch = css.match(/\.ops-nav\s*{[\s\S]*?}/);
-  assert.ok(navMatch, '.ops-nav rules for mobile not found');
-  const navBlock = navMatch[0];
-  assert.ok(navBlock.includes('overflow-x: auto'), '.ops-nav should allow horizontal scrolling');
-});
+  test('ops-nav enables horizontal scrolling when cramped', () => {
+    const css = fs.readFileSync(path.join(root, 'css', 'style.css'), 'utf-8');
+    const navMatch = css.match(/\.ops-nav\s*{[\s\S]*?}/);
+    assert.ok(navMatch, '.ops-nav rules for mobile not found');
+    const navBlock = navMatch[0];
+    assert.ok(navBlock.includes('overflow-x: auto'), '.ops-nav should allow horizontal scrolling');
+  });
+
+  test('menu toggle not forcibly hidden on wide screens', () => {
+    const css = fs.readFileSync(path.join(root, 'css', 'style.css'), 'utf-8');
+    assert.ok(!/\.nav-menu-toggle\s*{[^}]*display:\s*none/.test(css), 'nav menu toggle should remain visible');
+  });
 
 // Verify HTML structure defaults (nav links closed)
 const pages = ['index.html', 'contact-center.html', 'it-support.html', 'professional-services.html'];
