@@ -56,10 +56,19 @@ document.addEventListener('DOMContentLoaded', () => {
     chatbotFab.addEventListener('click', () => showModal('chatbot'));
   }
 
+  function destroyFabStack() {
+    if (fabStack) {
+      fabStack.remove();
+      fabStack = null;
+      menuFab = null;
+    }
+  }
+
   function updateMenuFab() {
     const navToggle = document.querySelector('.nav-menu-toggle');
     const shouldShow = navToggle && isMobileWidth();
     if (shouldShow && !menuFab) {
+      if (!fabStack) return;
       menuFab = createFab('menu', '<i class="fa fa-bars"></i>', 'Menu', 'fab--menu');
       menuFab.addEventListener('click', () => {
         const navToggle = document.querySelector('.nav-menu-toggle');
@@ -78,16 +87,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function checkFabVisibility() {
-    if (!fabStack) {
-      buildFabStack();
+    if (isMobileWidth()) {
+      if (!fabStack) {
+        buildFabStack();
+      }
+      updateMenuFab();
+    } else {
+      destroyFabStack();
     }
-    updateMenuFab();
   }
 
   checkFabVisibility();
 
   const handleMediaChange = () => {
-    updateMenuFab();
+    checkFabVisibility();
     if (activeModal && window.initDraggableModal) {
       window.initDraggableModal(activeModal);
     }

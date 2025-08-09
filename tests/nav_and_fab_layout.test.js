@@ -12,8 +12,8 @@ test('fab stack uses safe-area margins and button sizes', () => {
   assert.ok(stackMatch, 'fab-stack styles not found');
   const stackBlock = stackMatch[0];
   assert.ok(/position:\s*fixed/.test(stackBlock), 'fab stack should be fixed');
-  assert.ok(/bottom:\s*calc\(env\(safe-area-inset-bottom\) \+ 16px\)/.test(stackBlock), 'bottom margin should use safe-area inset');
-  assert.ok(/right:\s*calc\(env\(safe-area-inset-right\) \+ 16px\)/.test(stackBlock), 'right margin should use safe-area inset');
+  assert.ok(/bottom:\s*calc\(env\(safe-area-inset-bottom\) \+ 20px\)/.test(stackBlock), 'bottom margin should use safe-area inset');
+  assert.ok(/right:\s*calc\(env\(safe-area-inset-right\) \+ 10px\)/.test(stackBlock), 'right margin should use safe-area inset');
 
   const btnMatch = css.match(/\.fab\s*{[\s\S]*?}/);
   assert.ok(btnMatch, 'fab styles not found');
@@ -25,8 +25,21 @@ test('fab stack uses safe-area margins and button sizes', () => {
 });
 
 test('fab stack renders buttons in order', () => {
-  const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', { runScripts: 'dangerously', url: 'http://localhost' });
+  const dom = new JSDOM('<!DOCTYPE html><html><body><div class="nav-menu-toggle"></div></body></html>', { runScripts: 'dangerously', url: 'http://localhost' });
   const { window } = dom;
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: query => ({
+      matches: true, // Simulate mobile
+      media: query,
+      onchange: null,
+      addListener: () => {},
+      removeListener: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      dispatchEvent: () => {},
+    }),
+  });
   Object.defineProperty(window, 'innerWidth', { value: 500, configurable: true });
   window.fetch = async () => ({ text: async () => '<div></div>' });
   const code = fs.readFileSync(path.join(root, 'cojoinlistener.js'), 'utf-8');
