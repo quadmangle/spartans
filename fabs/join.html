@@ -1,4 +1,4 @@
-<!-- This is a fragment, intended to be loaded dynamically -->
+<!-- Modal fragment, loaded dynamically -->
 <div id="modal-join-us" class="modal-container" role="dialog" aria-modal="true">
   <div class="modal__header">
     <h1>Join Us</h1>
@@ -123,10 +123,9 @@
         <label for="honeypot-join">Leave this field blank</label>
         <input type="text" id="honeypot-join" name="honeypot-join" />
       </div>
-
-      <div class="modal__footer">
-        <button type="submit" class="submit-btn">Submit</button>
-      </div>
     </form>
+  </div>
+  <div class="modal__footer">
+    <button type="submit" form="joinForm" class="submit-btn">Submit</button>
   </div>
 </div>

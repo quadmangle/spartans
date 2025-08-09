@@ -1,4 +1,4 @@
-<!-- This is a fragment, intended to be loaded dynamically -->
+<!-- Modal fragment, loaded dynamically -->
 <div id="modal-contact-center" class="modal-container" role="dialog" aria-modal="true">
   <div class="modal__header">
     <h1>Contact Us</h1>
@@ -56,10 +56,9 @@
         <label for="honeypot-contact">Leave this field blank</label>
         <input type="text" id="honeypot-contact" name="honeypot-contact" />
       </div>
-
-      <div class="modal__footer">
-        <button type="submit" class="submit-btn">Send</button>
-      </div>
     </form>
+  </div>
+  <div class="modal__footer">
+    <button type="submit" form="contactForm" class="submit-btn">Send</button>
   </div>
 </div>

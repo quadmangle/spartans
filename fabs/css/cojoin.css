@@ -42,11 +42,12 @@ body {
   gap: 10px;
 }
 
+/* Individual FAB buttons */
 .fab {
   width: 56px;
   height: 56px;
-  min-width: 48px;
-  min-height: 48px;
+  min-width: 48px; /* ensure touch target */
+  min-height: 48px; /* ensure touch target */
   background: var(--clr-accent);
   color: white;
   border-radius: 50%;
@@ -108,8 +109,9 @@ body[data-lock="true"] {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: clamp(90vw, 91vw, 92vw);
-  height: calc(var(--vh, 1vh) * 90);
+  width: clamp(92vw, 94vw, 96vw);
+  height: calc(var(--vh, 1vh) * 80);
+  height: 80dvh;
   background: var(--clr-bg);
   border-radius: 0.75rem;
   box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.25);
@@ -117,7 +119,7 @@ body[data-lock="true"] {
   flex-direction: column;
   z-index: 1001;
   overflow: hidden;
-  transition: transform 0.3s ease;
+  transition: transform 0.25s ease;
 }
 
 .modal-container.is-visible {
@@ -143,7 +145,7 @@ body[data-lock="true"] {
 @media (max-height: 560px) {
   .modal-container {
     width: 100vw;
-    height: calc(var(--vh, 1vh) * 100);
+    height: 100dvh;
   }
 }
 
@@ -301,7 +303,8 @@ input, select, textarea {
   position: sticky;
   bottom: 0;
   background: var(--clr-bg);
-  padding-bottom: 1rem;
+  padding: 1rem 1.5rem;
+  z-index: 1;
 }
 
 button.submit-btn {
@@ -328,6 +331,9 @@ button.submit-btn:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .modal-container {
+    transition: none !important;
+  }
   *, *::before, *::after {
     animation: none !important;
     transition: none !important;

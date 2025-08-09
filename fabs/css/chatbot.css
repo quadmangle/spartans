@@ -136,6 +136,9 @@ body[data-lock="true"] {
 .human-check input{margin-right:.4rem}
 
 @media (prefers-reduced-motion: reduce) {
+  #modal-chatbot {
+    transition: none !important;
+  }
   *, *::before, *::after {
     animation: none !important;
     transition: none !important;
