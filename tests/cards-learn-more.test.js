@@ -17,7 +17,15 @@ test('learn-more buttons link to service pages', () => {
   const dom = new JSDOM(html, { runScripts: 'outside-only', url: 'http://example.com/' });
     const { window } = dom;
     window.currentLanguage = 'en';
-    window.fetch = async () => ({ json: async () => ({ token: 'test' }) });
+    window.fetch = async (url) => {
+      if (url === '/api/csrf-token') {
+        return {
+          ok: true,
+          json: async () => ({ token: 'test-csrf-token' }),
+        };
+      }
+      return { json: async () => ({ token: 'test' }) };
+    };
   window.translations = {
     services: {
       cc: { learn: 'contact-center.html' }
