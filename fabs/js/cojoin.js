@@ -4,7 +4,48 @@
  * This script contains the logic for both the Contact Us and Join Us forms.
  * It handles form submission, security checks (honeypot, malicious code),
  * and the dynamic form fields for the Join form.
- */
+*/
+
+(() => {
+  function lockScroll() {
+    document.documentElement.dataset.lock = 'true';
+    document.body.dataset.lock = 'true';
+  }
+
+  function unlockScroll() {
+    delete document.documentElement.dataset.lock;
+    delete document.body.dataset.lock;
+  }
+
+  function showBackdrop() {
+    let backdrop = document.querySelector('.backdrop');
+    if (!backdrop) {
+      backdrop = document.createElement('div');
+      backdrop.className = 'backdrop';
+      backdrop.addEventListener('click', () => {
+        if (window.hideActiveFabModal) {
+          window.hideActiveFabModal();
+        }
+      });
+      document.body.appendChild(backdrop);
+    }
+    backdrop.dataset.open = 'true';
+  }
+
+  function hideBackdrop() {
+    const backdrop = document.querySelector('.backdrop');
+    if (backdrop && backdrop.dataset) {
+      delete backdrop.dataset.open;
+    }
+  }
+
+  window.cojoinUI = {
+    lockScroll,
+    unlockScroll,
+    showBackdrop,
+    hideBackdrop,
+  };
+})();
 
 function initCojoinForms() {
 
