@@ -363,8 +363,10 @@ function initCojoinForms() {
   }
 }
 
-// Expose the draggable function globally for use by the listener script
-window.initDraggableModal = window.makeDraggable;
+// Reference the shared draggable helper if available
+if (typeof window.makeDraggable === 'function') {
+  window.initDraggableModal = window.makeDraggable;
+}
 
 window.initCojoinForms = initCojoinForms;
 document.addEventListener('DOMContentLoaded', initCojoinForms);
