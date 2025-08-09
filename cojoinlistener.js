@@ -31,8 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   const mobileQuery = '(max-width: 1024px)';
+  const mobileMql = window.matchMedia(mobileQuery);
   function isMobileWidth() {
-    return window.matchMedia(mobileQuery).matches;
+    return mobileMql.matches;
   }
 
   function buildFabStack() {
@@ -84,6 +85,19 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   checkFabVisibility();
+
+  const handleMediaChange = () => {
+    updateMenuFab();
+    if (activeModal && window.initDraggableModal) {
+      window.initDraggableModal(activeModal);
+    }
+  };
+
+  if (mobileMql.addEventListener) {
+    mobileMql.addEventListener('change', handleMediaChange);
+  } else if (mobileMql.addListener) {
+    mobileMql.addListener(handleMediaChange);
+  }
 
   /**
    * Create a single FAB button.

@@ -7,12 +7,27 @@ const { JSDOM } = require('jsdom');
 const root = path.resolve(__dirname, '..');
 
 function mockMatchMedia(win) {
-  win.matchMedia = query => ({
-    matches: win.innerWidth <= 1024,
-    media: query,
-    addEventListener: () => {},
-    removeEventListener: () => {}
-  });
+  const listeners = new Set();
+  const mql = {
+    media: '',
+    get matches() {
+      return win.innerWidth <= 1024;
+    },
+    addEventListener: (type, cb) => {
+      if (type === 'change') listeners.add(cb);
+    },
+    removeEventListener: (type, cb) => {
+      if (type === 'change') listeners.delete(cb);
+    },
+    dispatch: () => {
+      listeners.forEach(cb => cb(mql));
+    }
+  };
+  win.matchMedia = query => {
+    mql.media = query;
+    return mql;
+  };
+  return mql;
 }
 
 // Ensure FAB container positioning
@@ -74,6 +89,22 @@ test('menu fab toggles around 1024px width', () => {
   Object.defineProperty(window, 'innerWidth', { value: 1025, configurable: true });
   window.dispatchEvent(new window.Event('resize'));
   assert.ok(!window.document.getElementById('fab-menu'), 'menu fab should hide above 1024px');
+});
+
+test('menu fab updates on matchMedia change without resize', () => {
+  const dom = new JSDOM('<!DOCTYPE html><html><body><button class="nav-menu-toggle" aria-expanded="false"></button><div class="nav-links"></div></body></html>', { runScripts: 'dangerously', url: 'http://localhost' });
+  const { window } = dom;
+  Object.defineProperty(window, 'innerWidth', { value: 500, configurable: true });
+  const mql = mockMatchMedia(window);
+  window.fetch = async () => ({ text: async () => '<div></div>' });
+  const code = fs.readFileSync(path.join(root, 'cojoinlistener.js'), 'utf-8');
+  window.eval(code);
+  window.document.dispatchEvent(new window.Event('DOMContentLoaded'));
+  assert.ok(window.document.getElementById('fab-menu'), 'menu fab should show at small width');
+
+  Object.defineProperty(window, 'innerWidth', { value: 1025, configurable: true });
+  mql.dispatch();
+  assert.ok(!window.document.getElementById('fab-menu'), 'menu fab should hide when query no longer matches');
 });
 
 test('nav toggles remain visible without shrinking', () => {
