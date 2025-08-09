@@ -48,6 +48,7 @@ function initCojoinForms() {
     }
 
     let isDragging = false;
+    let hasMoved = false;
     let offsetX, offsetY;
 
     const modalHeader = modal.querySelector('.modal__header') || modal.querySelector('#chatbot-header');
@@ -60,6 +61,7 @@ function initCojoinForms() {
       }
 
       isDragging = true;
+      hasMoved = false;
       offsetX = e.clientX - modal.getBoundingClientRect().left;
       offsetY = e.clientY - modal.getBoundingClientRect().top;
       modal.classList.add('dragging', 'is-dragged');
@@ -70,6 +72,11 @@ function initCojoinForms() {
     function onPointerMove(e) {
       if (!isDragging) return;
       e.preventDefault();
+
+      if (!hasMoved) {
+        hasMoved = true;
+        modal.classList.add('is-dragged');
+      }
 
       const newX = e.clientX - offsetX;
       const newY = e.clientY - offsetY;
