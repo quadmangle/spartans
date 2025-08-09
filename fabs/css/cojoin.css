@@ -42,11 +42,12 @@ body {
   gap: 10px;
 }
 
+/* Individual FAB buttons */
 .fab {
   width: 56px;
   height: 56px;
-  min-width: 48px;
-  min-height: 48px;
+  min-width: 48px; /* ensure touch target */
+  min-height: 48px; /* ensure touch target */
   background: var(--clr-accent);
   color: white;
   border-radius: 50%;
