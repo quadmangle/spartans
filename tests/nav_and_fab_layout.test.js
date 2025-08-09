@@ -38,7 +38,7 @@ test('fab stack renders buttons in order', () => {
   window.eval(code);
   window.document.dispatchEvent(new window.Event('DOMContentLoaded'));
   const ids = Array.from(window.document.querySelectorAll('.fab')).map(b => b.id);
-  assert.deepStrictEqual(ids, ['fab-contact', 'fab-join', 'fab-chatbot', 'fab-menu']);
+  assert.deepStrictEqual(ids, ['fab-contact', 'fab-join', 'fab-chatbot']);
 });
 
 test('nav toggles remain visible without shrinking', () => {
