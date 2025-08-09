@@ -151,14 +151,26 @@ function createChatbotModal() {
 
   const header = new Element('div');
   header.id = 'chatbot-header';
+
+  const top = new Element('div');
+  top.className = 'chatbot-header-top';
   const title = new Element('span');
   title.id = 'title';
   title.dataset.en = 'OPS AI Chatbot';
   title.dataset.es = 'Chatbot OPS AI';
   title.textContent = 'OPS AI Chatbot';
-  header.appendChild(title);
+  top.appendChild(title);
+
+  const closeBtn = new Element('button');
+  closeBtn.id = 'chatbot-close';
+  closeBtn.className = 'modal-close';
+  closeBtn.setAttribute('aria-label', 'Close');
+  closeBtn.textContent = 'Close';
+  top.appendChild(closeBtn);
+  header.appendChild(top);
 
   const controls = new Element('div');
+  controls.id = 'chatbot-controls';
   const langCtrl = new Element('span');
   langCtrl.id = 'langCtrl';
   langCtrl.className = 'ctrl';
@@ -192,13 +204,6 @@ function createChatbotModal() {
   send.id = 'chatbot-send';
   send.disabled = true;
   form.appendChild(send);
-
-  const closeBtn = new Element('button');
-  closeBtn.id = 'chatbot-close';
-  closeBtn.className = 'modal-close';
-  closeBtn.setAttribute('aria-label', 'Close');
-  closeBtn.textContent = 'Close';
-  form.appendChild(closeBtn);
   formContainer.appendChild(form);
 
   const label = new Element('label');

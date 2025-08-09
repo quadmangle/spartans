@@ -737,9 +737,6 @@ body.dark .ops-modal {
   .nav-link:last-child {
     border-bottom: none;
   }
-  .nav-menu-toggle {
-    display: none;
-  }
   .nav-backdrop {
     display: none;
   }
@@ -747,6 +744,9 @@ body.dark .ops-modal {
     position: absolute;
     top: 1.2rem;
     right: 2rem;
+  }
+  .toggles .nav-menu-toggle {
+    display: none;
   }
 }
 

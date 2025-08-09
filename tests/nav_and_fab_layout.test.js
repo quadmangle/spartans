@@ -26,7 +26,7 @@ test('fab stack uses safe-area margins and button sizes', () => {
 });
 
 test('fab stack renders buttons in order', () => {
-  const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', { runScripts: 'dangerously', url: 'http://localhost' });
+  const dom = new JSDOM('<!DOCTYPE html><html><body><button class="nav-menu-toggle"></button></body></html>', { runScripts: 'dangerously', url: 'http://localhost' });
   const { window } = dom;
   Object.defineProperty(window, 'innerWidth', { value: 500, configurable: true });
   window.fetch = async () => ({ text: async () => '<div></div>' });
@@ -35,6 +35,18 @@ test('fab stack renders buttons in order', () => {
   window.document.dispatchEvent(new window.Event('DOMContentLoaded'));
   const ids = Array.from(window.document.querySelectorAll('.fab')).map(b => b.id);
   assert.deepStrictEqual(ids, ['fab-contact', 'fab-join', 'fab-chatbot', 'fab-menu']);
+});
+
+test('menu fab omitted when nav toggle missing', () => {
+  const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', { runScripts: 'dangerously', url: 'http://localhost' });
+  const { window } = dom;
+  Object.defineProperty(window, 'innerWidth', { value: 500, configurable: true });
+  window.fetch = async () => ({ text: async () => '<div></div>' });
+  const code = fs.readFileSync(path.join(root, 'cojoinlistener.js'), 'utf-8');
+  window.eval(code);
+  window.document.dispatchEvent(new window.Event('DOMContentLoaded'));
+  const ids = Array.from(window.document.querySelectorAll('.fab')).map(b => b.id);
+  assert.deepStrictEqual(ids, ['fab-contact', 'fab-join', 'fab-chatbot']);
 });
 
 test('nav toggles remain visible without shrinking', () => {

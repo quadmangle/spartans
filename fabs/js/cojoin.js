@@ -37,54 +37,6 @@ function initCojoinForms() {
   }
 
   /**
-   * Enables draggable functionality for modals on large screens.
-   * @param {HTMLElement} modal The modal element to make draggable.
-   */
-  function makeDraggable(modal) {
-    // Only make draggable on larger screens where there is enough space.
-    if (window.innerWidth < 768) {
-      return;
-    }
-
-    let isDragging = false;
-    let offsetX, offsetY;
-
-    const modalHeader = modal.querySelector('.modal__header') || modal.querySelector('#chatbot-header');
-    if (!modalHeader) return;
-
-    modalHeader.addEventListener('mousedown', (e) => {
-      // Ignore drag initiation when interacting with buttons or form controls
-      if (e.target.closest('button, [href], input, select, textarea')) {
-        return;
-      }
-
-      isDragging = true;
-      offsetX = e.clientX - modal.getBoundingClientRect().left;
-      offsetY = e.clientY - modal.getBoundingClientRect().top;
-      modal.classList.add('dragging', 'is-dragged');
-    });
-
-    document.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
-      e.preventDefault();
-
-      const newX = e.clientX - offsetX;
-      const newY = e.clientY - offsetY;
-
-      modal.style.left = `${newX}px`;
-      modal.style.top = `${newY}px`;
-    });
-
-    document.addEventListener('mouseup', () => {
-      isDragging = false;
-      modal.classList.remove('dragging');
-    });
-  }
-
-  // Expose the draggable function globally for use by the listener script
-  window.initDraggableModal = makeDraggable;
-
-  /**
    * Sanitizes input to prevent malicious code injection.
    * This is a simple client-side check and not a replacement for server-side validation.
    * @param {string} input The string to sanitize.
@@ -409,6 +361,10 @@ function initCojoinForms() {
       section.classList.remove('completed');
     }
   }
+}
+
+if (typeof window.makeDraggable === 'function') {
+  window.initDraggableModal = window.makeDraggable;
 }
 
 window.initCojoinForms = initCojoinForms;
