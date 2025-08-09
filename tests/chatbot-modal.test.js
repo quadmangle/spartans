@@ -237,6 +237,7 @@ test('chatbot modal initializes and handlers work', async () => {
   window.innerWidth = 500;
   window.addEventListener = () => {};
   window.dispatchEvent = () => {};
+  window.matchMedia = () => ({ matches: window.innerWidth <= 1024, addEventListener: () => {}, removeEventListener: () => {} });
   const context = vm.createContext({ window, document, console, setTimeout, fetch: null });
   context.window.initDraggableModal = () => {};
 
@@ -325,6 +326,7 @@ test('chatbot not initialized when HTML missing', async () => {
   window.innerWidth = 500;
   window.addEventListener = () => {};
   window.dispatchEvent = () => {};
+  window.matchMedia = () => ({ matches: window.innerWidth <= 1024, addEventListener: () => {}, removeEventListener: () => {} });
   const context = vm.createContext({ window, document, console, fetch: null, setTimeout });
   context.window.initDraggableModal = () => {};
 
@@ -350,6 +352,7 @@ test('chatbot FAB click is idempotent', async () => {
   window.innerWidth = 500;
   window.addEventListener = () => {};
   window.dispatchEvent = () => {};
+  window.matchMedia = () => ({ matches: window.innerWidth <= 1024, addEventListener: () => {}, removeEventListener: () => {} });
   const context = vm.createContext({ window, document, console, fetch: null, setTimeout });
   context.window.initDraggableModal = () => {};
 

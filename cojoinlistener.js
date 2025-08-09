@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const body = document.body;
 
   let fabStack = null;
+  let menuFab = null;
   let activeModal = null;
   let overlay = null;
   let lastFocused = null; // Remember focus to restore when modal closes
@@ -29,6 +30,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  const mobileQuery = '(max-width: 1024px)';
+  const mobileMql = window.matchMedia(mobileQuery);
+  function isMobileWidth() {
+    return mobileMql.matches;
+  }
+
   function buildFabStack() {
     if (fabStack) return;
 
@@ -39,29 +46,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const contactFab = createFab('contact', '<i class="fa fa-envelope"></i>', 'Contact Us', 'fab--contact');
     const joinFab = createFab('join', '<i class="fa fa-user-plus"></i>', 'Join Us', 'fab--join');
     const chatbotFab = createFab('chatbot', '<i class="fa fa-comments"></i>', 'Chatbot', 'fab--chatbot');
-    const navToggle = document.querySelector('.nav-menu-toggle');
-    let menuFab;
-    if (navToggle) {
-      menuFab = createFab('menu', '<i class="fa fa-bars"></i>', 'Menu', 'fab--menu');
-    }
 
     fabStack.appendChild(contactFab);
     fabStack.appendChild(joinFab);
     fabStack.appendChild(chatbotFab);
-    if (menuFab) {
-      fabStack.appendChild(menuFab);
-    }
 
     contactFab.addEventListener('click', () => showModal('contact'));
     joinFab.addEventListener('click', () => showModal('join'));
     chatbotFab.addEventListener('click', () => showModal('chatbot'));
-    if (menuFab) {
+  }
+
+  function updateMenuFab() {
+    const navToggle = document.querySelector('.nav-menu-toggle');
+    const shouldShow = navToggle && isMobileWidth();
+    if (shouldShow && !menuFab) {
+      menuFab = createFab('menu', '<i class="fa fa-bars"></i>', 'Menu', 'fab--menu');
       menuFab.addEventListener('click', () => {
         const navToggle = document.querySelector('.nav-menu-toggle');
         if (navToggle && navToggle.click) {
           navToggle.click();
         }
       });
+      fabStack.appendChild(menuFab);
+    } else if (!shouldShow && menuFab) {
+      menuFab.remove();
+      menuFab = null;
+      if (navToggle && navToggle.getAttribute('aria-expanded') === 'true' && navToggle.click) {
+        navToggle.click();
+      }
     }
   }
 
@@ -69,10 +81,23 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!fabStack) {
       buildFabStack();
     }
+    updateMenuFab();
   }
 
   checkFabVisibility();
-  window.addEventListener('resize', checkFabVisibility);
+
+  const handleMediaChange = () => {
+    updateMenuFab();
+    if (activeModal && window.initDraggableModal) {
+      window.initDraggableModal(activeModal);
+    }
+  };
+
+  if (mobileMql.addEventListener) {
+    mobileMql.addEventListener('change', handleMediaChange);
+  } else if (mobileMql.addListener) {
+    mobileMql.addListener(handleMediaChange);
+  }
 
   /**
    * Create a single FAB button.
@@ -223,8 +248,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Adjust draggable on resize
+  // Adjust draggable on resize and toggle menu FAB
   window.addEventListener('resize', () => {
+    checkFabVisibility();
     if (activeModal && window.initDraggableModal) {
       window.initDraggableModal(activeModal);
     }
