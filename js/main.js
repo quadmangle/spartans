@@ -69,11 +69,12 @@ function createModal(serviceKey, lang) {
 }
 
 function makeDraggable(modal) {
+  if (modal.dataset.draggableInit) return;
   const header = modal.querySelector('.modal-header');
   if (!header) return;
   let isDragging = false;
   let offsetX, offsetY;
-  header.addEventListener('mousedown', (e) => {
+  header.addEventListener('pointerdown', (e) => {
     // Skip dragging when interacting with buttons or other controls
     if (e.target.closest('button, [href], input, select, textarea')) {
       return;
@@ -91,10 +92,10 @@ function makeDraggable(modal) {
 
     // We add the listeners to the document so that dragging continues
     // even if the cursor moves outside the modal header.
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('pointermove', onPointerMove);
+    document.addEventListener('pointerup', onPointerUp);
   });
-  function onMouseMove(e) {
+  function onPointerMove(e) {
     if (!isDragging) return;
 
     // Prevent text selection during drag
@@ -105,11 +106,13 @@ function makeDraggable(modal) {
     modal.style.top = `${newY}px`;
   }
 
-  function onMouseUp() {
+  function onPointerUp() {
     isDragging = false;
-    document.removeEventListener('mousemove', onMouseMove);
-    document.removeEventListener('mouseup', onMouseUp);
+    document.removeEventListener('pointermove', onPointerMove);
+    document.removeEventListener('pointerup', onPointerUp);
   }
+
+  modal.dataset.draggableInit = 'true';
 }
 
 // Export the draggable helper for other modules
