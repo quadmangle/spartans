@@ -30,6 +30,7 @@ body.dark{--clr-bg:var(--clr-bg-dark);--clr-tx:var(--clr-tx-dark)}
   transform: translate(-50%, -50%);
   z-index: 1001;
   display: none;
+  transition: transform 0.25s ease, opacity 0.25s ease;
 }
 
 #modal-chatbot.is-visible {
@@ -146,6 +147,9 @@ body.dark{--clr-bg:var(--clr-bg-dark);--clr-tx:var(--clr-tx-dark)}
 .human-check input{margin-right:.4rem}
 
 @media (prefers-reduced-motion: reduce) {
+  #modal-chatbot {
+    transition: none !important;
+  }
   *, *::before, *::after {
     animation: none !important;
     transition: none !important;
