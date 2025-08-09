@@ -59,19 +59,19 @@
     </section>
 
     <section id="form" class="contact-form-section">
-        <h2 data-key="assessment-heading"></h2>
+        <h2 data-en="Request Your Free Needs Assessment" data-es="Solicite su Evaluación de Necesidades Gratis">Request Your Free Needs Assessment</h2>
       <form>
         <div class="form-errors" aria-live="polite"></div>
-        <input type="text" placeholder="" data-key="form-name" required />
-        <input type="email" placeholder="" data-key="form-email" required />
-        <input type="tel" placeholder="" data-key="form-phone" required />
-        <input type="text" placeholder="" data-key="form-company" required />
+        <input type="text" required placeholder="Full Name" data-en-placeholder="Full Name" data-es-placeholder="Nombre Completo" />
+        <input type="email" required placeholder="Business Email" data-en-placeholder="Business Email" data-es-placeholder="Correo Electrónico Empresarial" />
+        <input type="tel" required placeholder="Your Phone Number" data-en-placeholder="Your Phone Number" data-es-placeholder="Su Número de Teléfono" />
+        <input type="text" required placeholder="Company" data-en-placeholder="Company" data-es-placeholder="Empresa" />
         <div class="h-captcha" data-sitekey="your_site_key"></div>
         <div class="honeypot" aria-hidden="true">
-          <label for="hp-field">Leave this field blank</label>
+          <label for="hp-field" data-en="Leave this field blank" data-es="Deje este campo en blanco">Leave this field blank</label>
           <input type="text" id="hp-field" name="hp" tabindex="-1" autocomplete="off" />
         </div>
-          <button type="submit" class="submit-button" data-key="form-submit"></button>
+          <button type="submit" class="submit-button" data-en="Request Now" data-es="Solicitar Ahora">Request Now</button>
       </form>
     </section>
   </main>

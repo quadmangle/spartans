@@ -1,7 +1,7 @@
-<!-- Modal fragment, loaded dynamically -->
-<div id="modal-contact-center" class="modal-container" role="dialog" aria-modal="true">
+<!-- This is a fragment, intended to be loaded dynamically -->
+<div id="modal-contact-center" class="modal-container" role="dialog" aria-modal="true" data-lang="en">
   <div class="modal__header">
-    <h1>Contact Us</h1>
+    <h1 data-en="Contact Us" data-es="Contáctanos">Contact Us</h1>
     <button class="modal-close"><i class="fas fa-times"></i></button>
   </div>
   <div class="modal-content">
@@ -9,52 +9,55 @@
       <div class="form-errors" aria-live="polite"></div>
       <div class="form-row">
         <div class="form-cell">
-          <label for="name">Name</label>
-          <input id="name" name="name" required placeholder="Enter your name" />
+          <label for="name" data-en="Name" data-es="Nombre">Name</label>
+          <input id="name" name="name" required placeholder="Enter your name" data-en-placeholder="Enter your name" data-es-placeholder="Ingrese su nombre" />
         </div>
         <div class="form-cell">
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" required placeholder="Enter your email" />
+          <label for="email" data-en="Email" data-es="Correo electrónico">Email</label>
+          <input id="email" name="email" type="email" required placeholder="Enter your email" data-en-placeholder="Enter your email" data-es-placeholder="Ingrese su correo electrónico" />
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-cell">
-          <label for="contactNumber">Contact Number</label>
-          <input id="contactNumber" name="contactNumber" type="tel" required placeholder="Enter your contact number" />
+          <label for="contactNumber" data-en="Contact Number" data-es="Número de contacto">Contact Number</label>
+          <input id="contactNumber" name="contactNumber" type="tel" required placeholder="Enter your contact number" data-en-placeholder="Enter your contact number" data-es-placeholder="Ingrese su número de contacto" />
         </div>
         <div class="form-cell">
-          <label for="preferredDate">Preferred Date</label>
+          <label for="preferredDate" data-en="Preferred Date" data-es="Fecha preferida">Preferred Date</label>
           <input id="preferredDate" name="preferredDate" type="date" required />
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-cell">
-          <label for="preferredTime">Preferred Time</label>
+          <label for="preferredTime" data-en="Preferred Time" data-es="Hora preferida">Preferred Time</label>
           <input id="preferredTime" name="preferredTime" type="time" required />
         </div>
         <div class="form-cell">
-          <label for="interest">What are you interested about?</label>
+          <label for="interest" data-en="What are you interested about?" data-es="¿En qué está interesado?">What are you interested about?</label>
           <select id="interest" name="interest" required>
-            <option value="" disabled selected>Select an option</option>
-            <option>Business Operations</option>
-            <option>Contact Center</option>
-            <option>IT Support</option>
-            <option>Professionals</option>
+            <option value="" disabled selected data-en="Select an option" data-es="Seleccione una opción">Select an option</option>
+            <option data-en="Business Operations" data-es="Operaciones de Negocio">Business Operations</option>
+            <option data-en="Contact Center" data-es="Centro de Contacto">Contact Center</option>
+            <option data-en="IT Support" data-es="Soporte IT">IT Support</option>
+            <option data-en="Professionals" data-es="Profesionales">Professionals</option>
           </select>
         </div>
       </div>
 
       <div class="mt-1">
-        <label for="comments">Comments</label>
-        <textarea id="comments" name="comments" rows="4" placeholder="What service are you interested in?"></textarea>
+        <label for="comments" data-en="Comments" data-es="Comentarios">Comments</label>
+        <textarea id="comments" name="comments" rows="4" placeholder="What service are you interested in?" data-en-placeholder="What service are you interested in?" data-es-placeholder="¿En qué servicio está interesado?"></textarea>
       </div>
 
       <!-- Honeypot Field for security -->
       <div class="honeypot">
-        <label for="honeypot-contact">Leave this field blank</label>
+        <label for="honeypot-contact" data-en="Leave this field blank" data-es="Deje este campo en blanco">Leave this field blank</label>
         <input type="text" id="honeypot-contact" name="honeypot-contact" />
+      </div>
+      <div class="modal__footer">
+        <button type="submit" class="submit-btn" data-en="Send" data-es="Enviar">Send</button>
       </div>
     </form>
   </div>
