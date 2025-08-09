@@ -31,7 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const mobileQuery = '(max-width: 1024px)';
   const mobileMql = window.matchMedia
     ? window.matchMedia(mobileQuery)
-    : { matches: false, addEventListener: () => {}, addListener: () => {} };
+    : {
+        matches: window.innerWidth <= 1024,
+        addEventListener: () => {},
+        addListener: () => {},
+      };
   function isMobileWidth() {
     return mobileMql.matches;
   }
@@ -63,15 +67,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateMenuFab() {
     const navToggle = document.querySelector('.nav-menu-toggle');
     const shouldShow = navToggle && isMobileWidth();
-    if (navToggle) {
-      if (shouldShow) {
-        menuFab.style.display = '';
-      } else {
-        menuFab.style.display = 'none';
-        if (navToggle.getAttribute('aria-expanded') === 'true' && navToggle.click) {
-          navToggle.click();
-        }
-      }
+    if (menuFab) {
+      menuFab.hidden = !shouldShow;
+    }
+    if (!shouldShow && navToggle && navToggle.getAttribute('aria-expanded') === 'true' && navToggle.click) {
+      navToggle.click();
     }
   }
 
