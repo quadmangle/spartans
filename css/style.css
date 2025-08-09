@@ -541,7 +541,7 @@ body.dark .card .icon > i {
   border: 0.0625rem solid rgba(0, 0, 0, 0.1);
   box-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.15);
   padding: 2.1rem 2.2rem 1.3rem 2.2rem;
-  transition: box-shadow 0.25s;
+  transition: box-shadow 0.25s, transform 0.25s ease, opacity 0.25s ease;
   cursor: default;
   z-index: 3000;
   display: flex;
@@ -766,6 +766,9 @@ body.dark .ops-modal {
   }
   body {
     animation: none !important;
+  }
+  .ops-modal {
+    transition: none !important;
   }
 }
 

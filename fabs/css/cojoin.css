@@ -117,7 +117,7 @@ body[data-lock="true"] {
   flex-direction: column;
   z-index: 1001;
   overflow: hidden;
-  transition: transform 0.3s ease;
+  transition: transform 0.25s ease;
 }
 
 .modal-container.is-visible {
@@ -328,6 +328,9 @@ button.submit-btn:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .modal-container {
+    transition: none !important;
+  }
   *, *::before, *::after {
     animation: none !important;
     transition: none !important;
