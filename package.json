@@ -4,7 +4,8 @@
   "devDependencies": {
     "axe-core": "^4.9.1",
     "jsdom": "^26.1.0",
-    "playwright": "^1.47.2"
+    "playwright": "^1.47.2",
+    "http-server": "^14.1.1"
   },
   "keywords": [],
   "license": "ISC",
