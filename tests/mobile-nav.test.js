@@ -29,9 +29,10 @@ test('mobile nav links use off-canvas layout', () => {
     assert.ok(navBlock.includes('overflow-x: auto'), '.ops-nav should allow horizontal scrolling');
   });
 
-  test('menu toggle not forcibly hidden on wide screens', () => {
+  test('menu toggle hidden on wide screens', () => {
     const css = fs.readFileSync(path.join(root, 'css', 'style.css'), 'utf-8');
-    assert.ok(!/\.nav-menu-toggle\s*{[^}]*display:\s*none/.test(css), 'nav menu toggle should remain visible');
+    const pattern = /@media\s*\(min-width:\s*1025px\)[\s\S]*?\.nav-menu-toggle\s*{[^}]*display:\s*none/;
+    assert.ok(pattern.test(css), 'nav menu toggle should be hidden on wide screens');
   });
 
 // Verify HTML structure defaults (nav links closed)
