@@ -1,11 +1,12 @@
 <!-- This is a fragment, intended to be loaded dynamically -->
-<div id="modal-join-us" class="modal-container" role="dialog" aria-modal="true" data-lang="en">
-  <div class="modal__header">
-    <h1 data-en="Join Us" data-es="Únete a nosotros">Join Us</h1>
-    <button class="modal-close"><i class="fas fa-times"></i></button>
-  </div>
-  <div class="modal-content">
-    <form id="joinForm" autocomplete="off" novalidate>
+<div id="modal-join-us" class="modal-container" role="dialog" aria-modal="true">
+  <div class="drawer-mobile">
+    <div class="modal__header">
+      <h1>Join Us</h1>
+      <button class="modal-close"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-content">
+      <form id="joinForm" autocomplete="off" novalidate>
       <div class="form-errors" aria-live="polite"></div>
       <div class="form-pairs">
         <div>
@@ -123,10 +124,11 @@
         <label for="honeypot-join" data-en="Leave this field blank" data-es="Deje este campo en blanco">Leave this field blank</label>
         <input type="text" id="honeypot-join" name="honeypot-join" />
       </div>
-      <div class="modal__footer">
-        <button type="submit" class="submit-btn" data-en="Submit" data-es="Enviar">Submit</button>
-      </div>
-    </form>
+        <div class="modal__footer">
+          <button type="submit" class="submit-btn">Submit</button>
+        </div>
+      </form>
+    </div>
   </div>
   <div class="modal__footer">
     <button type="submit" form="joinForm" class="submit-btn">Submit</button>
