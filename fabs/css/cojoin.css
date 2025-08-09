@@ -64,6 +64,12 @@ body {
 .fab--chatbot { background: var(--clr-accent-dark); }
 .fab--menu { background: var(--clr-primary); }
 
+@media (min-width: 1025px) {
+  .fab--menu {
+    display: none;
+  }
+}
+
 @media (max-width: 480px) {
   .fab {
     width: 48px;

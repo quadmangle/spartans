@@ -3,7 +3,6 @@ const assert = require('node:assert');
 const fs = require('node:fs');
 const path = require('node:path');
 const { JSDOM } = require('jsdom');
-
 const root = path.resolve(__dirname, '..');
 
 // Ensure FAB container positioning
@@ -48,7 +47,6 @@ test('nav toggles remain visible without shrinking', () => {
 });
 
 // Ensure clicking outside or on backdrop closes mobile menu
-
 test('mobile menu closes on backdrop or outside click', async () => {
   const html = `<!DOCTYPE html><html><body>
     <nav class="ops-nav">
@@ -73,13 +71,11 @@ test('mobile menu closes on backdrop or outside click', async () => {
   window.currentLanguage = 'en';
   window.fetch = async () => ({ json: async () => ({ token: 'test' }) });
   Object.defineProperty(window, 'innerWidth', { value: 500, configurable: true });
-
   const script = fs.readFileSync(path.join(root, 'js', 'main.js'), 'utf-8');
   window.eval(script);
   // The DOMContentLoaded handler in main.js executes immediately
   // in this test environment because the document is already loaded.
   await new Promise(r => setImmediate(r));
-
   const toggle = window.document.querySelector('.nav-menu-toggle');
   const navLinks = window.document.querySelector('.nav-links');
   const backdrop = window.document.querySelector('.nav-backdrop');
@@ -89,13 +85,10 @@ test('mobile menu closes on backdrop or outside click', async () => {
   toggle.dispatchEvent(new window.MouseEvent('click'));
   assert.ok(navLinks.classList.contains('open'), 'menu should open');
   assert.ok(backdrop.classList.contains('open'), 'backdrop should be visible when menu opens');
-
   backdrop.dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
   assert.ok(!navLinks.classList.contains('open'), 'menu should close on backdrop click');
-
   toggle.dispatchEvent(new window.MouseEvent('click'));
   assert.ok(navLinks.classList.contains('open'), 'menu should reopen');
-
   window.document.body.dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
   assert.ok(!navLinks.classList.contains('open'), 'menu should close on outside click');
 });

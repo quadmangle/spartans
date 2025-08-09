@@ -82,20 +82,29 @@ test('makeDraggable updates modal position on drag', () => {
     offsetLeft: 0,
     offsetTop: 0,
     style: {},
-    querySelector(sel) { return sel === '.modal-header' ? header : null; }
+    dataset: {},
+    classList: { add() {}, remove() {} },
+    getBoundingClientRect() { return { left: this.offsetLeft, top: this.offsetTop }; },
+    querySelector() { return header; }
   };
 
   makeDraggable(modal);
-  assert.strictEqual(typeof header.events.mousedown, 'function');
+  assert.strictEqual(typeof header.events.pointerdown, 'function');
+  assert.strictEqual(modal.dataset.draggableInit, 'true');
 
-  header.events.mousedown({ clientX: 10, clientY: 10, target: { closest: () => null } });
-  documentStub._events.mousemove({ clientX: 30, clientY: 40, preventDefault() {} });
+  // Second initialization should be skipped
+  const initialHandler = header.events.pointerdown;
+  makeDraggable(modal);
+  assert.strictEqual(header.events.pointerdown, initialHandler);
+
+  header.events.pointerdown({ clientX: 10, clientY: 10, target: { closest: () => null } });
+  documentStub._events.pointermove({ clientX: 30, clientY: 40, preventDefault() {} });
   assert.strictEqual(modal.style.transform, 'none');
   assert.strictEqual(modal.style.left, '20px');
   assert.strictEqual(modal.style.top, '30px');
 
-  documentStub._events.mouseup();
-  assert.ok(!documentStub._events.mousemove);
+  documentStub._events.pointerup();
+  assert.ok(!documentStub._events.pointermove);
 });
 
 test('makeDraggable ignores mousedown on interactive elements', () => {
@@ -109,12 +118,15 @@ test('makeDraggable ignores mousedown on interactive elements', () => {
     offsetLeft: 0,
     offsetTop: 0,
     style: {},
-    querySelector(sel) { return sel === '.modal-header' ? header : null; }
+    dataset: {},
+    classList: { add() {}, remove() {} },
+    getBoundingClientRect() { return { left: this.offsetLeft, top: this.offsetTop }; },
+    querySelector() { return header; }
   };
 
   makeDraggable(modal);
   const btn = { closest: sel => (sel.includes('button') ? btn : null) };
-  header.events.mousedown({ clientX: 10, clientY: 10, target: btn });
+  header.events.pointerdown({ clientX: 10, clientY: 10, target: btn });
 
-  assert.ok(!documentStub._events.mousemove, 'mousemove listener should not be registered');
+  assert.ok(!documentStub._events.pointermove, 'pointermove listener should not be registered');
 });
