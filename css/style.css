@@ -702,7 +702,7 @@ body.dark .ops-modal {
   }
 }
 
-@media (min-width: 1025px) {
+@media (min-width: 1024px) {
   .ops-nav {
     justify-content: center;
     overflow: visible;
@@ -748,9 +748,6 @@ body.dark .ops-modal {
   .toggles .nav-menu-toggle {
     display: none;
   }
-}
-
-@media (min-width: 1024px) {
   .grid-container {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   }
