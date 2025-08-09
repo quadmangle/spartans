@@ -33,10 +33,10 @@ test('page and modal styles rely on --vh variable', () => {
   assert.ok(modalMatch, 'ops-modal styles not found');
   assert.ok(/max-height:\s*calc\(var\(--vh, 1vh\) \* 80\)/.test(modalMatch[0]), 'ops-modal should use --vh for max-height');
 
-  const chatbotCss = fs.readFileSync(path.join(root, 'fabs', 'css', 'chatbot.css'), 'utf8');
-  assert.ok(/height:\s*calc\(var\(--vh, 1vh\) \* 90\)/.test(chatbotCss), 'chatbot modal should use --vh');
-  assert.ok(/height:\s*calc\(var\(--vh, 1vh\) \* 100\)/.test(chatbotCss), 'chatbot modal should expand using --vh on mobile');
-  assert.ok(/#modal-chatbot\.is-visible\s*{[\s\S]*display\s*:\s*flex/.test(chatbotCss), 'chatbot modal should display when visible');
+    const chatbotCss = fs.readFileSync(path.join(root, 'fabs', 'css', 'chatbot.css'), 'utf8');
+    assert.ok(/height:\s*85dvh/.test(chatbotCss), 'chatbot modal should use dvh');
+    assert.ok(/height:\s*100dvh/.test(chatbotCss), 'chatbot modal should expand using dvh on small viewports');
+    assert.ok(/#modal-chatbot\.is-visible\s*{[\s\S]*display\s*:\s*flex/.test(chatbotCss), 'chatbot modal should display when visible');
 
   const cojoinCss = fs.readFileSync(path.join(root, 'fabs', 'css', 'cojoin.css'), 'utf8');
   assert.ok(/height:\s*calc\(var\(--vh, 1vh\) \* 90\)/.test(cojoinCss), 'cojoin modal should use --vh');

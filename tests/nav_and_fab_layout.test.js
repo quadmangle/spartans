@@ -25,9 +25,18 @@ test('fab stack uses safe-area margins and button sizes', () => {
 });
 
 test('fab stack renders buttons in order', () => {
-  const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', { runScripts: 'dangerously', url: 'http://localhost' });
-  const { window } = dom;
-  Object.defineProperty(window, 'innerWidth', { value: 500, configurable: true });
+    const dom = new JSDOM('<!DOCTYPE html><html><body><button class="nav-menu-toggle"></button></body></html>', { runScripts: 'dangerously', url: 'http://localhost' });
+    const { window } = dom;
+    window.matchMedia = window.matchMedia || function () {
+      return {
+        matches: true,
+        addListener() {},
+        removeListener() {},
+        addEventListener() {},
+        removeEventListener() {}
+      };
+    };
+    Object.defineProperty(window, 'innerWidth', { value: 500, configurable: true });
   window.fetch = async () => ({ text: async () => '<div></div>' });
   const code = fs.readFileSync(path.join(root, 'cojoinlistener.js'), 'utf-8');
   window.eval(code);
